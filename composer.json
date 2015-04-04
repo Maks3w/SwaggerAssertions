@@ -15,7 +15,8 @@
     },
     "require-dev": {
         "fabpot/php-cs-fixer": "~1.6",
-        "guzzlehttp/guzzle": "~5.0"
+        "guzzlehttp/guzzle": "~5.0",
+        "satooshi/php-coveralls": "dev-master"
     },
     "suggest": {
         "guzzlehttp/guzzle": "For Guzzle constraints"
