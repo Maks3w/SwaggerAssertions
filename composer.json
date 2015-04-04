@@ -1,0 +1,33 @@
+{
+    "name": "fr3d/swagger-assertions",
+    "description": "Test your API requests and responses against your swagger definition",
+    "license": "BSD-2-Clause",
+    "authors": [
+        {
+            "name": "Maks3w",
+            "email": "github.maks3w@virtualplanets.net"
+        }
+    ],
+    "homepage": "https://github.com/Maks3w/phpunit-swagger-assertions",
+    "require": {
+        "justinrainbow/json-schema": "~1.4.1",
+        "phpunit/phpunit": "~4.0"
+    },
+    "require-dev": {
+        "fabpot/php-cs-fixer": "~1.6",
+        "guzzlehttp/guzzle": "~5.0"
+    },
+    "suggest": {
+        "guzzlehttp/guzzle": "For Guzzle constraints"
+    },
+    "autoload": {
+        "psr-4": {
+            "FR3D\\SwaggerAssertions\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "FR3D\\SwaggerAssertionsTest\\": "tests/"
+        }
+    }
+}

@@ -1,0 +1,31 @@
+sudo: false
+
+language: php
+
+php:
+  - 5.4
+  - 5.5
+  - 5.6
+  - 7
+  - hhvm
+  - hhvm-nightly
+ 
+matrix:
+  fast_finish: true
+  allow_failures:
+    - php: 7
+    - php: hhvm-nightly
+
+install:
+  - composer install --no-interaction
+
+script:
+  - if [[ $TRAVIS_PHP_VERSION = '5.6' ]]; then php vendor/bin/phpunit --coverage-clover clover.xml tests; fi
+  - if [[ $TRAVIS_PHP_VERSION != '5.6' ]]; then php vendor/bin/phpunit tests; fi
+
+  - php vendor/bin/phpunit examples
+
+  - if [[ $TRAVIS_PHP_VERSION = '5.6' ]]; then php vendor/bin/php-cs-fixer fix -v --dry-run --config-file=.phpcs .; fi
+
+after_script:
+  - if [[ $TRAVIS_PHP_VERSION = '5.6' ]]; then php vendor/bin/coveralls -v; fi
