@@ -1,3 +1,4 @@
 clover.xml
+coveralls-upload.json
 composer.lock
 vendor/
