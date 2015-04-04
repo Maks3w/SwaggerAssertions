@@ -18,6 +18,16 @@ class GuzzleResponseConstraint extends Constraint
     protected $schemaManager;
 
     /**
+     * @var string
+     */
+    protected $path;
+
+    /**
+     * @var string
+     */
+    protected $httpMethod;
+
+    /**
      * @param SchemaManager $schemaManager
      * @param string $path
      * @param string $httpMethod
