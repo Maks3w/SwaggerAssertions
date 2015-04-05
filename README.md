@@ -19,7 +19,7 @@ composer require Maks3w/SwaggerAssertions
 
 There are two traits for provide predefined helper functions for different assertions.
 
-- [AssertsTrait](srcPhpUnit/AssertsTrait.php) For assert different parts of the response
+- [AssertsTrait](src/PhpUnit/AssertsTrait.php) For assert different parts of the response
 - [GuzzleAssertsTrait](src/PhpUnit/GuzzleAssertsTrait.php) For assert [Guzzle](https://github.com/guzzle/guzzle) responses.
 
 Example:
