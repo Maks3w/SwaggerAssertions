@@ -1,15 +1,17 @@
 <?php
 
-use FR3D\SwaggerAssertions\PhpUnit\GuzzleAssertsTrait;
+namespace FR3D\SwaggerAssertionsExamples\PhpUnit;
+
+use FR3D\SwaggerAssertions\PhpUnit\AssertsTrait;
 use FR3D\SwaggerAssertions\SchemaManager;
 use GuzzleHttp\Client;
 
 /**
- * README.md PHPUnit example.
+ * PHPUnit integration example.
  */
-class ReadmePhpUnitTest extends PHPUnit_Framework_TestCase
+class AssertTest extends \PHPUnit_Framework_TestCase
 {
-    use GuzzleAssertsTrait;
+    use AssertsTrait;
 
     /**
      * @var SchemaManager
@@ -35,17 +37,5 @@ class ReadmePhpUnitTest extends PHPUnit_Framework_TestCase
         $responseBody = $response->json(['object' => true]);
 
         $this->assertResponseBodyMatch($responseBody, self::$schemaManager, '/pet/{petId}', 'get', 200);
-    }
-
-    public function testFetchPetMatchDefinition()
-    {
-        $client = new Client();
-        $request = $client->createRequest('GET');
-        $request->addHeader('Accept', 'application/json');
-        $request->setPath('http://petstore.swagger.io/v2/pet/1');
-
-        $response = $client->send($request);
-
-        $this->assertResponseMatch($response, self::$schemaManager, '/pet/{petId}', 'get');
     }
 }
