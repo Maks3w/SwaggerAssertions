@@ -33,7 +33,6 @@ use FR3D\SwaggerAssertions\SchemaManager;
 use GuzzleHttp\Client;
 
 class ReadmePhpUnitTest extends PHPUnit_Framework_TestCase {
-    use AssertsTrait;
     use GuzzleAssertsTrait;
 
     /**

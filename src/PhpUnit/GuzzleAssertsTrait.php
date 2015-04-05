@@ -4,13 +4,14 @@ namespace FR3D\SwaggerAssertions\PhpUnit;
 
 use FR3D\SwaggerAssertions\SchemaManager;
 use GuzzleHttp\Message\ResponseInterface;
-use PHPUnit_Framework_Assert as Assert;
 
 /**
  * Facade functions for interact with Guzzle constraints.
  */
 trait GuzzleAssertsTrait
 {
+    use AssertsTrait;
+
     /**
      * Asserts response match with the response schema.
      *
@@ -27,8 +28,13 @@ trait GuzzleAssertsTrait
         $httpMethod,
         $message = ''
     ) {
-        $constraint = new GuzzleResponseConstraint($schemaManager, $path, $httpMethod);
-
-        Assert::assertThat($response, $constraint, $message);
+        $this->assertResponseBodyMatch(
+            $responseBody = $response->json(['object' => true]),
+            $schemaManager,
+            $path,
+            $httpMethod,
+            $response->getStatusCode(),
+            $message
+        );
     }
 }
