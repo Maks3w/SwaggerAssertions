@@ -31,7 +31,7 @@ class GuzzleTest extends \PHPUnit_Framework_TestCase
         $client = new Client();
         $request = $client->createRequest('GET');
         $request->addHeader('Accept', 'application/json');
-        $request->setPath('http://petstore.swagger.io/v2/pet/1');
+        $request->setPath('http://petstore.swagger.io/v2/pet/findByStatus');
 
         $response = $client->send($request);
 
