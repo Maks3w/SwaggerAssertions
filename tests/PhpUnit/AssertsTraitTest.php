@@ -54,4 +54,19 @@ JSON;
             $this->assertTrue(true);
         }
     }
+
+    public function testValidMediaType()
+    {
+        $this->assertResponseMediaTypeMatch('text/html', $this->schemaManager, '/pets', 'get');
+    }
+
+    public function testInvalidMediaType()
+    {
+        try {
+            $this->assertResponseMediaTypeMatch('application/pdf', $this->schemaManager, '/pets', 'get');
+            $this->fail();
+        } catch (ExpectationFailedException $e) {
+            $this->assertTrue(true);
+        }
+    }
 }

@@ -28,6 +28,14 @@ trait GuzzleAssertsTrait
         $httpMethod,
         $message = ''
     ) {
+        $this->assertResponseMediaTypeMatch(
+            $response->getHeader('Content-Type'),
+            $schemaManager,
+            $path,
+            $httpMethod,
+            $message
+        );
+
         $this->assertResponseBodyMatch(
             $responseBody = $response->json(['object' => true]),
             $schemaManager,

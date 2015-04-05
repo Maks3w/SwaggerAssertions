@@ -65,6 +65,34 @@ class SchemaManager
     }
 
     /**
+     * Get the response media types for the given API operation.
+     *
+     * If response does not have specific media types then inherit from global API media types.
+     *
+     * @param string $path
+     * @param string $method
+     *
+     * @return string[]
+     */
+    public function getResponseMediaTypes($path, $method)
+    {
+        $responseMediaTypes = [
+            'paths',
+            $path,
+            $method,
+            'produces'
+        ];
+
+        if ($this->hasPath($responseMediaTypes)) {
+            $mediaTypes = $this->getPath($responseMediaTypes);
+        } else {
+            $mediaTypes = $this->getPath(['produces']);
+        }
+
+        return $mediaTypes;
+    }
+
+    /**
      * @param string[] $segments
      *
      * @return bool If path exists.

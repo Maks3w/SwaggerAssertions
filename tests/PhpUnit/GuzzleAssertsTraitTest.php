@@ -25,20 +25,13 @@ class GuzzleAssertsTraitTest extends TestCase
 
     public function testAssertResponseMatch()
     {
-        $response = <<<JSON
-[
-  {
-    "id": 123456789,
-    "name": "foo"
-  }
-]
-JSON;
-        $response = new Response(200, [], Stream::factory($response));
+        $response = $this->getValidResponseBody();
+        $response = new Response(200, ['Content-Type' => 'application/json'], Stream::factory($response));
 
         $this->assertResponseMatch($response, $this->schemaManager, '/pets', 'get');
     }
 
-    public function testAssertResponseMatchFail()
+    public function testAssertResponseBodyDoesNotMatch()
     {
         $response = <<<JSON
 [
@@ -47,13 +40,52 @@ JSON;
   }
 ]
 JSON;
-        $response = new Response(200, [], Stream::factory($response));
+        $response = new Response(200, ['Content-Type' => 'application/json'], Stream::factory($response));
 
         try {
             $this->assertResponseMatch($response, $this->schemaManager, '/pets', 'get');
             $this->fail();
         } catch (ExpectationFailedException $e) {
-            $this->assertTrue(true);
+            $this->assertEquals(
+                <<<EOF
+Failed asserting that [{"id":123456789}] is valid.
+[0] the property name is required
+
+EOF
+                ,
+                $e->getMessage()
+            );
         }
+    }
+
+    public function testAssertResponseMediaTypeDoesNotMatch()
+    {
+        $response = $this->getValidResponseBody();
+        $response = new Response(200, ['Content-Type' => 'application/pdf'], Stream::factory($response));
+
+        try {
+            $this->assertResponseMatch($response, $this->schemaManager, '/pets', 'get');
+            $this->fail();
+        } catch (ExpectationFailedException $e) {
+            $this->assertEquals(
+                "Failed asserting that 'application/pdf' is an allowed media type (application/json, application/xml, text/xml, text/html).",
+                $e->getMessage()
+            );
+        }
+    }
+
+    /**
+     * @return string
+     */
+    protected function getValidResponseBody()
+    {
+        return <<<JSON
+[
+  {
+    "id": 123456789,
+    "name": "foo"
+  }
+]
+JSON;
     }
 }
