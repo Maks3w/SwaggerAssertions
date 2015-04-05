@@ -44,24 +44,35 @@ class SchemaManager
      */
     public function getResponseSchema($path, $method, $httpCode)
     {
-        $pathSegments = function ($path, $method, $httpCode) {
-            return [
-                'paths',
-                $path,
-                $method,
-                'responses',
-                $httpCode,
-                'schema'
-            ];
-        };
-
-        if ($this->hasPath($pathSegments($path, $method, $httpCode))) {
-            $schema = $this->getPath($pathSegments($path, $method, $httpCode));
-        } else {
-            $schema = $this->getPath($pathSegments($path, $method, 'default'));
+        $response = $this->getResponse($path, $method, $httpCode);
+        if (!isset($response->schema)) {
+            throw new \UnexpectedValueException(
+                'Missing schema definition for ' . $this->pathToString([$path, $method, $httpCode])
+            );
         }
 
+        $schema = $response->schema;
+
         return $this->resolveSchemaReferences($schema);
+    }
+
+    /**
+     * @param string $path
+     * @param string $method
+     * @param string $httpCode
+     *
+     * @return stdClass[]
+     */
+    public function getResponseHeaders($path, $method, $httpCode)
+    {
+        $response = $this->getResponse($path, $method, $httpCode);
+        if (!isset($response->headers)) {
+            return [];
+        }
+
+        $headers = $response->headers;
+
+        return $headers;
     }
 
     /**
@@ -145,5 +156,41 @@ class SchemaManager
         $refResolver->resolve($schema, $this->definitionUri);
 
         return $schema;
+    }
+
+    /**
+     * @param string $path
+     * @param string $method
+     * @param int $httpCode
+     * @return stdClass
+     */
+    public function getResponse($path, $method, $httpCode)
+    {
+        $pathSegments = function ($path, $method, $httpCode) {
+            return [
+                'paths',
+                $path,
+                $method,
+                'responses',
+                $httpCode
+            ];
+        };
+
+        if ($this->hasPath($pathSegments($path, $method, $httpCode))) {
+            $response = $this->getPath($pathSegments($path, $method, $httpCode));
+        } else {
+            $response = $this->getPath($pathSegments($path, $method, 'default'));
+        }
+
+        return $this->resolveSchemaReferences($response);
+    }
+
+    /**
+     * @param array $path
+     * @return string
+     */
+    public function pathToString(array $path)
+    {
+        return implode('.', $path);
     }
 }

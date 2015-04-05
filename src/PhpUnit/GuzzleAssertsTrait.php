@@ -36,12 +36,27 @@ trait GuzzleAssertsTrait
             $message
         );
 
+        $httpCode = $response->getStatusCode();
+        $headers = $response->getHeaders();
+        foreach ($headers as &$value) {
+            $value = implode(', ', $value);
+        }
+
+        $this->assertResponseHeadersMatch(
+            $headers,
+            $schemaManager,
+            $path,
+            $httpMethod,
+            $httpCode,
+            $message
+        );
+
         $this->assertResponseBodyMatch(
             $responseBody = $response->json(['object' => true]),
             $schemaManager,
             $path,
             $httpMethod,
-            $response->getStatusCode(),
+            $httpCode,
             $message
         );
     }

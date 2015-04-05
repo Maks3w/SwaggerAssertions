@@ -69,4 +69,25 @@ JSON;
             $this->assertTrue(true);
         }
     }
+
+    public function testValidHeaders()
+    {
+        $headers = [
+            'ETag' => '123',
+        ];
+
+        $this->assertResponseHeadersMatch($headers, $this->schemaManager, '/pets', 'get', 200);
+    }
+
+    public function testInvalidHeaders()
+    {
+        $headers = [];
+
+        try {
+            $this->assertResponseHeadersMatch($headers, $this->schemaManager, '/pets', 'get', 200);
+            $this->fail('Expected ExpectationFailedException to be thrown');
+        } catch (ExpectationFailedException $e) {
+            $this->assertTrue(true);
+        }
+    }
 }

@@ -74,6 +74,31 @@ EOF
         }
     }
 
+    public function testAssertResponseHeaderDoesNotMatch()
+    {
+        $headers = [
+            'Content-Type' => 'application/json',
+            // 'ETag' => '123', // Removed intentional
+        ];
+
+        $response = new Response(200, $headers, Stream::factory($this->getValidResponseBody()));
+
+        try {
+            $this->assertResponseMatch($response, $this->schemaManager, '/pets', 'get');
+            $this->fail('Expected ExpectationFailedException to be thrown');
+        } catch (ExpectationFailedException $e) {
+            $this->assertEquals(
+                <<<EOF
+Failed asserting that {"Content-Type":"application\/json"} is valid.
+[] the property ETag is required
+
+EOF
+                ,
+                $e->getMessage()
+            );
+        }
+    }
+
     /**
      * @return string
      */
@@ -96,6 +121,7 @@ JSON;
     {
         return [
             'Content-Type' => 'application/json',
+            'ETag' => '123',
         ];
     }
 }

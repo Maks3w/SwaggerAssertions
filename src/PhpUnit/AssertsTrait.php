@@ -54,4 +54,27 @@ trait AssertsTrait
 
         Assert::assertThat($responseMediaType, $constraint, $message);
     }
+
+    /**
+     * Asserts response headers match with the media types defined.
+     *
+     * @param string[] $headers
+     * @param SchemaManager $schemaManager
+     * @param string $path
+     * @param string $httpMethod
+     * @param int $httpCode
+     * @param string $message
+     */
+    public function assertResponseHeadersMatch(
+        array $headers,
+        SchemaManager $schemaManager,
+        $path,
+        $httpMethod,
+        $httpCode,
+        $message = ''
+    ) {
+        $constraint = new ResponseHeadersConstraint($schemaManager, $path, $httpMethod, $httpCode);
+
+        Assert::assertThat($headers, $constraint, $message);
+    }
 }
