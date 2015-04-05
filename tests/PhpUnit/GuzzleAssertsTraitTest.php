@@ -26,7 +26,7 @@ class GuzzleAssertsTraitTest extends TestCase
     public function testAssertResponseMatch()
     {
         $response = $this->getValidResponseBody();
-        $response = new Response(200, ['Content-Type' => 'application/json'], Stream::factory($response));
+        $response = new Response(200, $this->getValidHeaders(), Stream::factory($response));
 
         $this->assertResponseMatch($response, $this->schemaManager, '/pets', 'get');
     }
@@ -40,7 +40,7 @@ class GuzzleAssertsTraitTest extends TestCase
   }
 ]
 JSON;
-        $response = new Response(200, ['Content-Type' => 'application/json'], Stream::factory($response));
+        $response = new Response(200, $this->getValidHeaders(), Stream::factory($response));
 
         try {
             $this->assertResponseMatch($response, $this->schemaManager, '/pets', 'get');
@@ -87,5 +87,15 @@ EOF
   }
 ]
 JSON;
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getValidHeaders()
+    {
+        return [
+            'Content-Type' => 'application/json',
+        ];
     }
 }
