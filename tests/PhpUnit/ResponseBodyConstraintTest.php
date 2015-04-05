@@ -62,6 +62,7 @@ JSON;
 
         try {
             $this->constraint->evaluate($response);
+            $this->fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
             $this->assertEquals(
                 <<<EOF
@@ -72,11 +73,7 @@ EOF
                 ,
                 TestFailure::exceptionToString($e)
             );
-
-            return;
         }
-
-        $this->fail();
     }
 
     public function testDefaultSchema()

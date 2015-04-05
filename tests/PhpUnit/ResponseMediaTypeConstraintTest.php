@@ -44,6 +44,7 @@ class ResponseMediaTypeConstraintTest extends TestCase
 
         try {
             $this->constraint->evaluate($mediaType);
+            $this->fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
             $this->assertEquals(
                 <<<EOF
@@ -53,11 +54,7 @@ EOF
                 ,
                 TestFailure::exceptionToString($e)
             );
-
-            return;
         }
-
-        $this->fail();
     }
 
     public function testDefaultMediaType()

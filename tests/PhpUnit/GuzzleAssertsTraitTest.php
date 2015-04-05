@@ -44,7 +44,7 @@ JSON;
 
         try {
             $this->assertResponseMatch($response, $this->schemaManager, '/pets', 'get');
-            $this->fail();
+            $this->fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
             $this->assertEquals(
                 <<<EOF
@@ -65,7 +65,7 @@ EOF
 
         try {
             $this->assertResponseMatch($response, $this->schemaManager, '/pets', 'get');
-            $this->fail();
+            $this->fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
             $this->assertEquals(
                 "Failed asserting that 'application/pdf' is an allowed media type (application/json, application/xml, text/xml, text/html).",

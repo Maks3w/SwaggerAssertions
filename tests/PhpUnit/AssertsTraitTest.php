@@ -49,7 +49,7 @@ JSON;
 
         try {
             $this->assertResponseBodyMatch($response, $this->schemaManager, '/pets', 'get', 200);
-            $this->fail();
+            $this->fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
             $this->assertTrue(true);
         }
@@ -64,7 +64,7 @@ JSON;
     {
         try {
             $this->assertResponseMediaTypeMatch('application/pdf', $this->schemaManager, '/pets', 'get');
-            $this->fail();
+            $this->fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
             $this->assertTrue(true);
         }
