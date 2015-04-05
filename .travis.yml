@@ -25,7 +25,7 @@ script:
 
   - php vendor/bin/phpunit examples
 
-  - if [[ $TRAVIS_PHP_VERSION = '5.6' ]]; then php vendor/bin/php-cs-fixer fix -v --dry-run --config-file=.phpcs .; fi
+  - if [[ $TRAVIS_PHP_VERSION = '5.6' ]]; then php vendor/bin/php-cs-fixer fix -v --dry-run --config-file=.phpcs; fi
 
 after_script:
   - if [[ $TRAVIS_PHP_VERSION = '5.6' ]]; then php vendor/bin/coveralls -v; fi
