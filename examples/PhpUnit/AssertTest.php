@@ -1,7 +1,5 @@
 <?php
 
-namespace FR3D\SwaggerAssertionsExamples\PhpUnit;
-
 use FR3D\SwaggerAssertions\PhpUnit\AssertsTrait;
 use FR3D\SwaggerAssertions\SchemaManager;
 use GuzzleHttp\Client;

@@ -162,6 +162,7 @@ class SchemaManager
      * @param string $path
      * @param string $method
      * @param int $httpCode
+     *
      * @return stdClass
      */
     public function getResponse($path, $method, $httpCode)
@@ -187,6 +188,7 @@ class SchemaManager
 
     /**
      * @param array $path
+     *
      * @return string
      */
     public function pathToString(array $path)
