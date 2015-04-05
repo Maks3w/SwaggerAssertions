@@ -114,7 +114,7 @@ class SchemaManager
     /**
      * @param string[] $segments
      *
-     * @return stdClass Path contents
+     * @return mixed Path contents
      *
      * @throws InvalidArgumentException If path does not exists.
      */
