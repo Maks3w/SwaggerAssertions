@@ -8,7 +8,7 @@ use GuzzleHttp\ClientInterface;
 /**
  * PHPUnit integration example.
  */
-class AssertTest extends \PHPUnit_Framework_TestCase
+class LocalFileTest extends \PHPUnit_Framework_TestCase
 {
     use AssertsTrait;
 
@@ -24,7 +24,10 @@ class AssertTest extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        self::$schemaManager = new SchemaManager('http://petstore.swagger.io/v2/swagger.json');
+        $filePath = __DIR__ . '/../fixtures/pet_store.json';
+
+        // Use file:// for local files
+        self::$schemaManager = new SchemaManager('file://' . $filePath);
     }
 
     protected function setUp()

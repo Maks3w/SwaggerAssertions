@@ -25,9 +25,6 @@ class GuzzleTest extends \PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         self::$schemaManager = new SchemaManager('http://petstore.swagger.io/v2/swagger.json');
-
-        // Use file:// for local files
-        // self::$schemaManager = new SchemaManager('file:///MyAPI/swagger.json');
     }
 
     protected function setUp()
