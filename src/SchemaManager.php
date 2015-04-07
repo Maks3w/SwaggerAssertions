@@ -136,12 +136,12 @@ class SchemaManager
      * @param string $requestPath
      * @param string $path Output variable. matched path
      * @param array $params Output variable. path parameters
+     *
      * @return bool
      */
     public function findPathInTemplates($requestPath, &$path, &$params = [])
     {
         $uriTemplateManager = new UriTemplate();
-        $matchPath = null;
         foreach ($this->getPathTemplates() as $template) {
             if (isset($this->definition->basePath)) {
                 $fullTemplate = $this->definition->basePath . $template;
@@ -152,6 +152,7 @@ class SchemaManager
             $params = $uriTemplateManager->extract($fullTemplate, $requestPath, true);
             if ($params !== null) {
                 $path = $template;
+
                 return true;
             }
         }
