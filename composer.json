@@ -11,7 +11,8 @@
     "homepage": "https://github.com/Maks3w/phpunit-swagger-assertions",
     "require": {
         "justinrainbow/json-schema": "~1.4.1",
-        "phpunit/phpunit": "~4.0"
+        "phpunit/phpunit": "~4.0",
+        "rize/uri-template": "0.2.*"
     },
     "require-dev": {
         "fabpot/php-cs-fixer": "~1.6",

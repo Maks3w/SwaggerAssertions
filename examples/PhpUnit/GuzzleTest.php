@@ -27,12 +27,22 @@ class GuzzleTest extends \PHPUnit_Framework_TestCase
     public function testFetchPetMatchDefinition()
     {
         $client = new Client();
-        $request = $client->createRequest('GET');
+        $request = $client->createRequest('GET', 'http://petstore.swagger.io/v2/pet/findByStatus');
         $request->addHeader('Accept', 'application/json');
-        $request->setPath('http://petstore.swagger.io/v2/pet/findByStatus');
 
         $response = $client->send($request);
 
-        $this->assertResponseMatch($response, self::$schemaManager, '/pet/{petId}', 'get');
+        $this->assertResponseAndRequestMatch($response, $request, self::$schemaManager);
+    }
+
+    public function testOnlyResponse()
+    {
+        $client = new Client();
+        $request = $client->createRequest('GET', 'http://petstore.swagger.io/v2/pet/findByStatus');
+        $request->addHeader('Accept', 'application/json');
+
+        $response = $client->send($request);
+
+        $this->assertResponseMatch($response, self::$schemaManager, '/pet/findByStatus', 'get');
     }
 }

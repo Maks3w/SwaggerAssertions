@@ -5,6 +5,7 @@ namespace FR3D\SwaggerAssertions;
 use FR3D\SwaggerAssertions\JsonSchema\Uri\UriRetriever;
 use InvalidArgumentException;
 use JsonSchema\RefResolver;
+use Rize\UriTemplate;
 use stdClass;
 
 /**
@@ -33,6 +34,14 @@ class SchemaManager
     {
         $this->definition = json_decode(file_get_contents($definitionUri));
         $this->definitionUri = $definitionUri;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getPathTemplates()
+    {
+        return array_keys((array) $this->definition->paths);
     }
 
     /**
@@ -87,6 +96,7 @@ class SchemaManager
      */
     public function getResponseMediaTypes($path, $method)
     {
+        $method = strtolower($method);
         $responseMediaTypes = [
             'paths',
             $path,
@@ -120,6 +130,33 @@ class SchemaManager
         }
 
         return true;
+    }
+
+    /**
+     * @param string $requestPath
+     * @param string $path Output variable. matched path
+     * @param array $params Output variable. path parameters
+     * @return bool
+     */
+    public function findPathInTemplates($requestPath, &$path, &$params = [])
+    {
+        $uriTemplateManager = new UriTemplate();
+        $matchPath = null;
+        foreach ($this->getPathTemplates() as $template) {
+            if (isset($this->definition->basePath)) {
+                $fullTemplate = $this->definition->basePath . $template;
+            } else {
+                $fullTemplate = $template;
+            }
+
+            $params = $uriTemplateManager->extract($fullTemplate, $requestPath, true);
+            if ($params !== null) {
+                $path = $template;
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -167,6 +204,7 @@ class SchemaManager
      */
     public function getResponse($path, $method, $httpCode)
     {
+        $method = strtolower($method);
         $pathSegments = function ($path, $method, $httpCode) {
             return [
                 'paths',

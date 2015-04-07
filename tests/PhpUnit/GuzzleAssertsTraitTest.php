@@ -4,6 +4,7 @@ namespace FR3D\SwaggerAssertionsTest\PhpUnit;
 
 use FR3D\SwaggerAssertions\PhpUnit\GuzzleAssertsTrait;
 use FR3D\SwaggerAssertions\SchemaManager;
+use GuzzleHttp\Message\Request;
 use GuzzleHttp\Message\Response;
 use GuzzleHttp\Stream\Stream;
 use PHPUnit_Framework_ExpectationFailedException as ExpectationFailedException;
@@ -29,6 +30,15 @@ class GuzzleAssertsTraitTest extends TestCase
         $response = new Response(200, $this->getValidHeaders(), Stream::factory($response));
 
         $this->assertResponseMatch($response, $this->schemaManager, '/pets', 'get');
+    }
+
+    public function testAssertResponseAndRequestMatch()
+    {
+        $response = $this->getValidResponseBody();
+        $response = new Response(200, $this->getValidHeaders(), Stream::factory($response));
+        $request = new Request('GET', 'http://example.com/api/pets');
+
+        $this->assertResponseAndRequestMatch($response, $request, $this->schemaManager);
     }
 
     public function testAssertResponseBodyDoesNotMatch()
