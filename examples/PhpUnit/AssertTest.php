@@ -27,9 +27,8 @@ class AssertTest extends \PHPUnit_Framework_TestCase
     public function testFetchPetBodyMatchDefinition()
     {
         $client = new Client();
-        $request = $client->createRequest('GET');
+        $request = $client->createRequest('GET', 'http://petstore.swagger.io/v2/pet/findByStatus');
         $request->addHeader('Accept', 'application/json');
-        $request->setPath('http://petstore.swagger.io/v2/pet/findByStatus');
 
         $response = $client->send($request);
         $responseBody = $response->json(['object' => true]);
