@@ -24,16 +24,14 @@ class AssertsTraitTest extends TestCase
     public function testAssertResponseBodyMatch()
     {
         $response = <<<JSON
-[
-  {
-    "id": 123456789,
-    "name": "foo"
-  }
-]
+{
+  "id": 123456789,
+  "name": "foo"
+}
 JSON;
         $response = json_decode($response);
 
-        $this->assertResponseBodyMatch($response, $this->schemaManager, '/pets', 'get', 200);
+        $this->assertResponseBodyMatch($response, $this->schemaManager, '/api/pets/123456789', 'get', 200);
     }
 
     public function testAssertResponseBodyMatchFail()
@@ -48,7 +46,7 @@ JSON;
         $response = json_decode($response);
 
         try {
-            $this->assertResponseBodyMatch($response, $this->schemaManager, '/pets', 'get', 200);
+            $this->assertResponseBodyMatch($response, $this->schemaManager, '/api/pets', 'get', 200);
             $this->fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
             $this->assertTrue(true);
@@ -57,13 +55,13 @@ JSON;
 
     public function testValidMediaType()
     {
-        $this->assertResponseMediaTypeMatch('text/html', $this->schemaManager, '/pets', 'get');
+        $this->assertResponseMediaTypeMatch('text/html', $this->schemaManager, '/api/pets', 'get');
     }
 
     public function testInvalidMediaType()
     {
         try {
-            $this->assertResponseMediaTypeMatch('application/pdf', $this->schemaManager, '/pets', 'get');
+            $this->assertResponseMediaTypeMatch('application/pdf', $this->schemaManager, '/api/pets', 'get');
             $this->fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
             $this->assertTrue(true);
@@ -76,7 +74,7 @@ JSON;
             'ETag' => '123',
         ];
 
-        $this->assertResponseHeadersMatch($headers, $this->schemaManager, '/pets', 'get', 200);
+        $this->assertResponseHeadersMatch($headers, $this->schemaManager, '/api/pets', 'get', 200);
     }
 
     public function testInvalidHeaders()
@@ -84,7 +82,7 @@ JSON;
         $headers = [];
 
         try {
-            $this->assertResponseHeadersMatch($headers, $this->schemaManager, '/pets', 'get', 200);
+            $this->assertResponseHeadersMatch($headers, $this->schemaManager, '/api/pets', 'get', 200);
             $this->fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
             $this->assertTrue(true);

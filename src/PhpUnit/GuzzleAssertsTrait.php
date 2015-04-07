@@ -76,11 +76,6 @@ trait GuzzleAssertsTrait
         SchemaManager $schemaManager,
         $message = ''
     ) {
-        $requestPath = $request->getPath();
-        if (!$schemaManager->findPathInTemplates($requestPath, $template, $params)) {
-            throw new \RuntimeException('Request URI does not match with any swagger path definition');
-        }
-
-        $this->assertResponseMatch($response, $schemaManager, $template, $request->getMethod(), $message);
+        $this->assertResponseMatch($response, $schemaManager, $request->getPath(), $request->getMethod(), $message);
     }
 }

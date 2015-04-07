@@ -29,7 +29,7 @@ class GuzzleAssertsTraitTest extends TestCase
         $response = $this->getValidResponseBody();
         $response = new Response(200, $this->getValidHeaders(), Stream::factory($response));
 
-        $this->assertResponseMatch($response, $this->schemaManager, '/pets', 'get');
+        $this->assertResponseMatch($response, $this->schemaManager, '/api/pets', 'get');
     }
 
     public function testAssertResponseAndRequestMatch()
@@ -53,7 +53,7 @@ JSON;
         $response = new Response(200, $this->getValidHeaders(), Stream::factory($response));
 
         try {
-            $this->assertResponseMatch($response, $this->schemaManager, '/pets', 'get');
+            $this->assertResponseMatch($response, $this->schemaManager, '/api/pets', 'get');
             $this->fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
             $this->assertEquals(
@@ -74,7 +74,7 @@ EOF
         $response = new Response(200, ['Content-Type' => 'application/pdf'], Stream::factory($response));
 
         try {
-            $this->assertResponseMatch($response, $this->schemaManager, '/pets', 'get');
+            $this->assertResponseMatch($response, $this->schemaManager, '/api/pets', 'get');
             $this->fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
             $this->assertEquals(
@@ -94,7 +94,7 @@ EOF
         $response = new Response(200, $headers, Stream::factory($this->getValidResponseBody()));
 
         try {
-            $this->assertResponseMatch($response, $this->schemaManager, '/pets', 'get');
+            $this->assertResponseMatch($response, $this->schemaManager, '/api/pets', 'get');
             $this->fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
             $this->assertEquals(

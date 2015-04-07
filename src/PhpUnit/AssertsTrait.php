@@ -29,7 +29,11 @@ trait AssertsTrait
         $httpCode,
         $message = ''
     ) {
-        $constraint = new ResponseBodyConstraint($schemaManager, $path, $httpMethod, $httpCode);
+        if (!$schemaManager->findPathInTemplates($path, $template, $params)) {
+            throw new \RuntimeException('Request URI does not match with any swagger path definition');
+        }
+
+        $constraint = new ResponseBodyConstraint($schemaManager, $template, $httpMethod, $httpCode);
 
         Assert::assertThat($responseBody, $constraint, $message);
     }
@@ -50,7 +54,11 @@ trait AssertsTrait
         $httpMethod,
         $message = ''
     ) {
-        $constraint = new ResponseMediaTypeConstraint($schemaManager, $path, $httpMethod);
+        if (!$schemaManager->findPathInTemplates($path, $template, $params)) {
+            throw new \RuntimeException('Request URI does not match with any swagger path definition');
+        }
+
+        $constraint = new ResponseMediaTypeConstraint($schemaManager, $template, $httpMethod);
 
         Assert::assertThat($responseMediaType, $constraint, $message);
     }
@@ -73,7 +81,11 @@ trait AssertsTrait
         $httpCode,
         $message = ''
     ) {
-        $constraint = new ResponseHeadersConstraint($schemaManager, $path, $httpMethod, $httpCode);
+        if (!$schemaManager->findPathInTemplates($path, $template, $params)) {
+            throw new \RuntimeException('Request URI does not match with any swagger path definition');
+        }
+
+        $constraint = new ResponseHeadersConstraint($schemaManager, $template, $httpMethod, $httpCode);
 
         Assert::assertThat($headers, $constraint, $message);
     }
