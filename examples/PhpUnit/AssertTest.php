@@ -3,6 +3,7 @@
 use FR3D\SwaggerAssertions\PhpUnit\AssertsTrait;
 use FR3D\SwaggerAssertions\SchemaManager;
 use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 
 /**
  * PHPUnit integration example.
@@ -16,6 +17,11 @@ class AssertTest extends \PHPUnit_Framework_TestCase
      */
     protected static $schemaManager;
 
+    /**
+     * @var ClientInterface
+     */
+    protected $guzzleHttpClient;
+
     public static function setUpBeforeClass()
     {
         self::$schemaManager = new SchemaManager('http://petstore.swagger.io/v2/swagger.json');
@@ -24,15 +30,19 @@ class AssertTest extends \PHPUnit_Framework_TestCase
         // self::$schemaManager = new SchemaManager('file:///MyAPI/swagger.json');
     }
 
+    protected function setUp()
+    {
+        $this->guzzleHttpClient = new Client(['headers' => ['User-Agent' => 'https://github.com/Maks3w/SwaggerAssertions']]);
+    }
+
     public function testFetchPetBodyMatchDefinition()
     {
-        $client = new Client();
-        $request = $client->createRequest('GET', 'http://petstore.swagger.io/v2/pet/findByStatus');
+        $request = $this->guzzleHttpClient->createRequest('GET', 'http://petstore.swagger.io/v2/pet/findByStatus');
         $request->addHeader('Accept', 'application/json');
 
-        $response = $client->send($request);
+        $response = $this->guzzleHttpClient->send($request);
         $responseBody = $response->json(['object' => true]);
 
-        $this->assertResponseBodyMatch($responseBody, self::$schemaManager, '/pet/{petId}', 'get', 200);
+        $this->assertResponseBodyMatch($responseBody, self::$schemaManager, '/pet/findByStatus', 'get', 200);
     }
 }
