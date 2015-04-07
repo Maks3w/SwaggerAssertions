@@ -40,6 +40,6 @@ class AssertTest extends \PHPUnit_Framework_TestCase
         $response = $this->guzzleHttpClient->send($request);
         $responseBody = $response->json(['object' => true]);
 
-        $this->assertResponseBodyMatch($responseBody, self::$schemaManager, '/pet/findByStatus', 'get', 200);
+        $this->assertResponseBodyMatch($responseBody, self::$schemaManager, '/v2/pet/findByStatus', 'get', 200);
     }
 }

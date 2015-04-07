@@ -49,6 +49,6 @@ class GuzzleTest extends \PHPUnit_Framework_TestCase
 
         $response = $this->guzzleHttpClient->send($request);
 
-        $this->assertResponseMatch($response, self::$schemaManager, '/pet/findByStatus', 'get');
+        $this->assertResponseMatch($response, self::$schemaManager, '/v2/pet/findByStatus', 'get');
     }
 }
