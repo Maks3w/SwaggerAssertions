@@ -8,7 +8,7 @@
             "email": "github.maks3w@virtualplanets.net"
         }
     ],
-    "homepage": "https://github.com/Maks3w/phpunit-swagger-assertions",
+    "homepage": "https://github.com/Maks3w/SwaggerAssertions",
     "require": {
         "justinrainbow/json-schema": "~1.4.1",
         "phpunit/phpunit": "~4.0",
