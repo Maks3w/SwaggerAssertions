@@ -71,7 +71,7 @@ EOF
     public function testAssertResponseMediaTypeDoesNotMatch()
     {
         $response = $this->getValidResponseBody();
-        $response = new Response(200, ['Content-Type' => 'application/pdf'], Stream::factory($response));
+        $response = new Response(200, ['Content-Type' => 'application/pdf; charset=utf-8'], Stream::factory($response));
 
         try {
             $this->assertResponseMatch($response, $this->schemaManager, '/api/pets', 'get');
