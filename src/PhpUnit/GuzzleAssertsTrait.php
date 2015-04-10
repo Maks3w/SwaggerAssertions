@@ -18,7 +18,7 @@ trait GuzzleAssertsTrait
      *
      * @param ResponseInterface $response
      * @param SchemaManager $schemaManager
-     * @param string $path
+     * @param string $path percent-encoded path used on the request.
      * @param string $httpMethod
      * @param string $message
      */

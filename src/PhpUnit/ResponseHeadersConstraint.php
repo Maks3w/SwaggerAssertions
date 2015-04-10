@@ -33,7 +33,7 @@ class ResponseHeadersConstraint extends Constraint
 
     /**
      * @param SchemaManager $schemaManager
-     * @param string $path
+     * @param string $path Swagger path template.
      * @param string $httpMethod
      * @param int $httpCode
      */

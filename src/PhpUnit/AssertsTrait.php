@@ -17,7 +17,7 @@ trait AssertsTrait
      *
      * @param stdClass|stdClass[] $responseBody
      * @param SchemaManager $schemaManager
-     * @param string $path
+     * @param string $path percent-encoded path used on the request.
      * @param string $httpMethod
      * @param int $httpCode
      * @param string $message
@@ -44,7 +44,7 @@ trait AssertsTrait
      *
      * @param string $responseMediaType
      * @param SchemaManager $schemaManager
-     * @param string $path
+     * @param string $path percent-encoded path used on the request.
      * @param string $httpMethod
      * @param string $message
      */
@@ -73,7 +73,7 @@ trait AssertsTrait
      *
      * @param string[] $headers
      * @param SchemaManager $schemaManager
-     * @param string $path
+     * @param string $path percent-encoded path used on the request.
      * @param string $httpMethod
      * @param int $httpCode
      * @param string $message

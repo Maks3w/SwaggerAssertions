@@ -45,7 +45,7 @@ class SchemaManager
     }
 
     /**
-     * @param string $path
+     * @param string $path Swagger path template.
      * @param string $method
      * @param string $httpCode
      *
@@ -66,7 +66,7 @@ class SchemaManager
     }
 
     /**
-     * @param string $path
+     * @param string $path Swagger path template.
      * @param string $method
      * @param string $httpCode
      *
@@ -89,7 +89,7 @@ class SchemaManager
      *
      * If response does not have specific media types then inherit from global API media types.
      *
-     * @param string $path
+     * @param string $path Swagger path template.
      * @param string $method
      *
      * @return string[]
@@ -133,7 +133,7 @@ class SchemaManager
     }
 
     /**
-     * @param string $requestPath
+     * @param string $requestPath percent-encoded path used on the request.
      * @param string $path Output variable. matched path
      * @param array $params Output variable. path parameters
      *
@@ -197,7 +197,7 @@ class SchemaManager
     }
 
     /**
-     * @param string $path
+     * @param string $path Swagger path template.
      * @param string $method
      * @param int $httpCode
      *

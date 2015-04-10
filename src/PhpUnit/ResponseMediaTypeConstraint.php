@@ -17,7 +17,7 @@ class ResponseMediaTypeConstraint extends Constraint
 
     /**
      * @param SchemaManager $schemaManager
-     * @param string $path
+     * @param string $path Swagger path template.
      * @param string $httpMethod
      */
     public function __construct(SchemaManager $schemaManager, $path, $httpMethod)
