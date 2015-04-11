@@ -5,7 +5,7 @@ namespace FR3D\SwaggerAssertions;
 use FR3D\SwaggerAssertions\JsonSchema\Uri\UriRetriever;
 use InvalidArgumentException;
 use JsonSchema\RefResolver;
-use Rize\UriTemplate;
+use Rize\UriTemplate\UriTemplate;
 use stdClass;
 
 /**
@@ -152,6 +152,13 @@ class SchemaManager
             $params = $uriTemplateManager->extract($fullTemplate, $requestPath, true);
             if ($params !== null) {
                 $path = $template;
+
+                // Swagger don't follow RFC6570 so array parameters must be treated like a single string argument.
+                array_walk($params, function (&$param) {
+                    if (is_array($param)) {
+                        $param = implode(',', $param);
+                    }
+                });
 
                 return true;
             }
