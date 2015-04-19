@@ -21,5 +21,6 @@ return Symfony\CS\Config\Config::create()
             ->in('examples')
             ->in('src')
             ->in('tests')
+            ->exclude('JsonSchema')
     )
     ;
