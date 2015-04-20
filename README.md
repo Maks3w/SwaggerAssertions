@@ -12,7 +12,7 @@ This project is compatible with [Swagger 2](http://swagger.io/) spec definitions
 You can use [Composer](https://getcomposer.org) .
 
 ```bash
-composer require Maks3w/SwaggerAssertions
+composer require fr3d/swagger-assertions
 ```
 
 ## Usage in PHPUnit
