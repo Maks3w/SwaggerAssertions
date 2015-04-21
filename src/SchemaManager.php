@@ -101,7 +101,7 @@ class SchemaManager
             'paths',
             $path,
             $method,
-            'produces'
+            'produces',
         ];
 
         if ($this->hasPath($responseMediaTypes)) {
@@ -219,7 +219,7 @@ class SchemaManager
                 $path,
                 $method,
                 'responses',
-                $httpCode
+                $httpCode,
             ];
         };
 

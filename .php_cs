@@ -5,8 +5,6 @@ return Symfony\CS\Config\Config::create()
         [
             '-concat_without_spaces',
             '-empty_return',
-            '-multiline_array_trailing_comma',
-            '-phpdoc_indent',
             '-phpdoc_no_empty_return',
             '-phpdoc_params',
             '-phpdoc_to_comment',
