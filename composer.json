@@ -1,6 +1,14 @@
 {
     "name": "fr3d/swagger-assertions",
     "description": "Test your API requests and responses against your swagger definition",
+    "keywords": [
+        "api",
+        "assertion",
+        "phpunit",
+        "swagger",
+        "test",
+        "testing"
+    ],
     "license": "BSD-2-Clause",
     "authors": [
         {
