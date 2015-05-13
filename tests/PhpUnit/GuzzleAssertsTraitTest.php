@@ -29,7 +29,7 @@ class GuzzleAssertsTraitTest extends TestCase
         $response = $this->getValidResponseBody();
         $response = new Response(200, $this->getValidHeaders(), Stream::factory($response));
 
-        $this->assertResponseMatch($response, $this->schemaManager, '/api/pets', 'get');
+        self::assertResponseMatch($response, $this->schemaManager, '/api/pets', 'get');
     }
 
     public function testAssertResponseAndRequestMatch()
@@ -38,7 +38,7 @@ class GuzzleAssertsTraitTest extends TestCase
         $response = new Response(200, $this->getValidHeaders(), Stream::factory($response));
         $request = new Request('GET', 'http://example.com/api/pets');
 
-        $this->assertResponseAndRequestMatch($response, $request, $this->schemaManager);
+        self::assertResponseAndRequestMatch($response, $request, $this->schemaManager);
     }
 
     public function testAssertResponseBodyDoesNotMatch()
@@ -53,10 +53,10 @@ JSON;
         $response = new Response(200, $this->getValidHeaders(), Stream::factory($response));
 
         try {
-            $this->assertResponseMatch($response, $this->schemaManager, '/api/pets', 'get');
-            $this->fail('Expected ExpectationFailedException to be thrown');
+            self::assertResponseMatch($response, $this->schemaManager, '/api/pets', 'get');
+            self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
-            $this->assertEquals(
+            self::assertEquals(
                 <<<EOF
 Failed asserting that [{"id":123456789}] is valid.
 [0] the property name is required
@@ -74,10 +74,10 @@ EOF
         $response = new Response(200, ['Content-Type' => 'application/pdf; charset=utf-8'], Stream::factory($response));
 
         try {
-            $this->assertResponseMatch($response, $this->schemaManager, '/api/pets', 'get');
-            $this->fail('Expected ExpectationFailedException to be thrown');
+            self::assertResponseMatch($response, $this->schemaManager, '/api/pets', 'get');
+            self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
-            $this->assertEquals(
+            self::assertEquals(
                 "Failed asserting that 'application/pdf' is an allowed media type (application/json, application/xml, text/xml, text/html).",
                 $e->getMessage()
             );
@@ -94,10 +94,10 @@ EOF
         $response = new Response(200, $headers, Stream::factory($this->getValidResponseBody()));
 
         try {
-            $this->assertResponseMatch($response, $this->schemaManager, '/api/pets', 'get');
-            $this->fail('Expected ExpectationFailedException to be thrown');
+            self::assertResponseMatch($response, $this->schemaManager, '/api/pets', 'get');
+            self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
-            $this->assertEquals(
+            self::assertEquals(
                 <<<EOF
 Failed asserting that {"Content-Type":"application\/json"} is valid.
 [] the property ETag is required

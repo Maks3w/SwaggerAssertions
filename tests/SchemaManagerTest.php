@@ -26,9 +26,9 @@ class SchemaManagerTest extends TestCase
      */
     public function testFindPathInTemplatesValid($requestPath, $expectedTemplate, array $expectedParameters)
     {
-        $this->assertTrue($this->schemaManager->findPathInTemplates($requestPath, $path, $parameters));
-        $this->assertEquals($expectedTemplate, $path);
-        $this->assertEquals($expectedParameters, $parameters);
+        self::assertTrue($this->schemaManager->findPathInTemplates($requestPath, $path, $parameters));
+        self::assertEquals($expectedTemplate, $path);
+        self::assertEquals($expectedParameters, $parameters);
     }
 
     public function validPathsProvider()

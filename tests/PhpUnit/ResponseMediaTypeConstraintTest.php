@@ -28,25 +28,25 @@ class ResponseMediaTypeConstraintTest extends TestCase
 
     public function testConstraintDefinition()
     {
-        $this->assertEquals(1, count($this->constraint));
-        $this->assertEquals('is an allowed media type (application/json, application/xml, text/xml, text/html)', $this->constraint->toString());
+        self::assertEquals(1, count($this->constraint));
+        self::assertEquals('is an allowed media type (application/json, application/xml, text/xml, text/html)', $this->constraint->toString());
     }
 
     public function testValidMediaType()
     {
-        $this->assertTrue($this->constraint->evaluate('text/xml', '', true));
+        self::assertTrue($this->constraint->evaluate('text/xml', '', true));
     }
 
     public function testInvalidMediaType()
     {
         $mediaType = 'application/pdf';
-        $this->assertFalse($this->constraint->evaluate($mediaType, '', true));
+        self::assertFalse($this->constraint->evaluate($mediaType, '', true));
 
         try {
             $this->constraint->evaluate($mediaType);
-            $this->fail('Expected ExpectationFailedException to be thrown');
+            self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
-            $this->assertEquals(
+            self::assertEquals(
                 <<<EOF
 Failed asserting that 'application/pdf' is an allowed media type (application/json, application/xml, text/xml, text/html).
 
@@ -61,6 +61,6 @@ EOF
     {
         $this->constraint = new ResponseMediaTypeConstraint($this->schemaManager, '/pets', 'delete');
 
-        $this->assertTrue($this->constraint->evaluate('application/json', '', true));
+        self::assertTrue($this->constraint->evaluate('application/json', '', true));
     }
 }

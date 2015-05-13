@@ -31,7 +31,7 @@ class AssertsTraitTest extends TestCase
 JSON;
         $response = json_decode($response);
 
-        $this->assertResponseBodyMatch($response, $this->schemaManager, '/api/pets/123456789', 'get', 200);
+        self::assertResponseBodyMatch($response, $this->schemaManager, '/api/pets/123456789', 'get', 200);
     }
 
     public function testAssertResponseBodyMatchFail()
@@ -46,25 +46,25 @@ JSON;
         $response = json_decode($response);
 
         try {
-            $this->assertResponseBodyMatch($response, $this->schemaManager, '/api/pets', 'get', 200);
-            $this->fail('Expected ExpectationFailedException to be thrown');
+            self::assertResponseBodyMatch($response, $this->schemaManager, '/api/pets', 'get', 200);
+            self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
-            $this->assertTrue(true);
+            self::assertTrue(true);
         }
     }
 
     public function testValidMediaType()
     {
-        $this->assertResponseMediaTypeMatch('text/html', $this->schemaManager, '/api/pets', 'get');
+        self::assertResponseMediaTypeMatch('text/html', $this->schemaManager, '/api/pets', 'get');
     }
 
     public function testInvalidMediaType()
     {
         try {
-            $this->assertResponseMediaTypeMatch('application/pdf', $this->schemaManager, '/api/pets', 'get');
-            $this->fail('Expected ExpectationFailedException to be thrown');
+            self::assertResponseMediaTypeMatch('application/pdf', $this->schemaManager, '/api/pets', 'get');
+            self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
-            $this->assertTrue(true);
+            self::assertTrue(true);
         }
     }
 
@@ -74,7 +74,7 @@ JSON;
             'ETag' => '123',
         ];
 
-        $this->assertResponseHeadersMatch($headers, $this->schemaManager, '/api/pets', 'get', 200);
+        self::assertResponseHeadersMatch($headers, $this->schemaManager, '/api/pets', 'get', 200);
     }
 
     public function testInvalidHeaders()
@@ -82,10 +82,10 @@ JSON;
         $headers = [];
 
         try {
-            $this->assertResponseHeadersMatch($headers, $this->schemaManager, '/api/pets', 'get', 200);
-            $this->fail('Expected ExpectationFailedException to be thrown');
+            self::assertResponseHeadersMatch($headers, $this->schemaManager, '/api/pets', 'get', 200);
+            self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
-            $this->assertTrue(true);
+            self::assertTrue(true);
         }
     }
 }

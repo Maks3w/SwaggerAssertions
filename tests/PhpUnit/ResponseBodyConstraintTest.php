@@ -28,8 +28,8 @@ class ResponseBodyConstraintTest extends TestCase
 
     public function testConstraintDefinition()
     {
-        $this->assertEquals(1, count($this->constraint));
-        $this->assertEquals('is valid', $this->constraint->toString());
+        self::assertEquals(1, count($this->constraint));
+        self::assertEquals('is valid', $this->constraint->toString());
     }
 
     public function testValidSchema()
@@ -44,7 +44,7 @@ class ResponseBodyConstraintTest extends TestCase
 JSON;
         $response = json_decode($response);
 
-        $this->assertTrue($this->constraint->evaluate($response, '', true), $this->constraint->evaluate($response));
+        self::assertTrue($this->constraint->evaluate($response, '', true), $this->constraint->evaluate($response));
     }
 
     public function testInvalidSchema()
@@ -58,13 +58,13 @@ JSON;
 JSON;
         $response = json_decode($response);
 
-        $this->assertFalse($this->constraint->evaluate($response, '', true));
+        self::assertFalse($this->constraint->evaluate($response, '', true));
 
         try {
             $this->constraint->evaluate($response);
-            $this->fail('Expected ExpectationFailedException to be thrown');
+            self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
-            $this->assertEquals(
+            self::assertEquals(
                 <<<EOF
 Failed asserting that [{"id":123456789}] is valid.
 [0] the property name is required
@@ -88,6 +88,6 @@ EOF
 JSON;
         $response = json_decode($response);
 
-        $this->assertTrue($this->constraint->evaluate($response, '', true), $this->constraint->evaluate($response));
+        self::assertTrue($this->constraint->evaluate($response, '', true), $this->constraint->evaluate($response));
     }
 }

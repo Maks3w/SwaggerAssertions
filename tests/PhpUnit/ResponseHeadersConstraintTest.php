@@ -28,8 +28,8 @@ class ResponseHeadersConstraintTest extends TestCase
 
     public function testConstraintDefinition()
     {
-        $this->assertEquals(1, count($this->constraint));
-        $this->assertEquals('is valid', $this->constraint->toString());
+        self::assertEquals(1, count($this->constraint));
+        self::assertEquals('is valid', $this->constraint->toString());
     }
 
     public function testValidHeaders()
@@ -39,7 +39,7 @@ class ResponseHeadersConstraintTest extends TestCase
             'ETag' => '123',
         ];
 
-        $this->assertTrue($this->constraint->evaluate($headers, '', true), $this->constraint->evaluate($headers));
+        self::assertTrue($this->constraint->evaluate($headers, '', true), $this->constraint->evaluate($headers));
     }
 
     public function testInvalidHeaderType()
@@ -49,13 +49,13 @@ class ResponseHeadersConstraintTest extends TestCase
             // 'ETag' => '123', // Removed intentional
         ];
 
-        $this->assertFalse($this->constraint->evaluate($headers, '', true));
+        self::assertFalse($this->constraint->evaluate($headers, '', true));
 
         try {
             $this->constraint->evaluate($headers);
-            $this->fail('Expected ExpectationFailedException to be thrown');
+            self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
-            $this->assertEquals(
+            self::assertEquals(
                 <<<EOF
 Failed asserting that {"Content-Type":"application\/json"} is valid.
 [] the property ETag is required
