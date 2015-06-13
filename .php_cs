@@ -12,6 +12,7 @@ return Symfony\CS\Config\Config::create()
             'concat_with_spaces',
             'ereg_to_preg',
             'ordered_use',
+            'short_array_syntax',
         ]
     )
     ->finder(
