@@ -2,8 +2,8 @@
 
 namespace FR3D\SwaggerAssertions\PhpUnit;
 
-use FR3D\SwaggerAssertions\JsonSchema\Validator;
 use FR3D\SwaggerAssertions\SchemaManager;
+use JsonSchema\Validator;
 use PHPUnit_Framework_Constraint as Constraint;
 
 /**
