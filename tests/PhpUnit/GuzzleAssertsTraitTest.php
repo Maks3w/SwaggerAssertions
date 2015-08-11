@@ -59,7 +59,7 @@ JSON;
             self::assertEquals(
                 <<<EOF
 Failed asserting that [{"id":123456789}] is valid.
-[0] the property name is required
+[name] The property name is required
 
 EOF
                 ,
@@ -100,7 +100,7 @@ EOF
             self::assertEquals(
                 <<<EOF
 Failed asserting that {"Content-Type":"application\/json"} is valid.
-[] the property ETag is required
+[ETag] The property ETag is required
 
 EOF
                 ,

@@ -67,7 +67,7 @@ JSON;
             self::assertEquals(
                 <<<EOF
 Failed asserting that [{"id":123456789}] is valid.
-[0] the property name is required
+[name] The property name is required
 
 EOF
                 ,

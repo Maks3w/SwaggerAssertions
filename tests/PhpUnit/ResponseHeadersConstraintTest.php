@@ -58,7 +58,7 @@ class ResponseHeadersConstraintTest extends TestCase
             self::assertEquals(
                 <<<EOF
 Failed asserting that {"Content-Type":"application\/json"} is valid.
-[] the property ETag is required
+[ETag] The property ETag is required
 
 EOF
                 ,
