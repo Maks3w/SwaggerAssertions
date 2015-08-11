@@ -4,9 +4,9 @@ namespace FR3D\SwaggerAssertionsTest\PhpUnit;
 
 use FR3D\SwaggerAssertions\PhpUnit\GuzzleAssertsTrait;
 use FR3D\SwaggerAssertions\SchemaManager;
-use GuzzleHttp\Message\Request;
-use GuzzleHttp\Message\Response;
-use GuzzleHttp\Stream\Stream;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7;
 use PHPUnit_Framework_ExpectationFailedException as ExpectationFailedException;
 use PHPUnit_Framework_TestCase as TestCase;
 
@@ -27,7 +27,7 @@ class GuzzleAssertsTraitTest extends TestCase
     public function testAssertResponseMatch()
     {
         $response = $this->getValidResponseBody();
-        $response = new Response(200, $this->getValidHeaders(), Stream::factory($response));
+        $response = new Response(200, $this->getValidHeaders(), Psr7\stream_for($response));
 
         self::assertResponseMatch($response, $this->schemaManager, '/api/pets', 'get');
     }
@@ -35,7 +35,7 @@ class GuzzleAssertsTraitTest extends TestCase
     public function testAssertResponseAndRequestMatch()
     {
         $response = $this->getValidResponseBody();
-        $response = new Response(200, $this->getValidHeaders(), Stream::factory($response));
+        $response = new Response(200, $this->getValidHeaders(), Psr7\stream_for($response));
         $request = new Request('GET', 'http://example.com/api/pets');
 
         self::assertResponseAndRequestMatch($response, $request, $this->schemaManager);
@@ -50,7 +50,7 @@ class GuzzleAssertsTraitTest extends TestCase
   }
 ]
 JSON;
-        $response = new Response(200, $this->getValidHeaders(), Stream::factory($response));
+        $response = new Response(200, $this->getValidHeaders(), Psr7\stream_for($response));
 
         try {
             self::assertResponseMatch($response, $this->schemaManager, '/api/pets', 'get');
@@ -71,7 +71,7 @@ EOF
     public function testAssertResponseMediaTypeDoesNotMatch()
     {
         $response = $this->getValidResponseBody();
-        $response = new Response(200, ['Content-Type' => 'application/pdf; charset=utf-8'], Stream::factory($response));
+        $response = new Response(200, ['Content-Type' => 'application/pdf; charset=utf-8'], Psr7\stream_for($response));
 
         try {
             self::assertResponseMatch($response, $this->schemaManager, '/api/pets', 'get');
@@ -91,7 +91,7 @@ EOF
             // 'ETag' => '123', // Removed intentional
         ];
 
-        $response = new Response(200, $headers, Stream::factory($this->getValidResponseBody()));
+        $response = new Response(200, $headers, Psr7\stream_for($this->getValidResponseBody()));
 
         try {
             self::assertResponseMatch($response, $this->schemaManager, '/api/pets', 'get');

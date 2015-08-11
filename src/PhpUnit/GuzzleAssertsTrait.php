@@ -3,8 +3,9 @@
 namespace FR3D\SwaggerAssertions\PhpUnit;
 
 use FR3D\SwaggerAssertions\SchemaManager;
-use GuzzleHttp\Message\RequestInterface;
-use GuzzleHttp\Message\ResponseInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use PHPUnit_Framework_Assert as Assert;
 
 /**
  * Facade functions for interact with Guzzle constraints.
@@ -29,8 +30,11 @@ trait GuzzleAssertsTrait
         $httpMethod,
         $message = ''
     ) {
+        $contentTypeHeader = $response->getHeader('Content-Type');
+        Assert::assertNotEmpty($contentTypeHeader);
+
         $this->assertResponseMediaTypeMatch(
-            $response->getHeader('Content-Type'),
+            $contentTypeHeader[0],
             $schemaManager,
             $path,
             $httpMethod,
@@ -53,7 +57,7 @@ trait GuzzleAssertsTrait
         );
 
         $this->assertResponseBodyMatch(
-            $responseBody = $response->json(['object' => true]),
+            $responseBody = json_decode($response->getBody()),
             $schemaManager,
             $path,
             $httpMethod,
@@ -76,6 +80,6 @@ trait GuzzleAssertsTrait
         SchemaManager $schemaManager,
         $message = ''
     ) {
-        $this->assertResponseMatch($response, $schemaManager, $request->getPath(), $request->getMethod(), $message);
+        $this->assertResponseMatch($response, $schemaManager, $request->getUri()->getPath(), $request->getMethod(), $message);
     }
 }
