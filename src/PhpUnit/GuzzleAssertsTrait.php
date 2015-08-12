@@ -53,7 +53,7 @@ trait GuzzleAssertsTrait
         );
 
         $this->assertResponseBodyMatch(
-            $responseBody = $response->json(['object' => true]),
+            $response->json(['object' => true]),
             $schemaManager,
             $path,
             $httpMethod,
