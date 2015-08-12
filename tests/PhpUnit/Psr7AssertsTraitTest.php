@@ -145,6 +145,7 @@ JSON;
     /**
      * @param string $method
      * @param string $path
+     *
      * @return MockObject|RequestInterface
      */
     protected function createMockRequest($method, $path)
@@ -165,6 +166,7 @@ JSON;
      * @param int $statusCode
      * @param array $headers
      * @param string $body
+     *
      * @return MockObject|ResponseInterface
      */
     protected function createMockResponse($statusCode, array $headers, $body)
