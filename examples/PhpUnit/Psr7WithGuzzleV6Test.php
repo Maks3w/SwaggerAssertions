@@ -1,16 +1,17 @@
 <?php
 
-use FR3D\SwaggerAssertions\PhpUnit\GuzzleAssertsTrait;
+use FR3D\SwaggerAssertions\PhpUnit\Psr7AssertsTrait;
 use FR3D\SwaggerAssertions\SchemaManager;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Psr7\Request;
 
 /**
  * PHPUnit-Guzzle integration example.
  */
-class GuzzleTest extends \PHPUnit_Framework_TestCase
+class Psr7WithGuzzleV6Test extends \PHPUnit_Framework_TestCase
 {
-    use GuzzleAssertsTrait;
+    use Psr7AssertsTrait;
 
     /**
      * @var SchemaManager
@@ -24,21 +25,21 @@ class GuzzleTest extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        if (version_compare(ClientInterface::VERSION, '6.0', '>=')) {
-            self::markTestSkipped('This example requires Guzzle V5 installed');
-        }
         self::$schemaManager = new SchemaManager('http://petstore.swagger.io/v2/swagger.json');
     }
 
     protected function setUp()
     {
+        if (version_compare(ClientInterface::VERSION, '6.0'. '<')) {
+            self::markTestSkipped('This example requires Guzzle V6 installed');
+        }
         $this->guzzleHttpClient = new Client(['headers' => ['User-Agent' => 'https://github.com/Maks3w/SwaggerAssertions']]);
     }
 
     public function testFetchPetMatchDefinition()
     {
-        $request = $this->guzzleHttpClient->createRequest('GET', 'http://petstore.swagger.io/v2/pet/findByStatus');
-        $request->addHeader('Accept', 'application/json');
+        $request = new Request('GET', 'http://petstore.swagger.io/v2/pet/findByStatus');
+        $request->withHeader('Accept', 'application/json');
 
         $response = $this->guzzleHttpClient->send($request);
 
@@ -47,8 +48,8 @@ class GuzzleTest extends \PHPUnit_Framework_TestCase
 
     public function testOnlyResponse()
     {
-        $request = $this->guzzleHttpClient->createRequest('GET', 'http://petstore.swagger.io/v2/pet/findByStatus');
-        $request->addHeader('Accept', 'application/json');
+        $request = new Request('GET', 'http://petstore.swagger.io/v2/pet/findByStatus');
+        $request->withHeader('Accept', 'application/json');
 
         $response = $this->guzzleHttpClient->send($request);
 

@@ -20,7 +20,8 @@ composer require fr3d/swagger-assertions
 There are two traits for provide predefined helper functions for different assertions.
 
 - [AssertsTrait](src/PhpUnit/AssertsTrait.php) For assert different parts of the response
-- [GuzzleAssertsTrait](src/PhpUnit/GuzzleAssertsTrait.php) For assert [Guzzle](https://github.com/guzzle/guzzle) responses.
+- [GuzzleAssertsTrait](src/PhpUnit/GuzzleAssertsTrait.php) For assert [Guzzle v5](https://github.com/guzzle/guzzle) responses.
+- [Psr7AssertsTrait](src/PhpUnit/Psr7AssertsTrait.php) For assert [PSR-7 compatible](http://www.php-fig.org/psr/psr-7/) responses.
 
 See examples at [examples/PhpUnit](examples/PhpUnit)
 
