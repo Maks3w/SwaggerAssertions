@@ -30,7 +30,7 @@ class Psr7WithGuzzleV6Test extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        if (version_compare(ClientInterface::VERSION, '6.0'. '<')) {
+        if (version_compare(ClientInterface::VERSION, '6.0', '<')) {
             self::markTestSkipped('This example requires Guzzle V6 installed');
         }
         $this->guzzleHttpClient = new Client(['headers' => ['User-Agent' => 'https://github.com/Maks3w/SwaggerAssertions']]);
