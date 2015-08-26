@@ -84,11 +84,15 @@ class ResponseHeadersConstraint extends Constraint
     protected function getValidator($headers)
     {
         $schema = new \stdClass();
-        $schema->properties = $this->schemaManager->getResponseHeaders($this->path, $this->httpMethod, $this->httpCode);
+        $headers = (object) array_change_key_case((array) $headers, CASE_LOWER);
+
+        $properties = $this->schemaManager->getResponseHeaders($this->path, $this->httpMethod, $this->httpCode);
+
+        $schema->properties = (object) array_change_key_case((array) $properties, CASE_LOWER);
         $schema->required = array_keys((array) $schema->properties);
 
         $validator = new Validator();
-        $validator->check((object) $headers, $schema);
+        $validator->check($headers, $schema);
 
         return $validator;
     }
