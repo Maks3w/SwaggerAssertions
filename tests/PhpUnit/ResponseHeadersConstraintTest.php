@@ -42,6 +42,16 @@ class ResponseHeadersConstraintTest extends TestCase
         self::assertTrue($this->constraint->evaluate($headers, '', true), $this->constraint->evaluate($headers));
     }
 
+    public function testCaseInsensitiveValidHeaders()
+    {
+        $headers = [
+            'Content-Type' => 'application/json',
+            'etag' => '123',
+        ];
+
+        self::assertTrue($this->constraint->evaluate($headers, '', true), $this->constraint->evaluate($headers));
+    }
+
     public function testInvalidHeaderType()
     {
         $headers = [
