@@ -103,7 +103,7 @@ EOF
             self::assertEquals(
                 <<<EOF
 Failed asserting that {"Content-Type":"application\/json"} is valid.
-[ETag] The property ETag is required
+[etag] The property etag is required
 
 EOF
                 ,

@@ -42,6 +42,16 @@ class ResponseHeadersConstraintTest extends TestCase
         self::assertTrue($this->constraint->evaluate($headers, '', true), $this->constraint->evaluate($headers));
     }
 
+    public function testCaseInsensitiveValidHeaders()
+    {
+        $headers = [
+            'Content-Type' => 'application/json',
+            'etag' => '123',
+        ];
+
+        self::assertTrue($this->constraint->evaluate($headers, '', true), $this->constraint->evaluate($headers));
+    }
+
     public function testInvalidHeaderType()
     {
         $headers = [
@@ -58,7 +68,7 @@ class ResponseHeadersConstraintTest extends TestCase
             self::assertEquals(
                 <<<EOF
 Failed asserting that {"Content-Type":"application\/json"} is valid.
-[ETag] The property ETag is required
+[etag] The property etag is required
 
 EOF
                 ,
