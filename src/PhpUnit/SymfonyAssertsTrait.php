@@ -1,6 +1,5 @@
 <?php
 
-
 namespace FR3D\SwaggerAssertions\PhpUnit;
 
 use FR3D\SwaggerAssertions\SchemaManager;

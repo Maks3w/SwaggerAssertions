@@ -1,18 +1,16 @@
 <?php
 
-
 namespace FR3D\SwaggerAssertionsTest\PhpUnit;
 
+use FR3D\SwaggerAssertions\PhpUnit\SymfonyAssertsTrait;
 use FR3D\SwaggerAssertions\SchemaManager;
 use PHPUnit_Framework_ExpectationFailedException as ExpectationFailedException;
 use PHPUnit_Framework_TestCase as TestCase;
-use FR3D\SwaggerAssertions\PhpUnit\SymfonyAssertsTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class SymfonyAssertsTraitTest extends TestCase
 {
-
     use SymfonyAssertsTrait;
 
     /**
@@ -122,11 +120,9 @@ JSON;
     protected function getValidHeaders()
     {
         return [
-            'Content-Type' =>
-                'application/json'
+            'Content-Type' => 'application/json'
             ,
-            'ETag' =>
-                '123'
+            'ETag' => '123'
             ,
         ];
     }
