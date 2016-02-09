@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
-         colors="true">
+<phpunit bootstrap="vendor/autoload.php"
+        colors="true"
+        forceCoversAnnotation="true"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd">
     <testsuites>
-        <testsuite name="librrary">
+        <testsuite name="library">
             <directory suffix="Test.php">tests/</directory>
         </testsuite>
         <testsuite name="examples">
