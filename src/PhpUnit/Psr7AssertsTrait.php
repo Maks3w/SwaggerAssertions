@@ -117,7 +117,16 @@ trait Psr7AssertsTrait
         SchemaManager $schemaManager,
         $message = ''
     ) {
-        $this->assertRequestMatch($request, $schemaManager, $message);
+        try {
+            $this->assertRequestMatch($request, $schemaManager, $message);
+        } catch (\PHPUnit_Framework_ExpectationFailedException $e) {
+            // If response represent a Client error then ignore.
+            $statusCode = $response->getStatusCode();
+            if ($statusCode < 400 || $statusCode > 499) {
+                throw $e;
+            }
+        }
+
         $this->assertResponseMatch($response, $schemaManager, $request->getUri()->getPath(), $request->getMethod(), $message);
     }
 

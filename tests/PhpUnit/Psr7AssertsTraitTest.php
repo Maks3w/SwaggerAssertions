@@ -45,6 +45,26 @@ class Psr7AssertsTraitTest extends TestCase
         self::assertResponseAndRequestMatch($response, $request, $this->schemaManager);
     }
 
+    public function testAssertResponseIsValidIfClientErrorAndRequestIsInvalid()
+    {
+        $response = $this->createMockResponse(404, $this->getValidHeaders(), '{"code":400,"message":"Invalid"}');
+        $request = $this->createMockRequest('POST', '/api/pets', ['Content-Type' => ['application/pdf']]);
+
+        self::assertResponseAndRequestMatch($response, $request, $this->schemaManager);
+    }
+
+    public function testAssertRerquestIsInvalidIfResponseIsNotAClientError()
+    {
+        $response = $this->createMockResponse(200, $this->getValidHeaders(), $this->getValidResponseBody());
+        $request = $this->createMockRequest('POST', '/api/pets', ['Content-Type' => ['application/pdf']]);
+
+        try {
+            self::assertResponseAndRequestMatch($response, $request, $this->schemaManager);
+        } catch (\PHPUnit_Framework_ExpectationFailedException $e) {
+            self::assertContains('request', $e->getMessage());
+        }
+    }
+
     public function testAssertResponseBodyDoesNotMatch()
     {
         $response = <<<JSON
