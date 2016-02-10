@@ -12,6 +12,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
 
+/**
+ * @covers FR3D\SwaggerAssertions\PhpUnit\Psr7AssertsTrait
+ */
 class Psr7AssertsTraitTest extends TestCase
 {
     use Psr7AssertsTrait;

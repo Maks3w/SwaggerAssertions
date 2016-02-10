@@ -7,93 +7,29 @@ use JsonSchema\Validator;
 use PHPUnit_Framework_Constraint as Constraint;
 
 /**
- * Validate response headers match against defined Swagger response schema.
+ * Validate response headers match against defined Swagger response headers schema.
  */
-class ResponseHeadersConstraint extends Constraint
+class ResponseHeadersConstraint extends JsonSchemaConstraint
 {
     /**
-     * @var SchemaManager
+     * @param object $headersSchema
      */
-    protected $schemaManager;
-
-    /**
-     * @var string
-     */
-    protected $path;
-
-    /**
-     * @var string
-     */
-    protected $httpMethod;
-
-    /**
-     * @var int
-     */
-    protected $httpCode;
-
-    /**
-     * @param SchemaManager $schemaManager
-     * @param string $path Swagger path template.
-     * @param string $httpMethod
-     * @param int $httpCode
-     */
-    public function __construct(SchemaManager $schemaManager, $path, $httpMethod, $httpCode)
+    public function __construct($headersSchema)
     {
-        parent::__construct();
+        $normalizedSchema = new \stdClass();
+        $normalizedSchema->properties = (object) array_change_key_case((array) $headersSchema, CASE_LOWER);
+        $normalizedSchema->required = array_keys((array) $normalizedSchema->properties);
 
-        $this->schemaManager = $schemaManager;
-        $this->path = $path;
-        $this->httpMethod = $httpMethod;
-        $this->httpCode = $httpCode;
-    }
-
-    protected function matches($other)
-    {
-        $validator = $this->getValidator($other);
-
-        return $validator->isValid();
-    }
-
-    protected function failureDescription($other)
-    {
-        return json_encode($other) . ' ' . $this->toString();
-    }
-
-    protected function additionalFailureDescription($other)
-    {
-        $description = '';
-
-        $validator = $this->getValidator($other);
-        foreach ($validator->getErrors() as $error) {
-            $description .= sprintf("[%s] %s\n", $error['property'], $error['message']);
-        }
-
-        return $description;
-    }
-
-    public function toString()
-    {
-        return 'is valid';
+        parent::__construct($normalizedSchema);
     }
 
     /**
-     * @param \stdClass $headers
-     *
-     * @return Validator
+     * {@inheritdoc}
      */
     protected function getValidator($headers)
     {
-        $schema = new \stdClass();
         $headers = (object) array_change_key_case((array) $headers, CASE_LOWER);
 
-        $properties = $this->schemaManager->getResponseHeaders($this->path, $this->httpMethod, $this->httpCode);
-
-        $schema->properties = (object) array_change_key_case((array) $properties, CASE_LOWER);
-        $schema->required = array_keys((array) $schema->properties);
-
-        $validator = new Validator();
-        $validator->check($headers, $schema);
-
-        return $validator;
+        return parent::getValidator($headers);
     }
 }

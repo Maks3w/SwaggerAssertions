@@ -7,6 +7,9 @@ use FR3D\SwaggerAssertions\SchemaManager;
 use PHPUnit_Framework_ExpectationFailedException as ExpectationFailedException;
 use PHPUnit_Framework_TestCase as TestCase;
 
+/**
+ * @covers FR3D\SwaggerAssertions\PhpUnit\AssertsTrait
+ */
 class AssertsTraitTest extends TestCase
 {
     use AssertsTrait;

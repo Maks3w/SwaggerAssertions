@@ -34,7 +34,7 @@ trait AssertsTrait
             throw new \RuntimeException('Request URI does not match with any swagger path definition');
         }
 
-        $constraint = new ResponseBodyConstraint($schemaManager, $template, $httpMethod, $httpCode);
+        $constraint = new JsonSchemaConstraint($schemaManager->getResponseSchema($template, $httpMethod, $httpCode));
 
         Assert::assertThat($responseBody, $constraint, $message);
     }
@@ -63,7 +63,7 @@ trait AssertsTrait
         $ctHeader = ContentType::fromString('Content-Type: ' . $responseMediaType);
         $responseMediaType = $ctHeader->getMediaType();
 
-        $constraint = new ResponseMediaTypeConstraint($schemaManager, $template, $httpMethod);
+        $constraint = new MediaTypeConstraint($schemaManager->getResponseMediaTypes($template, $httpMethod));
 
         Assert::assertThat($responseMediaType, $constraint, $message);
     }
@@ -90,7 +90,7 @@ trait AssertsTrait
             throw new \RuntimeException('Request URI does not match with any swagger path definition');
         }
 
-        $constraint = new ResponseHeadersConstraint($schemaManager, $template, $httpMethod, $httpCode);
+        $constraint = new ResponseHeadersConstraint($schemaManager->getResponseHeaders($template, $httpMethod, $httpCode));
 
         Assert::assertThat($headers, $constraint, $message);
     }

@@ -8,13 +8,11 @@ use PHPUnit_Framework_ExpectationFailedException as ExpectationFailedException;
 use PHPUnit_Framework_TestCase as TestCase;
 use PHPUnit_Framework_TestFailure as TestFailure;
 
+/**
+ * @covers FR3D\SwaggerAssertions\PhpUnit\ResponseHeadersConstraint
+ */
 class ResponseHeadersConstraintTest extends TestCase
 {
-    /**
-     * @var SchemaManager
-     */
-    protected $schemaManager;
-
     /**
      * @var \PHPUnit_Framework_Constraint
      */
@@ -22,8 +20,10 @@ class ResponseHeadersConstraintTest extends TestCase
 
     protected function setUp()
     {
-        $this->schemaManager = new SchemaManager('file://' . __DIR__ . '/../fixture/petstore-with-external-docs.json');
-        $this->constraint = new ResponseHeadersConstraint($this->schemaManager, '/pets', 'get', 200);
+        $schema = '{"ETag":{"minimum":1}}';
+        $schema = json_decode($schema);
+
+        $this->constraint = new ResponseHeadersConstraint($schema);
     }
 
     public function testConstraintDefinition()

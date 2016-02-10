@@ -2,19 +2,17 @@
 
 namespace FR3D\SwaggerAssertionsTest\PhpUnit;
 
-use FR3D\SwaggerAssertions\PhpUnit\ResponseMediaTypeConstraint;
+use FR3D\SwaggerAssertions\PhpUnit\MediaTypeConstraint;
 use FR3D\SwaggerAssertions\SchemaManager;
 use PHPUnit_Framework_ExpectationFailedException as ExpectationFailedException;
 use PHPUnit_Framework_TestCase as TestCase;
 use PHPUnit_Framework_TestFailure as TestFailure;
 
-class ResponseMediaTypeConstraintTest extends TestCase
+/**
+ * @covers FR3D\SwaggerAssertions\PhpUnit\MediaTypeConstraint
+ */
+class MediaTypeConstraintTest extends TestCase
 {
-    /**
-     * @var SchemaManager
-     */
-    protected $schemaManager;
-
     /**
      * @var \PHPUnit_Framework_Constraint
      */
@@ -22,14 +20,13 @@ class ResponseMediaTypeConstraintTest extends TestCase
 
     protected function setUp()
     {
-        $this->schemaManager = new SchemaManager('file://' . __DIR__ . '/../fixture/petstore-with-external-docs.json');
-        $this->constraint = new ResponseMediaTypeConstraint($this->schemaManager, '/pets', 'get');
+        $this->constraint = new MediaTypeConstraint(['application/json', 'text/xml']);
     }
 
     public function testConstraintDefinition()
     {
         self::assertEquals(1, count($this->constraint));
-        self::assertEquals('is an allowed media type (application/json, application/xml, text/xml, text/html)', $this->constraint->toString());
+        self::assertEquals('is an allowed media type (application/json, text/xml)', $this->constraint->toString());
     }
 
     public function testValidMediaType()
@@ -48,19 +45,12 @@ class ResponseMediaTypeConstraintTest extends TestCase
         } catch (ExpectationFailedException $e) {
             self::assertEquals(
                 <<<EOF
-Failed asserting that 'application/pdf' is an allowed media type (application/json, application/xml, text/xml, text/html).
+Failed asserting that 'application/pdf' is an allowed media type (application/json, text/xml).
 
 EOF
                 ,
                 TestFailure::exceptionToString($e)
             );
         }
-    }
-
-    public function testDefaultMediaType()
-    {
-        $this->constraint = new ResponseMediaTypeConstraint($this->schemaManager, '/pets', 'delete');
-
-        self::assertTrue($this->constraint->evaluate('application/json', '', true));
     }
 }

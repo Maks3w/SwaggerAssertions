@@ -10,6 +10,9 @@ use GuzzleHttp\Stream\Stream;
 use PHPUnit_Framework_ExpectationFailedException as ExpectationFailedException;
 use PHPUnit_Framework_TestCase as TestCase;
 
+/**
+ * @covers FR3D\SwaggerAssertions\PhpUnit\GuzzleAssertsTrait
+ */
 class GuzzleAssertsTraitTest extends TestCase
 {
     use GuzzleAssertsTrait;

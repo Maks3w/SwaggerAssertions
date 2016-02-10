@@ -5,6 +5,9 @@ namespace FR3D\SwaggerAssertionsTest;
 use FR3D\SwaggerAssertions\SchemaManager;
 use PHPUnit_Framework_TestCase as TestCase;
 
+/**
+ * @covers FR3D\SwaggerAssertions\SchemaManager
+ */
 class SchemaManagerTest extends TestCase
 {
     /**
@@ -19,10 +22,6 @@ class SchemaManagerTest extends TestCase
 
     /**
      * @dataProvider validPathsProvider
-     *
-     * @param string $requestPath
-     * @param string $expectedTemplate
-     * @param array $expectedParameters
      */
     public function testFindPathInTemplatesValid($requestPath, $expectedTemplate, array $expectedParameters)
     {
@@ -53,5 +52,69 @@ class SchemaManagerTest extends TestCase
         }
 
         return $dataCases;
+    }
+
+    /**
+     * @dataProvider responseMediaTypesProvider
+     */
+    public function testGetResponseMediaType($path, $method, array $expectedMediaTypes)
+    {
+        $mediaTypes = $this->schemaManager->getResponseMediaTypes($path, $method);
+
+        self::assertEquals($expectedMediaTypes, $mediaTypes);
+    }
+
+    public function responseMediaTypesProvider()
+    {
+        return [
+            // Description => [path, method, expectedMediaTypes]
+            'in response object' => ['/pets', 'get', ['application/json', 'application/xml', 'text/xml', 'text/html']],
+            'fallback to global' => ['/pets', 'delete', ['application/json']],
+        ];
+    }
+
+    /**
+     * @dataProvider responseSchemaProvider
+     */
+    public function testGetResponseSchema($path, $method, $httpCode, $expectedSchema)
+    {
+        $schema = $this->schemaManager->getResponseSchema($path, $method, $httpCode);
+
+        self::assertStringMatchesFormat($expectedSchema, json_encode($schema));
+    }
+
+    public function responseSchemaProvider()
+    {
+        $schema200 = '{"type":"array","items":{"required":["id","name"],"externalDocs":{"description":"find more info here","url":"https:\/\/swagger.io\/about"},"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"tag":{"type":"string"}},"id":"%s"}}';
+        $schemaDefault = '{"required":["code","message"],"properties":{"code":{"type":"integer","format":"int32"},"message":{"type":"string"}},"id":"%s"}';
+
+        $dataSet = [
+            // Description => [path, method, httpCode, expectedSchema]
+            'by http code' => ['/pets', 'get', 200, $schema200],
+            'fallback to default' => ['/pets', 'get', 222, $schemaDefault],
+        ];
+
+        return $dataSet;
+    }
+
+    /**
+     * @dataProvider responseHeadersProvider
+     */
+    public function testGetResponseHeaders($path, $method, $httpCode, $expectedHeaders)
+    {
+        $headers = $this->schemaManager->getResponseHeaders($path, $method, $httpCode);
+
+        self::assertStringMatchesFormat($expectedHeaders, json_encode($headers));
+    }
+
+    public function responseHeadersProvider()
+    {
+        $dataSet = [
+            // Description => [path, method, httpCode, expectedHeaders]
+            'by http code' => ['/pets', 'get', 200, '{"ETag":{"minimum":1}}'],
+            'fallback to default' => ['/pets', 'get', 222, '[]'],
+        ];
+
+        return $dataSet;
     }
 }
