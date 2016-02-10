@@ -123,9 +123,9 @@ EOF
             self::assertResponseMatch($response, $this->schemaManager, '/api/pets', 'get');
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
-            self::assertEquals(
+            self::assertStringMatchesFormat(
                 <<<EOF
-Failed asserting that {"content-type":"application\/json","cache-control":"no-cache"} is a valid response header.
+Failed asserting that {"content-type":"application\/json"%s} is a valid response header.
 [etag] The property etag is required
 
 EOF
