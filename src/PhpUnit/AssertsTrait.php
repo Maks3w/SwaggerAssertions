@@ -83,7 +83,9 @@ trait AssertsTrait
         $message = ''
     ) {
         if (!$schemaManager->findPathInTemplates($path, $template, $params)) {
+            // @codeCoverageIgnoreStart
             throw new \RuntimeException('Request URI does not match with any swagger path definition');
+            // @codeCoverageIgnoreEnd
         }
 
         // Strip charset encoding
@@ -112,7 +114,9 @@ trait AssertsTrait
         $message = ''
     ) {
         if (!$schemaManager->findPathInTemplates($path, $template, $params)) {
+            // @codeCoverageIgnoreStart
             throw new \RuntimeException('Request URI does not match with any swagger path definition');
+            // @codeCoverageIgnoreEnd
         }
 
         // Strip charset encoding
@@ -143,7 +147,9 @@ trait AssertsTrait
         $message = ''
     ) {
         if (!$schemaManager->findPathInTemplates($path, $template, $params)) {
+            // @codeCoverageIgnoreStart
             throw new \RuntimeException('Request URI does not match with any swagger path definition');
+            // @codeCoverageIgnoreEnd
         }
 
         $constraint = new ResponseHeadersConstraint($schemaManager->getResponseHeaders($template, $httpMethod, $httpCode));
@@ -168,7 +174,9 @@ trait AssertsTrait
         $message = ''
     ) {
         if (!$schemaManager->findPathInTemplates($path, $template, $params)) {
+            // @codeCoverageIgnoreStart
             throw new \RuntimeException('Request URI does not match with any swagger path definition');
+            // @codeCoverageIgnoreEnd
         }
 
         $constraint = new RequestHeadersConstraint($schemaManager->getRequestHeadersParameters($template, $httpMethod));

@@ -16,7 +16,9 @@ class RequestHeadersConstraint extends JsonSchemaConstraint
         $normalizedSchema->required = [];
         foreach ($headersParameters as $headerParameter) {
             if (!isset($headerParameter->name)) {
+                // @codeCoverageIgnoreStart
                 throw new \DomainException('Expected missing name field');
+                // @codeCoverageIgnoreEnd
             }
 
             $normalizedName = strtolower($headerParameter->name);

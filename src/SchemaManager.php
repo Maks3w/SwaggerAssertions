@@ -77,9 +77,11 @@ class SchemaManager
     {
         $response = $this->getResponse($path, $method, $httpCode);
         if (!isset($response->schema)) {
+            // @codeCoverageIgnoreStart
             throw new \UnexpectedValueException(
                 'Missing schema definition for ' . $this->pathToString([$path, $method, $httpCode])
             );
+            // @codeCoverageIgnoreEnd
         }
 
         $schema = $response->schema;
@@ -201,7 +203,9 @@ class SchemaManager
         $result = $this->definition;
         foreach ($segments as $segment) {
             if (!isset($result->$segment)) {
+                // @codeCoverageIgnoreStart
                 throw new InvalidArgumentException('Missing ' . $segment);
+                // @codeCoverageIgnoreEnd
             }
 
             $result = $result->$segment;
@@ -316,12 +320,16 @@ class SchemaManager
             case 1:
                 break;
             default:
-                throw new \DomainException('Too much body parameters. Only one is allowed');
+                // @codeCoverageIgnoreStart
+                throw new \DomainException('Too many body parameters. Only one is allowed');
+                // @codeCoverageIgnoreEnd
         }
 
         $parameter = $parameters[0];
         if (!isset($parameter->schema)) {
+            // @codeCoverageIgnoreStart
             throw new \DomainException('schema property is required for body parameter');
+            // @codeCoverageIgnoreEnd
         }
 
         return $this->resolveSchemaReferences($parameter->schema);
@@ -337,7 +345,9 @@ class SchemaManager
     {
         $method = $this->getMethod($path, $method);
         if (!isset($method->parameters)) {
+            // @codeCoverageIgnoreStart
             throw new InvalidArgumentException('Missing Parameter Object');
+            // @codeCoverageIgnoreEnd
         }
 
         $parameters = $method->parameters;
@@ -369,7 +379,9 @@ class SchemaManager
             $parameters,
             function ($parameter) use ($location) {
                 if (!isset($parameter->in)) {
+                    // @codeCoverageIgnoreStart
                     throw new InvalidArgumentException('Missing "in" field in Parameter Object');
+                    // @codeCoverageIgnoreEnd
                 }
 
                 return ($parameter->in === $location);
