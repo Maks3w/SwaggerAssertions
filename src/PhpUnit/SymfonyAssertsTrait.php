@@ -38,11 +38,7 @@ trait SymfonyAssertsTrait
         );
 
         $httpCode = $response->getStatusCode();
-
-        $headers = $response->headers->all();
-        foreach ($headers as &$value) {
-            $value = implode(', ', $value);
-        }
+        $headers = $this->inlineHeaders($response->headers->all());
 
         $this->assertResponseHeadersMatch(
             $headers,
@@ -64,6 +60,50 @@ trait SymfonyAssertsTrait
     }
 
     /**
+     * Asserts request match with the request schema.
+     *
+     * @param Request $request
+     * @param SchemaManager $schemaManager
+     * @param string $message
+     */
+    public function assertRequestMatch(
+        Request $request,
+        SchemaManager $schemaManager,
+        $message = ''
+    ) {
+        $path = $request->getRequestUri();
+        $httpMethod = $request->getMethod();
+
+        $headers = $this->inlineHeaders($request->headers->all());
+
+        $this->assertRequestHeadersMatch(
+            $headers,
+            $schemaManager,
+            $path,
+            $httpMethod,
+            $message
+        );
+
+        if (!empty((string) $request->getContent())) {
+            $this->assertRequestMediaTypeMatch(
+                $request->headers->get('Content-Type'),
+                $schemaManager,
+                $path,
+                $httpMethod,
+                $message
+            );
+        }
+
+        $this->assertRequestBodyMatch(
+            json_decode($request->getContent()),
+            $schemaManager,
+            $path,
+            $httpMethod,
+            $message
+        );
+    }
+
+    /**
      * Asserts response match with the response schema.
      *
      * @param Response $response
@@ -77,6 +117,31 @@ trait SymfonyAssertsTrait
         SchemaManager $schemaManager,
         $message = ''
     ) {
+        try {
+            $this->assertRequestMatch($request, $schemaManager, $message);
+        } catch (\PHPUnit_Framework_ExpectationFailedException $e) {
+            // If response represent a Client error then ignore.
+            $statusCode = $response->getStatusCode();
+            if ($statusCode < 400 || $statusCode > 499) {
+                throw $e;
+            }
+        }
+
         $this->assertResponseMatch($response, $schemaManager, $request->getRequestUri(), $request->getMethod(), $message);
+    }
+
+    /**
+     * @param string[] $headers
+     *
+     * @return string
+     */
+    protected function inlineHeaders(array $headers)
+    {
+        return array_map(
+            function (array $headers) {
+                return implode(', ', $headers);
+            },
+            $headers
+        );
     }
 }
