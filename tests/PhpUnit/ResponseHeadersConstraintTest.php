@@ -28,7 +28,7 @@ class ResponseHeadersConstraintTest extends TestCase
     public function testConstraintDefinition()
     {
         self::assertEquals(1, count($this->constraint));
-        self::assertEquals('is valid', $this->constraint->toString());
+        self::assertEquals('is a valid response header', $this->constraint->toString());
     }
 
     public function testValidHeaders()
@@ -66,7 +66,7 @@ class ResponseHeadersConstraintTest extends TestCase
         } catch (ExpectationFailedException $e) {
             self::assertEquals(
                 <<<EOF
-Failed asserting that {"Content-Type":"application\/json"} is valid.
+Failed asserting that {"Content-Type":"application\/json"} is a valid response header.
 [etag] The property etag is required
 
 EOF

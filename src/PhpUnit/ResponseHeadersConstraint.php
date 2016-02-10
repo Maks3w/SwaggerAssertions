@@ -16,7 +16,7 @@ class ResponseHeadersConstraint extends JsonSchemaConstraint
         $normalizedSchema->properties = (object) array_change_key_case((array) $headersSchema, CASE_LOWER);
         $normalizedSchema->required = array_keys((array) $normalizedSchema->properties);
 
-        parent::__construct($normalizedSchema);
+        parent::__construct($normalizedSchema, 'response header');
     }
 
     /**

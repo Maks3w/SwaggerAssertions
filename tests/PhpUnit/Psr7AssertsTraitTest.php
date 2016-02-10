@@ -61,7 +61,7 @@ JSON;
         } catch (ExpectationFailedException $e) {
             self::assertEquals(
                 <<<EOF
-Failed asserting that [{"id":123456789}] is valid.
+Failed asserting that [{"id":123456789}] is a valid response body.
 [name] The property name is required
 
 EOF
@@ -105,7 +105,7 @@ EOF
         } catch (ExpectationFailedException $e) {
             self::assertEquals(
                 <<<EOF
-Failed asserting that {"Content-Type":"application\/json"} is valid.
+Failed asserting that {"Content-Type":"application\/json"} is a valid response header.
 [etag] The property etag is required
 
 EOF

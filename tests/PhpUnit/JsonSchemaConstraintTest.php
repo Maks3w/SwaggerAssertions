@@ -32,13 +32,13 @@ class JsonSchemaConstraintTest extends TestCase
 JSON;
         $schema = json_decode($schema);
 
-        $this->constraint = new JsonSchemaConstraint($schema);
+        $this->constraint = new JsonSchemaConstraint($schema, 'context');
     }
 
     public function testConstraintDefinition()
     {
         self::assertEquals(1, count($this->constraint));
-        self::assertEquals('is valid', $this->constraint->toString());
+        self::assertEquals('is a valid context', $this->constraint->toString());
     }
 
     public function testValidSchema()
@@ -75,7 +75,7 @@ JSON;
         } catch (ExpectationFailedException $e) {
             self::assertEquals(
                 <<<EOF
-Failed asserting that [{"id":123456789}] is valid.
+Failed asserting that [{"id":123456789}] is a valid context.
 [name] The property name is required
 
 EOF

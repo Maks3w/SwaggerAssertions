@@ -16,13 +16,20 @@ class JsonSchemaConstraint extends Constraint
     protected $expectedSchema;
 
     /**
-     * @param object $expectedSchema
+     * @var string
      */
-    public function __construct($expectedSchema)
+    private $context;
+
+    /**
+     * @param object $expectedSchema
+     * @param string $context
+     */
+    public function __construct($expectedSchema, $context)
     {
         parent::__construct();
 
         $this->expectedSchema = $expectedSchema;
+        $this->context = $context;
     }
 
     /**
@@ -63,7 +70,7 @@ class JsonSchemaConstraint extends Constraint
      */
     public function toString()
     {
-        return 'is valid';
+        return 'is a valid ' . $this->context;
     }
 
     /**
