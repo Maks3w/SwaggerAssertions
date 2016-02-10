@@ -19,7 +19,7 @@
     "homepage": "https://github.com/Maks3w/SwaggerAssertions",
     "require": {
         "php": ">= 5.4.0",
-        "justinrainbow/json-schema": ">=1.4.2 <1.5",
+        "justinrainbow/json-schema": "1.4.4",
         "phpunit/phpunit": "4 - 5",
         "rize/uri-template": "^0.3.0",
         "zendframework/zend-http": "2.5 - 3"
