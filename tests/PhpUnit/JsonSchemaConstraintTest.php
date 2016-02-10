@@ -23,10 +23,10 @@ class JsonSchemaConstraintTest extends TestCase
 {
   "type":"array",
   "items":{
+    "type":"object",
     "required":["id","name"],
     "externalDocs":{"description":"find more info here","url":"https:\/\/swagger.io\/about"},
-    "properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"tag":{"type":"string"}},
-    "id":"#/definitions/pet"
+    "properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"tag":{"type":"string"}}
   }
 }
 JSON;

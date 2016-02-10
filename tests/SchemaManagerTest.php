@@ -85,8 +85,8 @@ class SchemaManagerTest extends TestCase
 
     public function responseSchemaProvider()
     {
-        $schema200 = '{"type":"array","items":{"required":["id","name"],"externalDocs":{"description":"find more info here","url":"https:\/\/swagger.io\/about"},"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"tag":{"type":"string"}},"id":"%s"}}';
-        $schemaDefault = '{"required":["code","message"],"properties":{"code":{"type":"integer","format":"int32"},"message":{"type":"string"}},"id":"%s"}';
+        $schema200 = '{"type":"array","items":{"type":"object","required":["id","name"],"externalDocs":{"description":"find more info here","url":"https:\/\/swagger.io\/about"},"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"tag":{"type":"string"}},"id":"%s"}}';
+        $schemaDefault = '{"type":"object","required":["code","message"],"properties":{"code":{"type":"integer","format":"int32"},"message":{"type":"string"}},"id":"%s"}';
 
         $dataSet = [
             // Description => [path, method, httpCode, expectedSchema]
@@ -111,7 +111,7 @@ class SchemaManagerTest extends TestCase
     {
         $dataSet = [
             // Description => [path, method, httpCode, expectedHeaders]
-            'by http code' => ['/pets', 'get', 200, '{"ETag":{"minimum":1}}'],
+            'by http code' => ['/pets', 'get', 200, '{"ETag":{"type":"string","minimum":1}}'],
             'fallback to default' => ['/pets', 'get', 222, '[]'],
         ];
 
