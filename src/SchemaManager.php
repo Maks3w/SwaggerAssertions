@@ -37,6 +37,28 @@ class SchemaManager
     }
 
     /**
+     * @param string $path Swagger path template.
+     * @param string $method
+     *
+     * @return stdClass
+     */
+    public function getMethod($path, $method)
+    {
+        $method = strtolower($method);
+        $pathSegments = function ($path, $method) {
+            return [
+                'paths',
+                $path,
+                $method,
+            ];
+        };
+
+        $method = $this->getPath($pathSegments($path, $method));
+
+        return $method;
+    }
+
+    /**
      * @return string[]
      */
     public function getPathTemplates()
@@ -233,6 +255,99 @@ class SchemaManager
     }
 
     /**
+     * Get the request media types for the given API operation.
+     *
+     * If request does not have specific media types then inherit from global API media types.
+     *
+     * @param string $path Swagger path template.
+     * @param string $method
+     *
+     * @return string[]
+     */
+    public function getRequestMediaTypes($path, $method)
+    {
+        $method = strtolower($method);
+        $mediaTypesPath = [
+            'paths',
+            $path,
+            $method,
+            'consumes',
+        ];
+
+        if ($this->hasPath($mediaTypesPath)) {
+            $mediaTypes = $this->getPath($mediaTypesPath);
+        } else {
+            $mediaTypes = $this->getPath(['consumes']);
+        }
+
+        return $mediaTypes;
+    }
+
+    /**
+     * @param string $path Swagger path template.
+     * @param string $method
+     *
+     * @return stdClass[]
+     */
+    public function getRequestHeadersParameters($path, $method)
+    {
+        $parameters = $this->getRequestParameters($path, $method);
+        $parameters = $this->filterParametersObjectByLocation($parameters, 'header');
+        if (empty($parameters)) {
+            return [];
+        }
+
+        return $parameters;
+    }
+
+    /**
+     * @param string $path Swagger path template.
+     * @param string $method
+     *
+     * @return stdClass
+     */
+    public function getRequestSchema($path, $method)
+    {
+        $parameters = $this->getRequestParameters($path, $method);
+        $parameters = $this->filterParametersObjectByLocation($parameters, 'body');
+        switch (count($parameters)) {
+            case 0:
+                return new stdClass();
+            case 1:
+                break;
+            default:
+                throw new \DomainException('Too much body parameters. Only one is allowed');
+        }
+
+        $parameter = $parameters[0];
+        if (!isset($parameter->schema)) {
+            throw new \DomainException('schema property is required for body parameter');
+        }
+
+        return $this->resolveSchemaReferences($parameter->schema);
+    }
+
+    /**
+     * @param string $path Swagger path template.
+     * @param string $method
+     *
+     * @return stdClass[]
+     */
+    public function getRequestParameters($path, $method)
+    {
+        $method = $this->getMethod($path, $method);
+        if (!isset($method->parameters)) {
+            throw new InvalidArgumentException('Missing Parameter Object');
+        }
+
+        $parameters = $method->parameters;
+
+        array_walk($parameters, [$this, 'resolveSchemaReferences']);
+
+        return $parameters;
+    }
+
+    /**
      * @param array $path
      *
      * @return string
@@ -240,5 +355,25 @@ class SchemaManager
     public function pathToString(array $path)
     {
         return implode('.', $path);
+    }
+
+    /**
+     * @param stdClass[] $parameters
+     * @param string $location
+     *
+     * @return \stdClass[]
+     */
+    private function filterParametersObjectByLocation(array $parameters, $location)
+    {
+        return array_values(array_filter(
+            $parameters,
+            function ($parameter) use ($location) {
+                if (!isset($parameter->in)) {
+                    throw new InvalidArgumentException('Missing "in" field in Parameter Object');
+                }
+
+                return ($parameter->in === $location);
+            }
+        ));
     }
 }

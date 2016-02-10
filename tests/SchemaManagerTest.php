@@ -117,4 +117,67 @@ class SchemaManagerTest extends TestCase
 
         return $dataSet;
     }
+
+    /**
+     * @dataProvider requestMediaTypesProvider
+     */
+    public function testGetRequestMediaType($path, $method, array $expectedMediaTypes)
+    {
+        $mediaTypes = $this->schemaManager->getRequestMediaTypes($path, $method);
+
+        self::assertEquals($expectedMediaTypes, $mediaTypes);
+    }
+
+    public function requestMediaTypesProvider()
+    {
+        return [
+            // Description => [path, method, expectedMediaTypes]
+            'in request method' => ['/pets/{id}', 'patch', ['application/json', 'application/xml']],
+            'fallback to global' => ['/pets', 'post', ['application/json']],
+        ];
+    }
+
+    /**
+     * @dataProvider requestHeadersParameters
+     */
+    public function testGetRequestHeadersParameters($path, $method, $expectedParameters)
+    {
+        $parameters = $this->schemaManager->getRequestHeadersParameters($path, $method);
+
+        self::assertStringMatchesFormat($expectedParameters, json_encode($parameters));
+    }
+
+    public function requestHeadersParameters()
+    {
+        $parameters = '[{"name":"X-Required-Header","in":"header","description":"Required header","required":true,"type":"string","id":"%s"},{"name":"X-Optional-Header","in":"header","description":"Optional header","type":"string"}]';
+
+        $dataSet = [
+            // Description => [path, method, expectedHeaders]
+            'in request method' => ['/pets/{id}', 'patch', $parameters],
+        ];
+
+        return $dataSet;
+    }
+
+    /**
+     * @dataProvider requestBodyParameters
+     */
+    public function testGetRequestBodyParameters($path, $method, $expectedParameters)
+    {
+        $parameters = $this->schemaManager->getRequestSchema($path, $method);
+
+        self::assertStringMatchesFormat($expectedParameters, json_encode($parameters));
+    }
+
+    public function requestBodyParameters()
+    {
+        $parameters = '{"type":"object","allOf":[{"type":"object","required":["id","name"],"externalDocs":{"description":"find more info here","url":"https:\/\/swagger.io\/about"},"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"tag":{"type":"string"}},"id":"%s"},{"required":["id"],"properties":{"id":{"type":"integer","format":"int64"}}}],"id":"%s"}';
+
+        $dataSet = [
+            // Description => [path, method, expectedBody]
+            'in request method' => ['/pets/{id}', 'patch', $parameters],
+        ];
+
+        return $dataSet;
+    }
 }
