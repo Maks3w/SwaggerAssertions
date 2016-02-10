@@ -9,6 +9,7 @@ return Symfony\CS\Config\Config::create()
             '-phpdoc_params',
             '-phpdoc_to_comment',
             '-single_array_no_trailing_comma',
+            '-unneeded_control_parentheses',
             'concat_with_spaces',
             'ereg_to_preg',
             'ordered_use',
