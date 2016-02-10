@@ -2,7 +2,6 @@
 
 namespace FR3D\SwaggerAssertions\PhpUnit;
 
-use FR3D\SwaggerAssertions\SchemaManager;
 use PHPUnit_Framework_Constraint as Constraint;
 
 /**

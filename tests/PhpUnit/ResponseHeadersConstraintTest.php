@@ -3,7 +3,6 @@
 namespace FR3D\SwaggerAssertionsTest\PhpUnit;
 
 use FR3D\SwaggerAssertions\PhpUnit\ResponseHeadersConstraint;
-use FR3D\SwaggerAssertions\SchemaManager;
 use PHPUnit_Framework_ExpectationFailedException as ExpectationFailedException;
 use PHPUnit_Framework_TestCase as TestCase;
 use PHPUnit_Framework_TestFailure as TestFailure;

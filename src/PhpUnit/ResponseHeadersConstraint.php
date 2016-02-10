@@ -2,10 +2,6 @@
 
 namespace FR3D\SwaggerAssertions\PhpUnit;
 
-use FR3D\SwaggerAssertions\SchemaManager;
-use JsonSchema\Validator;
-use PHPUnit_Framework_Constraint as Constraint;
-
 /**
  * Validate response headers match against defined Swagger response headers schema.
  */
