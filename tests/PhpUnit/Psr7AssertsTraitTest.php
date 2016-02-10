@@ -38,8 +38,9 @@ class Psr7AssertsTraitTest extends TestCase
 
     public function testAssertResponseAndRequestMatch()
     {
-        $response = $this->createMockResponse(200, $this->getValidHeaders(), $this->getValidResponseBody());
-        $request = $this->createMockRequest('GET', '/api/pets');
+        $body = $this->getValidRequestBody();
+        $response = $this->createMockResponse(200, $this->getValidHeaders(), $body);
+        $request = $this->createMockRequest('POST', '/api/pets', ['Content-Type' => ['application/json']], $body);
 
         self::assertResponseAndRequestMatch($response, $request, $this->schemaManager);
     }
@@ -115,6 +116,90 @@ EOF
         }
     }
 
+    public function testAssertRequestBodyDoesNotMatch()
+    {
+        $request = <<<JSON
+{
+  "id": 123456789
+}
+JSON;
+        $request = $this->createMockRequest('POST', '/api/pets', $this->getValidHeaders(), $request);
+
+        try {
+            self::assertRequestMatch($request, $this->schemaManager);
+            self::fail('Expected ExpectationFailedException to be thrown');
+        } catch (ExpectationFailedException $e) {
+            self::assertEquals(
+                <<<EOF
+Failed asserting that {"id":123456789} is a valid request body.
+[name] The property name is required
+[] Failed to match all schemas
+
+EOF
+                ,
+                $e->getMessage()
+            );
+        }
+    }
+
+    public function testAssertRequestMediaTypeDoesNotMatch()
+    {
+        $request = $this->createMockRequest(
+            'POST',
+            '/api/pets',
+            ['Content-Type' => ['application/pdf; charset=utf-8']],
+            $this->getValidRequestBody()
+        );
+
+        try {
+            self::assertRequestMatch($request, $this->schemaManager);
+            self::fail('Expected ExpectationFailedException to be thrown');
+        } catch (ExpectationFailedException $e) {
+            self::assertEquals(
+                "Failed asserting that 'application/pdf' is an allowed media type (application/json).",
+                $e->getMessage()
+            );
+        }
+    }
+
+    public function testAssertRequestHeaderDoesNotMatch()
+    {
+        $headers = [
+            'Content-Type' => ['application/json'],
+            'X-Optional-Header' => ['any'],
+        ];
+
+        $request = $this->createMockRequest('PATCH', '/api/pets/123', $headers, $this->getValidRequestBody());
+
+        try {
+            self::assertRequestMatch($request, $this->schemaManager);
+            self::fail('Expected ExpectationFailedException to be thrown');
+        } catch (ExpectationFailedException $e) {
+            self::assertEquals(
+                <<<EOF
+Failed asserting that {"Content-Type":"application\/json","X-Optional-Header":"any"} is a valid request header.
+[x-required-header] The property x-required-header is required
+
+EOF
+                ,
+                $e->getMessage()
+            );
+        }
+    }
+
+    /**
+     * @return string
+     */
+    protected function getValidRequestBody()
+    {
+        return <<<JSON
+{
+"id": 123456789,
+"name": "foo"
+}
+JSON;
+    }
+
     /**
      * @return string
      */
@@ -148,48 +233,77 @@ JSON;
     /**
      * @param string $method
      * @param string $path
+     * @param string[] $headers
+     * @param string $body
      *
      * @return MockObject|RequestInterface
      */
-    protected function createMockRequest($method, $path)
+    protected function createMockRequest($method, $path, array $headers, $body = '')
     {
         /** @var UriInterface|MockObject $request */
         $uri = $this->getMock('Psr\Http\Message\UriInterface');
         $uri->method('getPath')->willReturn($path);
 
+        $headersMap = $this->transformHeadersToMap($headers);
+
         /** @var RequestInterface|MockObject $request */
-        $request = $this->getMock('Psr\Http\Message\RequestInterface');
+        $request = $this->getMock(RequestInterface::class);
+        $request->method('getHeaderLine')->willReturnMap($headersMap);
+        $request->method('getHeaders')->willReturn($headers);
         $request->method('getMethod')->willReturn($method);
         $request->method('getUri')->willReturn($uri);
+        $request->method('getBody')->willReturn($this->createMockStream($body));
 
         return $request;
     }
 
     /**
      * @param int $statusCode
-     * @param array $headers
+     * @param string[] $headers
      * @param string $body
      *
      * @return MockObject|ResponseInterface
      */
     protected function createMockResponse($statusCode, array $headers, $body)
     {
-        /** @var StreamInterface|MockObject $body */
-        $stream = $this->getMock('Psr\Http\Message\StreamInterface');
+        $headersMap = $this->transformHeadersToMap($headers);
+
+        /** @var ResponseInterface|MockObject $response */
+        $response = $this->getMock(ResponseInterface::class);
+        $response->method('getStatusCode')->willReturn($statusCode);
+        $response->method('getHeaderLine')->willReturnMap($headersMap);
+        $response->method('getHeaders')->willReturn($headers);
+        $response->method('getBody')->willReturn($this->createMockStream($body));
+
+        return $response;
+    }
+
+    /**
+     * @param string $body
+     *
+     * @return StreamInterface|MockObject
+     */
+    protected function createMockStream($body)
+    {
+        /** @var StreamInterface|MockObject $stream */
+        $stream = $this->getMock(StreamInterface::class);
         $stream->method('__toString')->willReturn($body);
 
+        return $stream;
+    }
+
+    /**
+     * @param string[] $headers
+     *
+     * @return array
+     */
+    private function transformHeadersToMap(array $headers)
+    {
         $headersMap = [];
         foreach ($headers as $headerName => $headerValues) {
             $headersMap[$headerName] = [$headerName, implode(', ', $headerValues)];
         }
 
-        /** @var ResponseInterface|MockObject $response */
-        $response = $this->getMock('Psr\Http\Message\ResponseInterface');
-        $response->method('getStatusCode')->willReturn($statusCode);
-        $response->method('getHeaderLine')->willReturnMap($headersMap);
-        $response->method('getHeaders')->willReturn($headers);
-        $response->method('getBody')->willReturn($stream);
-
-        return $response;
+        return $headersMap;
     }
 }
