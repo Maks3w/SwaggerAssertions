@@ -5,6 +5,7 @@ language: php
 cache:
   directories:
     - $HOME/.composer/cache
+    - vendor
 
 matrix:
   fast_finish: true
@@ -12,11 +13,13 @@ matrix:
     - php: 5.4
     - php: 5.5
       env:
-        - EXECUTE_CS_CHECK=true
+        - COMPOSER_ARGUMENTS=--prefer-lowest
     - php: 5.6
       env:
         - EXECUTE_TEST_COVERALLS=true
-    - php: 7
+    - php: 7.0
+      env:
+        - EXECUTE_CS_CHECK=true
     - php: hhvm
 
 before_install:
@@ -25,7 +28,8 @@ before_install:
   - if [[ $EXECUTE_TEST_COVERALLS == 'true' ]]; then composer require --dev --no-update satooshi/php-coveralls:^0.7.0; fi
 
 install:
-  - travis_retry composer install --no-interaction
+  - travis_retry composer update --no-interaction $COMPOSER_ARGUMENTS
+  - composer info -i
 
 script:
   - if [[ $EXECUTE_TEST_COVERALLS == 'true' ]]; then vendor/bin/phpunit --coverage-clover clover.xml tests; fi
@@ -36,4 +40,4 @@ script:
   - if [[ $EXECUTE_CS_CHECK == 'true' ]]; then vendor/bin/php-cs-fixer fix -v --dry-run; fi
 
 after_script:
-  - if [[ $EXECUTE_TEST_COVERALLS == 'true' ]]; then ./vendor/bin/coveralls -v; fi
+  - if [[ $EXECUTE_TEST_COVERALLS == 'true' ]]; then vendor/bin/coveralls -v; fi
