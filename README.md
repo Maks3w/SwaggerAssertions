@@ -30,7 +30,7 @@ See examples at [examples/PhpUnit](examples/PhpUnit)
 
 <dl>
   <dt>Q: Can this library validate my Swagger definition?</dt>
-  <dd>A: No. This library validate your API responses against your Swagger definition.</dd>
+  <dd>A: No. This library validate your API requests and responses match your Swagger definition.</dd>
 </dl>
 
 ## License
