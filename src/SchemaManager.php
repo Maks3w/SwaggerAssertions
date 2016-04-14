@@ -5,6 +5,7 @@ namespace FR3D\SwaggerAssertions;
 use FR3D\SwaggerAssertions\JsonSchema\Uri\UriRetriever;
 use InvalidArgumentException;
 use JsonSchema\RefResolver;
+use JsonSchema\Uri\UriResolver;
 use Rize\UriTemplate\UriTemplate;
 use stdClass;
 
@@ -21,19 +22,12 @@ class SchemaManager
     protected $definition;
 
     /**
-     * Swagger definition URI.
-     *
-     * @var string
-     */
-    protected $definitionUri;
-
-    /**
      * @param string $definitionUri
      */
     public function __construct($definitionUri)
     {
-        $this->definition = json_decode(file_get_contents($definitionUri));
-        $this->definitionUri = $definitionUri;
+        $refResolver = new RefResolver(new UriRetriever(), new UriResolver());
+        $this->definition = $refResolver->resolve($definitionUri);
     }
 
     /**
@@ -84,9 +78,7 @@ class SchemaManager
             // @codeCoverageIgnoreEnd
         }
 
-        $schema = $response->schema;
-
-        return $this->resolveSchemaReferences($schema);
+        return $response->schema;
     }
 
     /**
@@ -215,21 +207,6 @@ class SchemaManager
     }
 
     /**
-     * Resolve schema references to object.
-     *
-     * @param stdClass $schema
-     *
-     * @return stdClass The same object with references replaced with definition target.
-     */
-    protected function resolveSchemaReferences(stdClass $schema)
-    {
-        $refResolver = new RefResolver(new UriRetriever());
-        $refResolver->resolve($schema, $this->definitionUri);
-
-        return $schema;
-    }
-
-    /**
      * @param string $path Swagger path template.
      * @param string $method
      * @param int $httpCode
@@ -255,7 +232,7 @@ class SchemaManager
             $response = $this->getPath($pathSegments($path, $method, 'default'));
         }
 
-        return $this->resolveSchemaReferences($response);
+        return $response;
     }
 
     /**
@@ -332,7 +309,7 @@ class SchemaManager
             // @codeCoverageIgnoreEnd
         }
 
-        return $this->resolveSchemaReferences($parameter->schema);
+        return $parameter->schema;
     }
 
     /**
@@ -350,11 +327,7 @@ class SchemaManager
             // @codeCoverageIgnoreEnd
         }
 
-        $parameters = $method->parameters;
-
-        array_walk($parameters, [$this, 'resolveSchemaReferences']);
-
-        return $parameters;
+        return $method->parameters;
     }
 
     /**

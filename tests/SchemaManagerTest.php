@@ -80,13 +80,13 @@ class SchemaManagerTest extends TestCase
     {
         $schema = $this->schemaManager->getResponseSchema($path, $method, $httpCode);
 
-        self::assertStringMatchesFormat($expectedSchema, json_encode($schema));
+        self::assertEquals($expectedSchema, json_encode($schema));
     }
 
     public function responseSchemaProvider()
     {
-        $schema200 = '{"type":"array","items":{"type":"object","required":["id","name"],"externalDocs":{"description":"find more info here","url":"https:\/\/swagger.io\/about"},"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"tag":{"type":"string"}},"id":"%s"}}';
-        $schemaDefault = '{"type":"object","required":["code","message"],"properties":{"code":{"type":"integer","format":"int32"},"message":{"type":"string"}},"id":"%s"}';
+        $schema200 = '{"type":"array","items":{"type":"object","required":["id","name"],"externalDocs":{"description":"find more info here","url":"https:\/\/swagger.io\/about"},"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"tag":{"type":"string"}}}}';
+        $schemaDefault = '{"type":"object","required":["code","message"],"properties":{"code":{"type":"integer","format":"int32"},"message":{"type":"string"}}}';
 
         $dataSet = [
             // Description => [path, method, httpCode, expectedSchema]
@@ -104,7 +104,7 @@ class SchemaManagerTest extends TestCase
     {
         $headers = $this->schemaManager->getResponseHeaders($path, $method, $httpCode);
 
-        self::assertStringMatchesFormat($expectedHeaders, json_encode($headers));
+        self::assertEquals($expectedHeaders, json_encode($headers));
     }
 
     public function responseHeadersProvider()
@@ -144,12 +144,12 @@ class SchemaManagerTest extends TestCase
     {
         $parameters = $this->schemaManager->getRequestHeadersParameters($path, $method);
 
-        self::assertStringMatchesFormat($expectedParameters, json_encode($parameters));
+        self::assertEquals($expectedParameters, json_encode($parameters));
     }
 
     public function requestHeadersParameters()
     {
-        $parameters = '[{"name":"X-Required-Header","in":"header","description":"Required header","required":true,"type":"string","id":"%s"},{"name":"X-Optional-Header","in":"header","description":"Optional header","type":"string"}]';
+        $parameters = '[{"name":"X-Required-Header","in":"header","description":"Required header","required":true,"type":"string"},{"name":"X-Optional-Header","in":"header","description":"Optional header","type":"string"}]';
 
         $dataSet = [
             // Description => [path, method, expectedHeaders]
@@ -166,12 +166,12 @@ class SchemaManagerTest extends TestCase
     {
         $parameters = $this->schemaManager->getRequestSchema($path, $method);
 
-        self::assertStringMatchesFormat($expectedParameters, json_encode($parameters));
+        self::assertEquals($expectedParameters, json_encode($parameters));
     }
 
     public function requestBodyParameters()
     {
-        $parameters = '{"type":"object","allOf":[{"type":"object","required":["id","name"],"externalDocs":{"description":"find more info here","url":"https:\/\/swagger.io\/about"},"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"tag":{"type":"string"}},"id":"%s"},{"required":["id"],"properties":{"id":{"type":"integer","format":"int64"}}}],"id":"%s"}';
+        $parameters = '{"type":"object","allOf":[{"type":"object","required":["id","name"],"externalDocs":{"description":"find more info here","url":"https:\/\/swagger.io\/about"},"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"tag":{"type":"string"}}},{"required":["id"],"properties":{"id":{"type":"integer","format":"int64"}}}]}';
 
         $dataSet = [
             // Description => [path, method, expectedBody]
