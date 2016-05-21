@@ -23,7 +23,6 @@ matrix:
 
 before_install:
   - if [[ $EXECUTE_TEST_COVERALLS != 'true' ]]; then phpenv config-rm xdebug.ini || return 0; fi
-  - composer self-update
 
 install:
   - travis_retry composer update --no-interaction $COMPOSER_ARGUMENTS
