@@ -2,6 +2,7 @@
 
 namespace FR3D\SwaggerAssertions;
 
+use FR3D\SwaggerAssertions\JsonSchema\Uri\Retrievers\FileGetContentsRetriever;
 use InvalidArgumentException;
 use JsonSchema\RefResolver;
 use JsonSchema\Uri\UriResolver;
@@ -30,7 +31,7 @@ class SchemaManager
      */
     public static function fromUri($definitionUri)
     {
-        $refResolver = new RefResolver(new UriRetriever(), new UriResolver());
+        $refResolver = new RefResolver((new UriRetriever())->setUriRetriever(new FileGetContentsRetriever()), new UriResolver());
 
         return new self($refResolver->resolve($definitionUri));
     }
