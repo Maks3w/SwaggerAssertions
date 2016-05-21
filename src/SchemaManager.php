@@ -339,16 +339,6 @@ class SchemaManager
     }
 
     /**
-     * @param array $path
-     *
-     * @return string
-     */
-    public function pathToString(array $path)
-    {
-        return implode('.', $path);
-    }
-
-    /**
      * @param stdClass[] $parameters
      * @param string $location
      *
