@@ -2,10 +2,10 @@
 
 namespace FR3D\SwaggerAssertions;
 
-use FR3D\SwaggerAssertions\JsonSchema\Uri\UriRetriever;
 use InvalidArgumentException;
 use JsonSchema\RefResolver;
 use JsonSchema\Uri\UriResolver;
+use JsonSchema\Uri\UriRetriever;
 use Rize\UriTemplate\UriTemplate;
 use stdClass;
 
