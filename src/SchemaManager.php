@@ -22,12 +22,25 @@ class SchemaManager
     protected $definition;
 
     /**
+     * Fetch the definition and resolve the references present in the schema.
+     *
      * @param string $definitionUri
+     *
+     * @return self
      */
-    public function __construct($definitionUri)
+    public static function fromUri($definitionUri)
     {
         $refResolver = new RefResolver(new UriRetriever(), new UriResolver());
-        $this->definition = $refResolver->resolve($definitionUri);
+
+        return new self($refResolver->resolve($definitionUri));
+    }
+
+    /**
+     * @param object $definition Swagger 2 definition with all their references resolved.
+     */
+    public function __construct($definition)
+    {
+        $this->definition = $definition;
     }
 
     /**

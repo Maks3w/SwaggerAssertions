@@ -27,7 +27,7 @@ class LocalFileTest extends \PHPUnit_Framework_TestCase
         $filePath = __DIR__ . '/../fixtures/pet_store.json';
 
         // Use file:// for local files
-        self::$schemaManager = new SchemaManager('file://' . $filePath);
+        self::$schemaManager = new SchemaManager(json_decode(file_get_contents($filePath)));
     }
 
     protected function setUp()

@@ -21,7 +21,7 @@ class AssertsTraitTest extends TestCase
 
     protected function setUp()
     {
-        $this->schemaManager = new SchemaManager('file://' . __DIR__ . '/../fixture/petstore-with-external-docs.json');
+        $this->schemaManager = SchemaManager::fromUri('file://' . __DIR__ . '/../fixture/petstore-with-external-docs.json');
     }
 
     public function testAssertResponseBodyMatch()

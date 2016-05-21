@@ -25,7 +25,7 @@ class Psr7WithGuzzleV6Test extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        self::$schemaManager = new SchemaManager('http://petstore.swagger.io/v2/swagger.json');
+        self::$schemaManager = SchemaManager::fromUri('http://petstore.swagger.io/v2/swagger.json');
     }
 
     protected function setUp()

@@ -25,7 +25,7 @@ class GuzzleAssertsTraitTest extends TestCase
 
     protected function setUp()
     {
-        $this->schemaManager = new SchemaManager('file://' . __DIR__ . '/../fixture/petstore-with-external-docs.json');
+        $this->schemaManager = SchemaManager::fromUri(__DIR__ . '/../fixture/petstore-with-external-docs.json');
     }
 
     public function testAssertResponseMatch()
