@@ -17,7 +17,7 @@ class SchemaManagerTest extends TestCase
 
     protected function setUp()
     {
-        $this->schemaManager = SchemaManager::fromUri(__DIR__ . '/fixture/petstore-with-external-docs.json');
+        $this->schemaManager = SchemaManager::fromUri('file://' . __DIR__ . '/fixture/petstore-with-external-docs.json');
     }
 
     /**
