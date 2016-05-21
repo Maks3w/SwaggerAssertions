@@ -92,6 +92,7 @@ class SchemaManagerTest extends TestCase
             // Description => [path, method, httpCode, expectedSchema]
             'by http code' => ['/pets', 'get', 200, $schema200],
             'fallback to default' => ['/pets', 'get', 222, $schemaDefault],
+            'schema not defined (empty)' => ['/pets/{id}', 'patch', 204, '{}'],
         ];
 
         return $dataSet;
@@ -154,6 +155,7 @@ class SchemaManagerTest extends TestCase
         $dataSet = [
             // Description => [path, method, expectedHeaders]
             'in request method' => ['/pets/{id}', 'patch', $parameters],
+            'without parameters' => ['/food', 'get', '[]'],
         ];
 
         return $dataSet;
@@ -176,6 +178,7 @@ class SchemaManagerTest extends TestCase
         $dataSet = [
             // Description => [path, method, expectedBody]
             'in request method' => ['/pets/{id}', 'patch', $parameters],
+            'without parameters' => ['/food', 'get', '{}'],
         ];
 
         return $dataSet;

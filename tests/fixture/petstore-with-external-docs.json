@@ -31,6 +31,30 @@
     "application/json"
   ],
   "paths": {
+    "/food": {
+      "get": {
+        "description": "Returns all food from the system that the user has access to",
+        "operationId": "findFood",
+        "externalDocs": {
+          "description": "This is an example of request without parameters",
+          "url": "https://swagger.io/about"
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "304": {
+            "description": "cached response"
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/ErrorModel"
+            }
+          }
+        }
+      }
+    },
     "/pets": {
       "get": {
         "description": "Returns all pets from the system that the user has access to",
@@ -168,6 +192,9 @@
             "schema": {
               "$ref": "#/definitions/Pet"
             }
+          },
+          "204": {
+            "description": "success"
           },
           "default": {
             "description": "unexpected error",

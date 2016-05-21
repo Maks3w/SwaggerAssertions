@@ -85,11 +85,7 @@ class SchemaManager
     {
         $response = $this->getResponse($path, $method, $httpCode);
         if (!isset($response->schema)) {
-            // @codeCoverageIgnoreStart
-            throw new \UnexpectedValueException(
-                'Missing schema definition for ' . $this->pathToString([$path, $method, $httpCode])
-            );
-            // @codeCoverageIgnoreEnd
+            return new stdClass();
         }
 
         return $response->schema;
@@ -336,9 +332,7 @@ class SchemaManager
     {
         $method = $this->getMethod($path, $method);
         if (!isset($method->parameters)) {
-            // @codeCoverageIgnoreStart
-            throw new InvalidArgumentException('Missing Parameter Object');
-            // @codeCoverageIgnoreEnd
+            return [];
         }
 
         return $method->parameters;
