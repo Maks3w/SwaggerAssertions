@@ -37,7 +37,7 @@ class GuzzleTest extends \PHPUnit_Framework_TestCase
 
     public function testFetchPetMatchDefinition()
     {
-        $request = $this->guzzleHttpClient->createRequest('GET', 'http://petstore.swagger.io/v2/pet/findByStatus');
+        $request = $this->guzzleHttpClient->createRequest('GET', 'http://petstore.swagger.io/v2/user/logout');
         $request->addHeader('Accept', 'application/json');
 
         $response = $this->guzzleHttpClient->send($request);
@@ -47,11 +47,11 @@ class GuzzleTest extends \PHPUnit_Framework_TestCase
 
     public function testOnlyResponse()
     {
-        $request = $this->guzzleHttpClient->createRequest('GET', 'http://petstore.swagger.io/v2/pet/findByStatus');
+        $request = $this->guzzleHttpClient->createRequest('GET', 'http://petstore.swagger.io/v2/user/logout');
         $request->addHeader('Accept', 'application/json');
 
         $response = $this->guzzleHttpClient->send($request);
 
-        $this->assertResponseMatch($response, self::$schemaManager, '/v2/pet/findByStatus', 'get');
+        $this->assertResponseMatch($response, self::$schemaManager, '/v2/user/logout', 'get');
     }
 }

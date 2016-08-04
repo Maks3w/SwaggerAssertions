@@ -157,4 +157,23 @@ JSON;
             self::assertTrue(true);
         }
     }
+
+    public function testValidRequestQuery()
+    {
+        $query = ['tags' => ['foo', 'bar'], 'limit' => 1];
+
+        self::assertRequestQueryMatch($query, $this->schemaManager, '/api/pets', 'get');
+    }
+
+    public function testInvalidRequestQuery()
+    {
+        $query = ['tags' => ['foo', 'bar']];
+
+        try {
+            self::assertRequestQueryMatch($query, $this->schemaManager, '/api/pets', 'get');
+            self::fail('Expected ExpectationFailedException to be thrown');
+        } catch (ExpectationFailedException $e) {
+            self::assertTrue(true);
+        }
+    }
 }

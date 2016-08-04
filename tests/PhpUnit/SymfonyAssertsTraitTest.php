@@ -206,6 +206,31 @@ EOF
         }
     }
 
+    public function testAssertRequestQueryDoesNotMatch()
+    {
+        $query = [
+            'tags' => ['foo', '1'],
+        ];
+
+        $request = $this->createMockRequest('GET', '/api/pets', $this->getValidHeaders(), $this->getValidRequestBody(), $query);
+
+        try {
+            self::assertRequestMatch($request, $this->schemaManager);
+            self::fail('Expected ExpectationFailedException to be thrown');
+        } catch (ExpectationFailedException $e) {
+            self::assertEquals(
+                <<<EOF
+Failed asserting that {"tags":["foo",1]} is a valid request query.
+[limit] The property limit is required
+[tags[1]] Integer value found, but a string is required
+
+EOF
+                ,
+                $e->getMessage()
+            );
+        }
+    }
+
     /**
      * @return string
      */
@@ -250,12 +275,13 @@ JSON;
      * @param string $path
      * @param string[] $headers
      * @param string $body
+     * @param mixed[] $query
      *
      * @return MockObject|Request
      */
-    protected function createMockRequest($method, $path, array $headers, $body = '')
+    protected function createMockRequest($method, $path, array $headers, $body = '', $query = [])
     {
-        $request = Request::create($path, $method, [], [], [], [], $body);
+        $request = Request::create($path, $method, $query, [], [], [], $body);
         $request->headers = new HeaderBag($headers);
 
         return $request;

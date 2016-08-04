@@ -297,6 +297,23 @@ class SchemaManager
      *
      * @return stdClass
      */
+    public function getRequestQueryParameters($path, $method)
+    {
+        $parameters = $this->getRequestParameters($path, $method);
+        $parameters = $this->filterParametersObjectByLocation($parameters, 'query');
+        if (empty($parameters)) {
+            return [];
+        }
+
+        return $parameters;
+    }
+
+    /**
+     * @param string $path Swagger path template.
+     * @param string $method
+     *
+     * @return stdClass
+     */
     public function getRequestSchema($path, $method)
     {
         $parameters = $this->getRequestParameters($path, $method);

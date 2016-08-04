@@ -183,4 +183,27 @@ class SchemaManagerTest extends TestCase
 
         return $dataSet;
     }
+
+    /**
+     * @dataProvider requestQueryParameters
+     */
+    public function testGetRequestQueryParameters($path, $method, $expectedParameters)
+    {
+        $parameters = $this->schemaManager->getRequestQueryParameters($path, $method);
+
+        self::assertEquals($expectedParameters, json_encode($parameters));
+    }
+
+    public function requestQueryParameters()
+    {
+        $parameters = '[{"name":"tags","in":"query","description":"tags to filter by","required":false,"type":"array","items":{"type":"string"},"collectionFormat":"csv"},{"name":"limit","in":"query","description":"maximum number of results to return","required":true,"type":"integer","format":"int32"}]';
+
+        $dataSet = [
+            // Description => [path, method, expectedHeaders]
+            'in request method' => ['/pets', 'get', $parameters],
+            'without parameters' => ['/food', 'get', '[]'],
+        ];
+
+        return $dataSet;
+    }
 }

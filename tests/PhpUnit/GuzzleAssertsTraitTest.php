@@ -6,6 +6,7 @@ use FR3D\SwaggerAssertions\PhpUnit\GuzzleAssertsTrait;
 use FR3D\SwaggerAssertions\SchemaManager;
 use GuzzleHttp\Message\RequestInterface;
 use GuzzleHttp\Message\ResponseInterface;
+use GuzzleHttp\Query;
 use GuzzleHttp\Stream\StreamInterface;
 use PHPUnit_Framework_ExpectationFailedException as ExpectationFailedException;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
@@ -206,6 +207,31 @@ EOF
         }
     }
 
+    public function testAssertRequestQueryDoesNotMatch()
+    {
+        $query = [
+            'tags' => ['foo', '1'],
+        ];
+
+        $request = $this->createMockRequest('GET', '/api/pets', $this->getValidHeaders(), $this->getValidRequestBody(), $query);
+
+        try {
+            self::assertRequestMatch($request, $this->schemaManager);
+            self::fail('Expected ExpectationFailedException to be thrown');
+        } catch (ExpectationFailedException $e) {
+            self::assertEquals(
+                <<<EOF
+Failed asserting that {"tags":["foo",1]} is a valid request query.
+[limit] The property limit is required
+[tags[1]] Integer value found, but a string is required
+
+EOF
+                ,
+                $e->getMessage()
+            );
+        }
+    }
+
     /**
      * @return string
      */
@@ -254,10 +280,11 @@ JSON;
      * @param string $path
      * @param string[] $headers
      * @param string $body
+     * @param mixed[] $query
      *
      * @return MockObject|RequestInterface
      */
-    protected function createMockRequest($method, $path, array $headers, $body = '')
+    protected function createMockRequest($method, $path, array $headers, $body = '', $query = [])
     {
         $headersMap = $this->transformHeadersToMap($headers);
 
@@ -268,6 +295,7 @@ JSON;
         $request->method('getMethod')->willReturn($method);
         $request->method('getPath')->willReturn($path);
         $request->method('getBody')->willReturn($this->createMockStream($body));
+        $request->method('getQuery')->willReturn(new Query($query));
 
         return $request;
     }

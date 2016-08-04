@@ -3,6 +3,7 @@
 namespace FR3D\SwaggerAssertions\PhpUnit;
 
 use FR3D\SwaggerAssertions\SchemaManager;
+use FR3D\SwaggerAssertions\Utils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -71,8 +72,9 @@ trait SymfonyAssertsTrait
         SchemaManager $schemaManager,
         $message = ''
     ) {
-        $path = $request->getRequestUri();
+        $path = $request->getPathInfo();
         $httpMethod = $request->getMethod();
+        $query = array_map([Utils::class, 'phpize'], $request->query->all());
 
         $headers = $this->inlineHeaders($request->headers->all());
 
@@ -93,6 +95,14 @@ trait SymfonyAssertsTrait
                 $message
             );
         }
+
+        $this->assertRequestQueryMatch(
+            $query,
+            $schemaManager,
+            $path,
+            $httpMethod,
+            $message
+        );
 
         $this->assertRequestBodyMatch(
             json_decode($request->getContent()),
