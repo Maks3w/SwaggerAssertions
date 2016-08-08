@@ -31,7 +31,7 @@ class RequestQueryConstraintTest extends TestCase
         self::assertEquals('is a valid request query', $this->constraint->toString());
     }
 
-    public function testValidHeaders()
+    public function testValidQuery()
     {
         $parameters = [
             'tags' => ['foo', 'bar'],

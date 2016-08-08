@@ -8,7 +8,7 @@ use PHPUnit_Framework_TestCase as TestCase;
 /**
  * @covers FR3D\SwaggerAssertions\Utils
  */
-class UtilsTests extends TestCase
+class UtilsTest extends TestCase
 {
     /**
      * @dataProvider getDataForPhpize
