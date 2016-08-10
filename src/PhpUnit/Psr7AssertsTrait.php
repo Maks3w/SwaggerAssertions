@@ -76,6 +76,9 @@ trait Psr7AssertsTrait
 
         $headers = $this->inlineHeaders($request->getHeaders());
 
+        $queryString = $request->getUri()->getQuery();
+        parse_str(html_entity_decode($queryString), $query);
+
         $this->assertRequestHeadersMatch(
             $headers,
             $schemaManager,
@@ -93,6 +96,14 @@ trait Psr7AssertsTrait
                 $message
             );
         }
+
+        $this->assertRequestQueryMatch(
+            $query,
+            $schemaManager,
+            $path,
+            $httpMethod,
+            $message
+        );
 
         $this->assertRequestBodyMatch(
             json_decode($request->getBody()),

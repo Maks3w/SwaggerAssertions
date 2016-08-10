@@ -75,6 +75,7 @@ trait GuzzleAssertsTrait
         $httpMethod = $request->getMethod();
 
         $headers = $this->inlineHeaders($request->getHeaders());
+        $query = $request->getQuery()->toArray();
 
         $this->assertRequestHeadersMatch(
             $headers,
@@ -93,6 +94,14 @@ trait GuzzleAssertsTrait
                 $message
             );
         }
+
+        $this->assertRequestQueryMatch(
+            $query,
+            $schemaManager,
+            $path,
+            $httpMethod,
+            $message
+        );
 
         $this->assertRequestBodyMatch(
             json_decode($request->getBody()),

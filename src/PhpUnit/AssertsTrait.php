@@ -183,4 +183,31 @@ trait AssertsTrait
 
         Assert::assertThat($headers, $constraint, $message);
     }
+
+    /**
+     * Asserts request body match with the request schema.
+     *
+     * @param mixed[] $query
+     * @param SchemaManager $schemaManager
+     * @param string $path percent-encoded path used on the request.
+     * @param string $httpMethod
+     * @param string $message
+     */
+    public function assertRequestQueryMatch(
+        $query,
+        SchemaManager $schemaManager,
+        $path,
+        $httpMethod,
+        $message = ''
+    ) {
+        if (!$schemaManager->findPathInTemplates($path, $template, $params)) {
+            // @codeCoverageIgnoreStart
+            throw new \RuntimeException('Request URI does not match with any swagger path definition');
+            // @codeCoverageIgnoreEnd
+        }
+
+        $constraint = new RequestQueryConstraint($schemaManager->getRequestQueryParameters($template, $httpMethod));
+
+        Assert::assertThat($query, $constraint, $message);
+    }
 }

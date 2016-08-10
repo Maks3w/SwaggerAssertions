@@ -207,6 +207,30 @@ EOF
         }
     }
 
+    public function testAssertRequestQueryDoesNotMatch()
+    {
+        $query = [
+            'tags' => ['foo', '1'],
+        ];
+
+        $request = $this->createMockRequest('GET', '/api/pets', $this->getValidHeaders(), $this->getValidRequestBody(), $query);
+
+        try {
+            self::assertRequestMatch($request, $this->schemaManager);
+            self::fail('Expected ExpectationFailedException to be thrown');
+        } catch (ExpectationFailedException $e) {
+            self::assertEquals(
+                <<<EOF
+Failed asserting that {"tags":["foo","1"]} is a valid request query.
+[limit] The property limit is required
+
+EOF
+                ,
+                $e->getMessage()
+            );
+        }
+    }
+
     /**
      * @return string
      */
@@ -255,14 +279,16 @@ JSON;
      * @param string $path
      * @param string[] $headers
      * @param string $body
+     * @param mixed[] $query
      *
      * @return MockObject|RequestInterface
      */
-    protected function createMockRequest($method, $path, array $headers, $body = '')
+    protected function createMockRequest($method, $path, array $headers, $body = '', $query = [])
     {
         /** @var UriInterface|MockObject $request */
         $uri = $this->getMock('Psr\Http\Message\UriInterface');
         $uri->method('getPath')->willReturn($path);
+        $uri->method('getQuery')->willReturn(http_build_query($query, '', '&'));
 
         $headersMap = $this->transformHeadersToMap($headers);
 

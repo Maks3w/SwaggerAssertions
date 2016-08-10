@@ -85,7 +85,7 @@
             "name": "limit",
             "in": "query",
             "description": "maximum number of results to return",
-            "required": false,
+            "required": true,
             "type": "integer",
             "format": "int32"
           }

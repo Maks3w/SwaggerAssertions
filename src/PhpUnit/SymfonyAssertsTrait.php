@@ -71,8 +71,9 @@ trait SymfonyAssertsTrait
         SchemaManager $schemaManager,
         $message = ''
     ) {
-        $path = $request->getRequestUri();
+        $path = $request->getPathInfo();
         $httpMethod = $request->getMethod();
+        $query = $request->query->all();
 
         $headers = $this->inlineHeaders($request->headers->all());
 
@@ -93,6 +94,14 @@ trait SymfonyAssertsTrait
                 $message
             );
         }
+
+        $this->assertRequestQueryMatch(
+            $query,
+            $schemaManager,
+            $path,
+            $httpMethod,
+            $message
+        );
 
         $this->assertRequestBodyMatch(
             json_decode($request->getContent()),
