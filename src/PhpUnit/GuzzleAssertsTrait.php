@@ -3,7 +3,6 @@
 namespace FR3D\SwaggerAssertions\PhpUnit;
 
 use FR3D\SwaggerAssertions\SchemaManager;
-use FR3D\SwaggerAssertions\Utils;
 use GuzzleHttp\Message\RequestInterface;
 use GuzzleHttp\Message\ResponseInterface;
 
@@ -76,7 +75,7 @@ trait GuzzleAssertsTrait
         $httpMethod = $request->getMethod();
 
         $headers = $this->inlineHeaders($request->getHeaders());
-        $query = array_map([Utils::class, 'phpize'], $request->getQuery()->toArray());
+        $query = $request->getQuery()->toArray();
 
         $this->assertRequestHeadersMatch(
             $headers,

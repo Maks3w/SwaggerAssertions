@@ -221,9 +221,8 @@ EOF
         } catch (ExpectationFailedException $e) {
             self::assertEquals(
                 <<<EOF
-Failed asserting that {"tags":["foo",1]} is a valid request query.
+Failed asserting that {"tags":["foo","1"]} is a valid request query.
 [limit] The property limit is required
-[tags[1]] Integer value found, but a string is required
 
 EOF
                 ,

@@ -3,7 +3,6 @@
 namespace FR3D\SwaggerAssertions\PhpUnit;
 
 use FR3D\SwaggerAssertions\SchemaManager;
-use FR3D\SwaggerAssertions\Utils;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -79,7 +78,6 @@ trait Psr7AssertsTrait
 
         $queryString = $request->getUri()->getQuery();
         parse_str(html_entity_decode($queryString), $query);
-        $query = array_map([Utils::class, 'phpize'], $query);
 
         $this->assertRequestHeadersMatch(
             $headers,
