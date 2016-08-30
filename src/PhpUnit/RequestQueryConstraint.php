@@ -15,6 +15,8 @@ class RequestQueryConstraint extends JsonSchemaConstraint
         $normalizedSchema = new \stdClass();
         $normalizedSchema->required = [];
         foreach ($queryParameters as $queryParameter) {
+            $queryParameter = clone $queryParameter;
+
             if (!isset($queryParameter->name)) {
                 // @codeCoverageIgnoreStart
                 throw new \DomainException('Expected missing name field');
