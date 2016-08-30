@@ -3,6 +3,7 @@
 namespace FR3D\SwaggerAssertionsTest\PhpUnit;
 
 use FR3D\SwaggerAssertions\PhpUnit\RequestQueryConstraint;
+use JsonSchema\Constraints\Factory;
 use PHPUnit_Framework_ExpectationFailedException as ExpectationFailedException;
 use PHPUnit_Framework_TestCase as TestCase;
 use PHPUnit_Framework_TestFailure as TestFailure;
@@ -89,7 +90,7 @@ EOF
             );
         }
     }
-
+    
     public function testConstructorDoesNotAlterParameters()
     {
         $source = '[{"name":"tags","in":"query","description":"tags to filter by","required":false,"type":"array","items":{"type":"string"},"collectionFormat":"csv"},{"name":"limit","in":"query","description":"maximum number of results to return","required":true,"type":"integer","format":"int32"}]';
@@ -99,5 +100,22 @@ EOF
         new RequestQueryConstraint($schema);
 
         self::assertEquals($expected, $schema);
+    }
+
+    public function testCustomFactory()
+    {
+        $factory = new Factory();
+        $factory->setConstraintClass('schema', 'FR3D\SwaggerAssertionsTest\PhpUnit\SchemaConstraintMock');
+
+        $schema = '[{"name":"tags","in":"query","description":"tags to filter by","required":false,"type":"array","items":{"type":"string"},"collectionFormat":"csv"},{"name":"limit","in":"query","description":"maximum number of results to return","required":true,"type":"integer","format":"int32"}]';
+        $schema = json_decode($schema);
+
+        $constraint = new RequestQueryConstraint($schema, $factory);
+
+        $parameters = [
+            'tags' => ['foo', 'bar'],
+        ];
+
+        self::assertTrue($constraint->evaluate($parameters, '', true), $constraint->evaluate($parameters));
     }
 }

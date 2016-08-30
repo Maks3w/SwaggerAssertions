@@ -3,6 +3,7 @@
 namespace FR3D\SwaggerAssertionsTest\PhpUnit;
 
 use FR3D\SwaggerAssertions\PhpUnit\RequestHeadersConstraint;
+use JsonSchema\Constraints\Factory;
 use PHPUnit_Framework_ExpectationFailedException as ExpectationFailedException;
 use PHPUnit_Framework_TestCase as TestCase;
 use PHPUnit_Framework_TestFailure as TestFailure;
@@ -71,5 +72,22 @@ EOF
                 TestFailure::exceptionToString($e)
             );
         }
+    }
+
+    public function testCustomFactory()
+    {
+        $factory = new Factory();
+        $factory->setConstraintClass('schema', 'FR3D\SwaggerAssertionsTest\PhpUnit\SchemaConstraintMock');
+
+        $schema = '[{"name":"X-Required-Header","in":"header","description":"Required header","required":true,"type":"string"},{"name":"X-Optional-Header","in":"header","description":"Optional header","type":"string"}]';
+        $schema = json_decode($schema);
+
+        $constraint = new RequestHeadersConstraint($schema, $factory);
+
+        $headers = [
+            'X-Optional-Header' => 'any',
+        ];
+
+        self::assertTrue($constraint->evaluate($headers, '', true), $constraint->evaluate($headers));
     }
 }

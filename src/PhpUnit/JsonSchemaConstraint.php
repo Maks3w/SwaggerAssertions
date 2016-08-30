@@ -2,6 +2,7 @@
 
 namespace FR3D\SwaggerAssertions\PhpUnit;
 
+use JsonSchema\Constraints\Factory;
 use JsonSchema\Validator;
 use PHPUnit_Framework_Constraint as Constraint;
 
@@ -21,15 +22,22 @@ class JsonSchemaConstraint extends Constraint
     private $context;
 
     /**
+     * @var Factory
+     */
+    private $factory;
+
+    /**
      * @param object $expectedSchema
      * @param string $context
+     * @param Factory $factory
      */
-    public function __construct($expectedSchema, $context)
+    public function __construct($expectedSchema, $context, Factory $factory = null)
     {
         parent::__construct();
 
         $this->expectedSchema = $expectedSchema;
         $this->context = $context;
+        $this->factory = $factory;
     }
 
     /**
@@ -80,7 +88,7 @@ class JsonSchemaConstraint extends Constraint
      */
     protected function getValidator($schema)
     {
-        $validator = new Validator();
+        $validator = new Validator(\JsonSchema\Constraints\Constraint::CHECK_MODE_NORMAL, null, $this->factory);
         $validator->check($schema, $this->expectedSchema);
 
         return $validator;
