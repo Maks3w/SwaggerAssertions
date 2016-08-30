@@ -89,4 +89,15 @@ EOF
             );
         }
     }
+
+    public function testConstructorDoesNotAlterParameters()
+    {
+        $source = '[{"name":"tags","in":"query","description":"tags to filter by","required":false,"type":"array","items":{"type":"string"},"collectionFormat":"csv"},{"name":"limit","in":"query","description":"maximum number of results to return","required":true,"type":"integer","format":"int32"}]';
+        $schema = json_decode($source);
+        $expected = json_decode($source);
+
+        new RequestQueryConstraint($schema);
+
+        self::assertEquals($expected, $schema);
+    }
 }
