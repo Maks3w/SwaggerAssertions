@@ -2,7 +2,6 @@
 
 namespace FR3D\SwaggerAssertions\PhpUnit;
 
-use JsonSchema\Constraints\Factory;
 use JsonSchema\Validator;
 use PHPUnit_Framework_Constraint as Constraint;
 
@@ -22,22 +21,22 @@ class JsonSchemaConstraint extends Constraint
     private $context;
 
     /**
-     * @var Factory
+     * @var Validator
      */
-    private $factory;
+    private $validator;
 
     /**
      * @param object $expectedSchema
      * @param string $context
-     * @param Factory $factory
+     * @param Validator $validator
      */
-    public function __construct($expectedSchema, $context, Factory $factory = null)
+    public function __construct($expectedSchema, $context, Validator $validator)
     {
         parent::__construct();
 
         $this->expectedSchema = $expectedSchema;
         $this->context = $context;
-        $this->factory = $factory;
+        $this->validator = $validator;
     }
 
     /**
@@ -45,9 +44,9 @@ class JsonSchemaConstraint extends Constraint
      */
     protected function matches($other)
     {
-        $validator = $this->getValidator($other);
+        $this->check($other);
 
-        return $validator->isValid();
+        return $this->validator->isValid();
     }
 
     /**
@@ -65,8 +64,7 @@ class JsonSchemaConstraint extends Constraint
     {
         $description = '';
 
-        $validator = $this->getValidator($other);
-        foreach ($validator->getErrors() as $error) {
+        foreach ($this->validator->getErrors() as $error) {
             $description .= sprintf("[%s] %s\n", $error['property'], $error['message']);
         }
 
@@ -83,14 +81,9 @@ class JsonSchemaConstraint extends Constraint
 
     /**
      * @param object $schema
-     *
-     * @return Validator
      */
-    protected function getValidator($schema)
+    protected function check($schema)
     {
-        $validator = new Validator(\JsonSchema\Constraints\Constraint::CHECK_MODE_NORMAL, null, $this->factory);
-        $validator->check($schema, $this->expectedSchema);
-
-        return $validator;
+        $this->validator->check($schema, $this->expectedSchema);
     }
 }

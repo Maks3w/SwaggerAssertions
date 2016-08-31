@@ -2,7 +2,7 @@
 
 namespace FR3D\SwaggerAssertions\PhpUnit;
 
-use JsonSchema\Constraints\Factory;
+use JsonSchema\Validator;
 
 /**
  * Validate request headers match against defined Swagger request headers schema.
@@ -11,9 +11,9 @@ class RequestHeadersConstraint extends JsonSchemaConstraint
 {
     /**
      * @param \stdClass[] $headersParameters
-     * @param Factory $factory
+     * @param Validator $validator
      */
-    public function __construct($headersParameters, Factory $factory = null)
+    public function __construct($headersParameters, Validator $validator)
     {
         $normalizedSchema = new \stdClass();
         $normalizedSchema->required = [];
@@ -38,16 +38,16 @@ class RequestHeadersConstraint extends JsonSchemaConstraint
         //        $normalizedSchema->properties = (object) array_change_key_case((array) $requestSchema, CASE_LOWER);
         //        $normalizedSchema->required = array_keys((array) $normalizedSchema->properties);
 
-        parent::__construct($normalizedSchema, 'request header', $factory);
+        parent::__construct($normalizedSchema, 'request header', $validator);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function getValidator($headers)
+    protected function check($headers)
     {
         $headers = (object) array_change_key_case((array) $headers, CASE_LOWER);
 
-        return parent::getValidator($headers);
+        return parent::check($headers);
     }
 }

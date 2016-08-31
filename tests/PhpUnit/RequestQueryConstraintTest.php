@@ -3,7 +3,7 @@
 namespace FR3D\SwaggerAssertionsTest\PhpUnit;
 
 use FR3D\SwaggerAssertions\PhpUnit\RequestQueryConstraint;
-use JsonSchema\Constraints\Factory;
+use JsonSchema\Validator;
 use PHPUnit_Framework_ExpectationFailedException as ExpectationFailedException;
 use PHPUnit_Framework_TestCase as TestCase;
 use PHPUnit_Framework_TestFailure as TestFailure;
@@ -23,7 +23,7 @@ class RequestQueryConstraintTest extends TestCase
         $schema = '[{"name":"tags","in":"query","description":"tags to filter by","required":false,"type":"array","items":{"type":"string"},"collectionFormat":"csv"},{"name":"limit","in":"query","description":"maximum number of results to return","required":true,"type":"integer","format":"int32"}]';
         $schema = json_decode($schema);
 
-        $this->constraint = new RequestQueryConstraint($schema);
+        $this->constraint = new RequestQueryConstraint($schema, new Validator());
     }
 
     public function testConstraintDefinition()
@@ -39,7 +39,8 @@ class RequestQueryConstraintTest extends TestCase
             'limit' => 1,
         ];
 
-        self::assertTrue($this->constraint->evaluate($parameters, '', true), $this->constraint->evaluate($parameters));
+        $this->constraint->evaluate($parameters);
+        self::assertTrue(true);
     }
 
     public function testInvalidParameterType()
@@ -48,8 +49,6 @@ class RequestQueryConstraintTest extends TestCase
             'tags' => ['foo', 1],
             'limit' => 1,
         ];
-
-        self::assertFalse($this->constraint->evaluate($parameters, '', true));
 
         try {
             $this->constraint->evaluate($parameters);
@@ -73,8 +72,6 @@ EOF
             'tags' => ['foo', 'bar'],
         ];
 
-        self::assertFalse($this->constraint->evaluate($parameters, '', true));
-
         try {
             $this->constraint->evaluate($parameters);
             self::fail('Expected ExpectationFailedException to be thrown');
@@ -90,32 +87,15 @@ EOF
             );
         }
     }
-    
+
     public function testConstructorDoesNotAlterParameters()
     {
         $source = '[{"name":"tags","in":"query","description":"tags to filter by","required":false,"type":"array","items":{"type":"string"},"collectionFormat":"csv"},{"name":"limit","in":"query","description":"maximum number of results to return","required":true,"type":"integer","format":"int32"}]';
         $schema = json_decode($source);
         $expected = json_decode($source);
 
-        new RequestQueryConstraint($schema);
+        new RequestQueryConstraint($schema, new Validator());
 
         self::assertEquals($expected, $schema);
-    }
-
-    public function testCustomFactory()
-    {
-        $factory = new Factory();
-        $factory->setConstraintClass('schema', 'FR3D\SwaggerAssertionsTest\PhpUnit\SchemaConstraintMock');
-
-        $schema = '[{"name":"tags","in":"query","description":"tags to filter by","required":false,"type":"array","items":{"type":"string"},"collectionFormat":"csv"},{"name":"limit","in":"query","description":"maximum number of results to return","required":true,"type":"integer","format":"int32"}]';
-        $schema = json_decode($schema);
-
-        $constraint = new RequestQueryConstraint($schema, $factory);
-
-        $parameters = [
-            'tags' => ['foo', 'bar'],
-        ];
-
-        self::assertTrue($constraint->evaluate($parameters, '', true), $constraint->evaluate($parameters));
     }
 }

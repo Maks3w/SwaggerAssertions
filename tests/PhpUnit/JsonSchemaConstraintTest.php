@@ -3,7 +3,7 @@
 namespace FR3D\SwaggerAssertionsTest\PhpUnit;
 
 use FR3D\SwaggerAssertions\PhpUnit\JsonSchemaConstraint;
-use JsonSchema\Constraints\Factory;
+use JsonSchema\Validator;
 use PHPUnit_Framework_ExpectationFailedException as ExpectationFailedException;
 use PHPUnit_Framework_TestCase as TestCase;
 use PHPUnit_Framework_TestFailure as TestFailure;
@@ -33,7 +33,7 @@ class JsonSchemaConstraintTest extends TestCase
 JSON;
         $schema = json_decode($schema);
 
-        $this->constraint = new JsonSchemaConstraint($schema, 'context');
+        $this->constraint = new JsonSchemaConstraint($schema, 'context', new Validator());
     }
 
     public function testConstraintDefinition()
@@ -54,7 +54,8 @@ JSON;
 JSON;
         $response = json_decode($response);
 
-        self::assertTrue($this->constraint->evaluate($response, '', true), $this->constraint->evaluate($response));
+        $this->constraint->evaluate($response);
+        self::assertTrue(true);
     }
 
     public function testInvalidSchema()
@@ -67,8 +68,6 @@ JSON;
 ]
 JSON;
         $response = json_decode($response);
-
-        self::assertFalse($this->constraint->evaluate($response, '', true));
 
         try {
             $this->constraint->evaluate($response);
@@ -84,35 +83,5 @@ EOF
                 TestFailure::exceptionToString($e)
             );
         }
-    }
-
-    public function testCustomFactory()
-    {
-        $factory = new Factory();
-        $factory->setConstraintClass('schema', 'FR3D\SwaggerAssertionsTest\PhpUnit\SchemaConstraintMock');
-
-        $schema = <<<JSON
-{
-  "type":"array",
-  "items":{
-    "type":"object",
-    "required":["id","name"],
-    "externalDocs":{"description":"find more info here","url":"https:\/\/swagger.io\/about"},
-    "properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"tag":{"type":"string"}}
-  }
-}
-JSON;
-        $schema = json_decode($schema);
-        $constraint = new JsonSchemaConstraint($schema, 'context', $factory);
-        $response = <<<JSON
-[
-  {
-    "id": 123456789
-  }
-]
-JSON;
-        $response = json_decode($response);
-
-        self::assertTrue($constraint->evaluate($response, '', true), $constraint->evaluate($response));
     }
 }
