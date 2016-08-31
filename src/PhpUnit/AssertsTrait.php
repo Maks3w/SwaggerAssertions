@@ -3,8 +3,6 @@
 namespace FR3D\SwaggerAssertions\PhpUnit;
 
 use FR3D\SwaggerAssertions\SchemaManager;
-use JsonSchema\Constraints\Constraint;
-use JsonSchema\Constraints\Factory;
 use JsonSchema\Validator;
 use PHPUnit_Framework_Assert as Assert;
 use stdClass;
