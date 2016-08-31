@@ -16,11 +16,6 @@ use Zend\Http\Header\ContentType;
 trait AssertsTrait
 {
     /**
-     * @var Factory
-     */
-    private $constraintFactory;
-
-    /**
      * Asserts response body match with the response schema.
      *
      * @param stdClass|stdClass[] $responseBody
@@ -226,6 +221,6 @@ trait AssertsTrait
      */
     protected function getValidator()
     {
-        return new Validator(Constraint::CHECK_MODE_NORMAL, null, $this->constraintFactory);
+        return new Validator();
     }
 }

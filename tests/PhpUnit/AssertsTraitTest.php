@@ -177,37 +177,4 @@ JSON;
             self::assertTrue(true);
         }
     }
-
-    public function testCustomFactory()
-    {
-        $this->constraintFactory = new Factory();
-        $this->constraintFactory->setConstraintClass('schema', 'FR3D\SwaggerAssertionsTest\PhpUnit\SchemaConstraintMock');
-
-        $query = ['tags' => ['foo', 'bar']];
-        self::assertRequestQueryMatch($query, $this->schemaManager, '/api/pets', 'get');
-
-        $headers = [];
-        self::assertRequestHeadersMatch($headers, $this->schemaManager, '/api/pets/1234', 'patch');
-
-        $request = <<<JSON
-{
-  "id": 123456789
-}
-JSON;
-        $request = json_decode($request);
-        self::assertRequestBodyMatch($request, $this->schemaManager, '/api/pets', 'post');
-
-        $response = <<<JSON
-[
-  {
-    "id": 123456789
-  }
-]
-JSON;
-        $response = json_decode($response);
-        self::assertResponseBodyMatch($response, $this->schemaManager, '/api/pets', 'get', 200);
-
-        $headers = [];
-        self::assertResponseHeadersMatch($headers, $this->schemaManager, '/api/pets', 'get', 200);
-    }
 }
