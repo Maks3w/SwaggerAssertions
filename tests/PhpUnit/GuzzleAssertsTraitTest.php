@@ -288,7 +288,7 @@ JSON;
         $headersMap = $this->transformHeadersToMap($headers);
 
         /** @var RequestInterface|MockObject $request */
-        $request = $this->getMock(RequestInterface::class);
+        $request = $this->getMockBuilder(RequestInterface::class)->getMock();
         $request->method('getHeader')->willReturnMap($headersMap);
         $request->method('getHeaders')->willReturn($headers);
         $request->method('getMethod')->willReturn($method);
@@ -311,7 +311,7 @@ JSON;
         $headersMap = $this->transformHeadersToMap($headers);
 
         /** @var ResponseInterface|MockObject $response */
-        $response = $this->getMock(ResponseInterface::class);
+        $response = $this->getMockBuilder(ResponseInterface::class)->getMock();
         $response->method('getStatusCode')->willReturn($statusCode);
         $response->method('getHeader')->willReturnMap($headersMap);
         $response->method('getHeaders')->willReturn($headers);
@@ -328,7 +328,7 @@ JSON;
     protected function createMockStream($body)
     {
         /** @var StreamInterface|MockObject $stream */
-        $stream = $this->getMock(StreamInterface::class);
+        $stream = $this->getMockBuilder(StreamInterface::class)->getMock();
         $stream->method('__toString')->willReturn($body);
 
         return $stream;

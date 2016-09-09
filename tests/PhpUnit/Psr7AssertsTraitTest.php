@@ -286,14 +286,14 @@ JSON;
     protected function createMockRequest($method, $path, array $headers, $body = '', $query = [])
     {
         /** @var UriInterface|MockObject $request */
-        $uri = $this->getMock('Psr\Http\Message\UriInterface');
+        $uri = $this->getMockBuilder('Psr\Http\Message\UriInterface')->getMock();
         $uri->method('getPath')->willReturn($path);
         $uri->method('getQuery')->willReturn(http_build_query($query, '', '&'));
 
         $headersMap = $this->transformHeadersToMap($headers);
 
         /** @var RequestInterface|MockObject $request */
-        $request = $this->getMock(RequestInterface::class);
+        $request = $this->getMockBuilder(RequestInterface::class)->getMock();
         $request->method('getHeaderLine')->willReturnMap($headersMap);
         $request->method('getHeaders')->willReturn($headers);
         $request->method('getMethod')->willReturn($method);
@@ -315,7 +315,7 @@ JSON;
         $headersMap = $this->transformHeadersToMap($headers);
 
         /** @var ResponseInterface|MockObject $response */
-        $response = $this->getMock(ResponseInterface::class);
+        $response = $this->getMockBuilder(ResponseInterface::class)->getMock();
         $response->method('getStatusCode')->willReturn($statusCode);
         $response->method('getHeaderLine')->willReturnMap($headersMap);
         $response->method('getHeaders')->willReturn($headers);
@@ -332,7 +332,7 @@ JSON;
     protected function createMockStream($body)
     {
         /** @var StreamInterface|MockObject $stream */
-        $stream = $this->getMock(StreamInterface::class);
+        $stream = $this->getMockBuilder(StreamInterface::class)->getMock();
         $stream->method('__toString')->willReturn($body);
 
         return $stream;
