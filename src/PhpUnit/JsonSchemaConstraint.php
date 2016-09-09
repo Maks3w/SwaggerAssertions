@@ -44,6 +44,8 @@ class JsonSchemaConstraint extends Constraint
      */
     protected function matches($other)
     {
+        $this->validator->reset();
+
         $this->check($other);
 
         return $this->validator->isValid();

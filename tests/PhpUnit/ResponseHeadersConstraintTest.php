@@ -39,8 +39,7 @@ class ResponseHeadersConstraintTest extends TestCase
             'ETag' => '123',
         ];
 
-        $this->constraint->evaluate($headers);
-        self::assertTrue(true);
+        self::assertTrue($this->constraint->evaluate($headers, '', true), $this->constraint->evaluate($headers));
     }
 
     public function testCaseInsensitiveValidHeaders()
@@ -50,8 +49,7 @@ class ResponseHeadersConstraintTest extends TestCase
             'etag' => '123',
         ];
 
-        $this->constraint->evaluate($headers);
-        self::assertTrue(true);
+        self::assertTrue($this->constraint->evaluate($headers, '', true), $this->constraint->evaluate($headers));
     }
 
     public function testInvalidHeaderType()
@@ -60,6 +58,8 @@ class ResponseHeadersConstraintTest extends TestCase
             'Content-Type' => 'application/json',
             // 'ETag' => '123', // Removed intentional
         ];
+
+        self::assertFalse($this->constraint->evaluate($headers, '', true));
 
         try {
             $this->constraint->evaluate($headers);

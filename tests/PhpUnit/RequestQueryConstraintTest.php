@@ -39,8 +39,7 @@ class RequestQueryConstraintTest extends TestCase
             'limit' => 1,
         ];
 
-        $this->constraint->evaluate($parameters);
-        self::assertTrue(true);
+        self::assertTrue($this->constraint->evaluate($parameters, '', true), $this->constraint->evaluate($parameters));
     }
 
     public function testInvalidParameterType()
@@ -49,6 +48,8 @@ class RequestQueryConstraintTest extends TestCase
             'tags' => ['foo', 1],
             'limit' => 1,
         ];
+
+        self::assertFalse($this->constraint->evaluate($parameters, '', true));
 
         try {
             $this->constraint->evaluate($parameters);
@@ -71,6 +72,8 @@ EOF
         $parameters = [
             'tags' => ['foo', 'bar'],
         ];
+
+        self::assertFalse($this->constraint->evaluate($parameters, '', true));
 
         try {
             $this->constraint->evaluate($parameters);
