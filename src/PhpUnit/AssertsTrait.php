@@ -3,6 +3,7 @@
 namespace FR3D\SwaggerAssertions\PhpUnit;
 
 use FR3D\SwaggerAssertions\SchemaManager;
+use JsonSchema\Validator;
 use PHPUnit_Framework_Assert as Assert;
 use stdClass;
 use Zend\Http\Header\ContentType;
@@ -35,7 +36,7 @@ trait AssertsTrait
         }
 
         $bodySchema = $schemaManager->getResponseSchema($template, $httpMethod, $httpCode);
-        $constraint = new JsonSchemaConstraint($bodySchema, 'response body');
+        $constraint = new JsonSchemaConstraint($bodySchema, 'response body', $this->getValidator());
 
         Assert::assertThat($responseBody, $constraint, $message);
     }
@@ -61,7 +62,7 @@ trait AssertsTrait
         }
 
         $bodySchema = $schemaManager->getRequestSchema($template, $httpMethod);
-        $constraint = new JsonSchemaConstraint($bodySchema, 'request body');
+        $constraint = new JsonSchemaConstraint($bodySchema, 'request body', $this->getValidator());
 
         Assert::assertThat($requestBody, $constraint, $message);
     }
@@ -152,7 +153,7 @@ trait AssertsTrait
             // @codeCoverageIgnoreEnd
         }
 
-        $constraint = new ResponseHeadersConstraint($schemaManager->getResponseHeaders($template, $httpMethod, $httpCode));
+        $constraint = new ResponseHeadersConstraint($schemaManager->getResponseHeaders($template, $httpMethod, $httpCode), $this->getValidator());
 
         Assert::assertThat($headers, $constraint, $message);
     }
@@ -179,7 +180,7 @@ trait AssertsTrait
             // @codeCoverageIgnoreEnd
         }
 
-        $constraint = new RequestHeadersConstraint($schemaManager->getRequestHeadersParameters($template, $httpMethod));
+        $constraint = new RequestHeadersConstraint($schemaManager->getRequestHeadersParameters($template, $httpMethod), $this->getValidator());
 
         Assert::assertThat($headers, $constraint, $message);
     }
@@ -206,8 +207,18 @@ trait AssertsTrait
             // @codeCoverageIgnoreEnd
         }
 
-        $constraint = new RequestQueryConstraint($schemaManager->getRequestQueryParameters($template, $httpMethod));
+        $constraint = new RequestQueryConstraint($schemaManager->getRequestQueryParameters($template, $httpMethod), $this->getValidator());
 
         Assert::assertThat($query, $constraint, $message);
+    }
+
+    /**
+     * Returns a new Validator instance.
+     *
+     * @return Validator
+     */
+    protected function getValidator()
+    {
+        return new Validator();
     }
 }

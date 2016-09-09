@@ -3,6 +3,7 @@
 namespace FR3D\SwaggerAssertionsTest\PhpUnit;
 
 use FR3D\SwaggerAssertions\PhpUnit\ResponseHeadersConstraint;
+use JsonSchema\Validator;
 use PHPUnit_Framework_ExpectationFailedException as ExpectationFailedException;
 use PHPUnit_Framework_TestCase as TestCase;
 use PHPUnit_Framework_TestFailure as TestFailure;
@@ -22,7 +23,7 @@ class ResponseHeadersConstraintTest extends TestCase
         $schema = '{"ETag":{"minimum":1}}';
         $schema = json_decode($schema);
 
-        $this->constraint = new ResponseHeadersConstraint($schema);
+        $this->constraint = new ResponseHeadersConstraint($schema, new Validator());
     }
 
     public function testConstraintDefinition()
@@ -38,7 +39,8 @@ class ResponseHeadersConstraintTest extends TestCase
             'ETag' => '123',
         ];
 
-        self::assertTrue($this->constraint->evaluate($headers, '', true), $this->constraint->evaluate($headers));
+        $this->constraint->evaluate($headers);
+        self::assertTrue(true);
     }
 
     public function testCaseInsensitiveValidHeaders()
@@ -48,7 +50,8 @@ class ResponseHeadersConstraintTest extends TestCase
             'etag' => '123',
         ];
 
-        self::assertTrue($this->constraint->evaluate($headers, '', true), $this->constraint->evaluate($headers));
+        $this->constraint->evaluate($headers);
+        self::assertTrue(true);
     }
 
     public function testInvalidHeaderType()
@@ -57,8 +60,6 @@ class ResponseHeadersConstraintTest extends TestCase
             'Content-Type' => 'application/json',
             // 'ETag' => '123', // Removed intentional
         ];
-
-        self::assertFalse($this->constraint->evaluate($headers, '', true));
 
         try {
             $this->constraint->evaluate($headers);
