@@ -25,10 +25,10 @@ class ResponseHeadersConstraint extends JsonSchemaConstraint
     /**
      * {@inheritdoc}
      */
-    protected function check($headers)
+    protected function matches($headers)
     {
         $headers = (object) array_change_key_case((array) $headers, CASE_LOWER);
 
-        return parent::check($headers);
+        return parent::matches($headers);
     }
 }

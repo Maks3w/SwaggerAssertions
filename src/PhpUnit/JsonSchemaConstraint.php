@@ -46,7 +46,7 @@ class JsonSchemaConstraint extends Constraint
     {
         $this->validator->reset();
 
-        $this->check($other);
+        $this->validator->check($other, $this->expectedSchema);
 
         return $this->validator->isValid();
     }
@@ -79,13 +79,5 @@ class JsonSchemaConstraint extends Constraint
     public function toString()
     {
         return 'is a valid ' . $this->context;
-    }
-
-    /**
-     * @param object $schema
-     */
-    protected function check($schema)
-    {
-        $this->validator->check($schema, $this->expectedSchema);
     }
 }
