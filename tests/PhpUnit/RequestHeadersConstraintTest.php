@@ -3,6 +3,7 @@
 namespace FR3D\SwaggerAssertionsTest\PhpUnit;
 
 use FR3D\SwaggerAssertions\PhpUnit\RequestHeadersConstraint;
+use JsonSchema\Validator;
 use PHPUnit_Framework_ExpectationFailedException as ExpectationFailedException;
 use PHPUnit_Framework_TestCase as TestCase;
 use PHPUnit_Framework_TestFailure as TestFailure;
@@ -22,7 +23,7 @@ class RequestHeadersConstraintTest extends TestCase
         $schema = '[{"name":"X-Required-Header","in":"header","description":"Required header","required":true,"type":"string"},{"name":"X-Optional-Header","in":"header","description":"Optional header","type":"string"}]';
         $schema = json_decode($schema);
 
-        $this->constraint = new RequestHeadersConstraint($schema);
+        $this->constraint = new RequestHeadersConstraint($schema, new Validator());
     }
 
     public function testConstraintDefinition()
