@@ -77,7 +77,7 @@ JSON;
             self::assertEquals(
                 <<<EOF
 Failed asserting that [{"id":123456789}] is a valid context.
-[name] The property name is required
+[[0].name] The property name is required
 
 EOF
                 ,
