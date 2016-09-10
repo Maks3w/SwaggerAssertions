@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace FR3D\SwaggerAssertions;
 
-use FR3D\SwaggerAssertions\JsonSchema\Uri\Retrievers\FileGetContentsRetriever;
+use FR3D\SwaggerAssertions\JsonSchema\RefResolver;
 use InvalidArgumentException;
-use JsonSchema\RefResolver;
 use JsonSchema\Uri\UriResolver;
 use JsonSchema\Uri\UriRetriever;
 use Rize\UriTemplate\UriTemplate;
@@ -29,9 +28,10 @@ class SchemaManager
      */
     public static function fromUri(string $definitionUri): self
     {
-        $refResolver = new RefResolver((new UriRetriever())->setUriRetriever(new FileGetContentsRetriever()), new UriResolver());
+        $refResolver = new RefResolver(new UriRetriever(), new UriResolver());
+        $definition = $refResolver->resolve($definitionUri);
 
-        return new self($refResolver->resolve($definitionUri));
+        return new self($definition);
     }
 
     /**

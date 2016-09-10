@@ -46,6 +46,8 @@ class RequestQueryConstraintTest extends TestCase
 
     public function testInvalidParameterType()
     {
+        self::markTestSkipped('Is not possible to check types');
+
         $parameters = [
             'tags' => ['foo', 1],
             'limit' => 1,
