@@ -295,7 +295,7 @@ class SchemaManager
      * @param string $path Swagger path template.
      * @param string $method
      *
-     * @return stdClass
+     * @return stdClass[]
      */
     public function getRequestQueryParameters($path, $method)
     {
