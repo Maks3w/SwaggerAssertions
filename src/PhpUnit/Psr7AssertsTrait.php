@@ -17,18 +17,14 @@ trait Psr7AssertsTrait
     /**
      * Asserts response match with the response schema.
      *
-     * @param ResponseInterface $response
-     * @param SchemaManager $schemaManager
      * @param string $path percent-encoded path used on the request.
-     * @param string $httpMethod
-     * @param string $message
      */
     public function assertResponseMatch(
         ResponseInterface $response,
         SchemaManager $schemaManager,
-        $path,
-        $httpMethod,
-        $message = ''
+        string $path,
+        string $httpMethod,
+        string $message = ''
     ) {
         $this->assertResponseMediaTypeMatch(
             $response->getHeaderLine('Content-Type'),
@@ -62,15 +58,11 @@ trait Psr7AssertsTrait
 
     /**
      * Asserts request match with the request schema.
-     *
-     * @param RequestInterface $request
-     * @param SchemaManager $schemaManager
-     * @param string $message
      */
     public function assertRequestMatch(
         RequestInterface $request,
         SchemaManager $schemaManager,
-        $message = ''
+        string $message = ''
     ) {
         $path = $request->getUri()->getPath();
         $httpMethod = $request->getMethod();
@@ -117,17 +109,12 @@ trait Psr7AssertsTrait
 
     /**
      * Asserts response match with the response schema.
-     *
-     * @param ResponseInterface $response
-     * @param RequestInterface $request
-     * @param SchemaManager $schemaManager
-     * @param string $message
      */
     public function assertResponseAndRequestMatch(
         ResponseInterface $response,
         RequestInterface $request,
         SchemaManager $schemaManager,
-        $message = ''
+        string $message = ''
     ) {
         try {
             $this->assertRequestMatch($request, $schemaManager, $message);
@@ -145,9 +132,9 @@ trait Psr7AssertsTrait
     /**
      * @param string[] $headers
      *
-     * @return string
+     * @return string[]
      */
-    protected function inlineHeaders(array $headers)
+    protected function inlineHeaders(array $headers): array
     {
         return array_map(
             function (array $headers) {

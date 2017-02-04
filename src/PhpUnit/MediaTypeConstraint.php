@@ -24,17 +24,11 @@ class MediaTypeConstraint extends Constraint
         $this->allowedMediaTypes = $allowedMediaTypes;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function matches($other)
     {
         return in_array($other, $this->allowedMediaTypes, true);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toString()
     {
         return 'is an allowed media type (' . implode(', ', $this->allowedMediaTypes) . ')';

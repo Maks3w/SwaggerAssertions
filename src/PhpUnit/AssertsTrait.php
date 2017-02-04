@@ -17,19 +17,15 @@ trait AssertsTrait
      * Asserts response body match with the response schema.
      *
      * @param stdClass|stdClass[] $responseBody
-     * @param SchemaManager $schemaManager
      * @param string $path percent-encoded path used on the request.
-     * @param string $httpMethod
-     * @param int $httpCode
-     * @param string $message
      */
     public function assertResponseBodyMatch(
         $responseBody,
         SchemaManager $schemaManager,
-        $path,
-        $httpMethod,
-        $httpCode,
-        $message = ''
+        string $path,
+        string $httpMethod,
+        int $httpCode,
+        string $message = ''
     ) {
         if (!$schemaManager->findPathInTemplates($path, $template, $params)) {
             throw new \RuntimeException('Request URI does not match with any swagger path definition');
@@ -45,17 +41,14 @@ trait AssertsTrait
      * Asserts request body match with the request schema.
      *
      * @param stdClass|stdClass[] $requestBody
-     * @param SchemaManager $schemaManager
      * @param string $path percent-encoded path used on the request.
-     * @param string $httpMethod
-     * @param string $message
      */
     public function assertRequestBodyMatch(
         $requestBody,
         SchemaManager $schemaManager,
-        $path,
-        $httpMethod,
-        $message = ''
+        string $path,
+        string $httpMethod,
+        string $message = ''
     ) {
         if (!$schemaManager->findPathInTemplates($path, $template, $params)) {
             throw new \RuntimeException('Request URI does not match with any swagger path definition');
@@ -70,18 +63,14 @@ trait AssertsTrait
     /**
      * Asserts response media type match with the media types defined.
      *
-     * @param string $responseMediaType
-     * @param SchemaManager $schemaManager
      * @param string $path percent-encoded path used on the request.
-     * @param string $httpMethod
-     * @param string $message
      */
     public function assertResponseMediaTypeMatch(
-        $responseMediaType,
+        string $responseMediaType,
         SchemaManager $schemaManager,
-        $path,
-        $httpMethod,
-        $message = ''
+        string $path,
+        string $httpMethod,
+        string $message = ''
     ) {
         if (!$schemaManager->findPathInTemplates($path, $template, $params)) {
             // @codeCoverageIgnoreStart
@@ -101,18 +90,14 @@ trait AssertsTrait
     /**
      * Asserts request media type match with the media types defined.
      *
-     * @param string $requestMediaType
-     * @param SchemaManager $schemaManager
      * @param string $path percent-encoded path used on the request.
-     * @param string $httpMethod
-     * @param string $message
      */
     public function assertRequestMediaTypeMatch(
-        $requestMediaType,
+        string $requestMediaType,
         SchemaManager $schemaManager,
-        $path,
-        $httpMethod,
-        $message = ''
+        string $path,
+        string $httpMethod,
+        string $message = ''
     ) {
         if (!$schemaManager->findPathInTemplates($path, $template, $params)) {
             // @codeCoverageIgnoreStart
@@ -133,19 +118,15 @@ trait AssertsTrait
      * Asserts response headers match with the media types defined.
      *
      * @param string[] $headers
-     * @param SchemaManager $schemaManager
      * @param string $path percent-encoded path used on the request.
-     * @param string $httpMethod
-     * @param int $httpCode
-     * @param string $message
      */
     public function assertResponseHeadersMatch(
         array $headers,
         SchemaManager $schemaManager,
-        $path,
-        $httpMethod,
-        $httpCode,
-        $message = ''
+        string $path,
+        string $httpMethod,
+        int $httpCode,
+        string $message = ''
     ) {
         if (!$schemaManager->findPathInTemplates($path, $template, $params)) {
             // @codeCoverageIgnoreStart
@@ -162,17 +143,14 @@ trait AssertsTrait
      * Asserts request headers match with the media types defined.
      *
      * @param string[] $headers
-     * @param SchemaManager $schemaManager
      * @param string $path percent-encoded path used on the request.
-     * @param string $httpMethod
-     * @param string $message
      */
     public function assertRequestHeadersMatch(
         array $headers,
         SchemaManager $schemaManager,
-        $path,
-        $httpMethod,
-        $message = ''
+        string $path,
+        string $httpMethod,
+        string $message = ''
     ) {
         if (!$schemaManager->findPathInTemplates($path, $template, $params)) {
             // @codeCoverageIgnoreStart
@@ -189,17 +167,14 @@ trait AssertsTrait
      * Asserts request body match with the request schema.
      *
      * @param mixed[] $query
-     * @param SchemaManager $schemaManager
      * @param string $path percent-encoded path used on the request.
-     * @param string $httpMethod
-     * @param string $message
      */
     public function assertRequestQueryMatch(
         $query,
         SchemaManager $schemaManager,
-        $path,
-        $httpMethod,
-        $message = ''
+        string $path,
+        string $httpMethod,
+        string $message = ''
     ) {
         if (!$schemaManager->findPathInTemplates($path, $template, $params)) {
             // @codeCoverageIgnoreStart
@@ -212,12 +187,7 @@ trait AssertsTrait
         Assert::assertThat($query, $constraint, $message);
     }
 
-    /**
-     * Returns a new Validator instance.
-     *
-     * @return Validator
-     */
-    protected function getValidator()
+    protected function getValidator(): Validator
     {
         return new Validator();
     }

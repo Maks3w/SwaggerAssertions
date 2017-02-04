@@ -18,18 +18,14 @@ class SchemaManager
     /**
      * Swagger definition.
      *
-     * @var stdClass
+     * @var object
      */
     protected $definition;
 
     /**
      * Fetch the definition and resolve the references present in the schema.
-     *
-     * @param string $definitionUri
-     *
-     * @return self
      */
-    public static function fromUri($definitionUri)
+    public static function fromUri(string $definitionUri): self
     {
         $refResolver = new RefResolver((new UriRetriever())->setUriRetriever(new FileGetContentsRetriever()), new UriResolver());
 
@@ -37,20 +33,17 @@ class SchemaManager
     }
 
     /**
-     * @param object $definition Swagger 2 definition with all their references resolved.
+     * @param stdClass $definition Swagger 2 definition with all their references resolved.
      */
-    public function __construct($definition)
+    public function __construct(stdClass $definition)
     {
         $this->definition = $definition;
     }
 
     /**
      * @param string $path Swagger path template.
-     * @param string $method
-     *
-     * @return stdClass
      */
-    public function getMethod($path, $method)
+    public function getMethod(string $path, string $method): stdClass
     {
         $method = strtolower($method);
         $pathSegments = function ($path, $method) {
@@ -69,19 +62,12 @@ class SchemaManager
     /**
      * @return string[]
      */
-    public function getPathTemplates()
+    public function getPathTemplates(): array
     {
         return array_keys((array) $this->definition->paths);
     }
 
-    /**
-     * @param string $path Swagger path template.
-     * @param string $method
-     * @param string $httpCode
-     *
-     * @return stdClass
-     */
-    public function getResponseSchema($path, $method, $httpCode)
+    public function getResponseSchema(string $path, string $method, string $httpCode): stdClass
     {
         $response = $this->getResponse($path, $method, $httpCode);
         if (!isset($response->schema)) {
@@ -93,12 +79,10 @@ class SchemaManager
 
     /**
      * @param string $path Swagger path template.
-     * @param string $method
-     * @param string $httpCode
      *
      * @return stdClass[]
      */
-    public function getResponseHeaders($path, $method, $httpCode)
+    public function getResponseHeaders(string $path, string $method, string $httpCode)
     {
         $response = $this->getResponse($path, $method, $httpCode);
         if (!isset($response->headers)) {
@@ -116,11 +100,10 @@ class SchemaManager
      * If response does not have specific media types then inherit from global API media types.
      *
      * @param string $path Swagger path template.
-     * @param string $method
      *
      * @return string[]
      */
-    public function getResponseMediaTypes($path, $method)
+    public function getResponseMediaTypes(string $path, string $method): array
     {
         $method = strtolower($method);
         $responseMediaTypes = [
@@ -141,10 +124,8 @@ class SchemaManager
 
     /**
      * @param string[] $segments
-     *
-     * @return bool If path exists.
      */
-    public function hasPath(array $segments)
+    public function hasPath(array $segments): bool
     {
         $result = $this->definition;
         foreach ($segments as $segment) {
@@ -162,10 +143,8 @@ class SchemaManager
      * @param string $requestPath percent-encoded path used on the request.
      * @param string $path Output variable. matched path
      * @param array $params Output variable. path parameters
-     *
-     * @return bool
      */
-    public function findPathInTemplates($requestPath, &$path, &$params = [])
+    public function findPathInTemplates(string $requestPath, &$path, &$params = []): bool
     {
         $uriTemplateManager = new UriTemplate();
         foreach ($this->getPathTemplates() as $template) {
@@ -218,12 +197,8 @@ class SchemaManager
 
     /**
      * @param string $path Swagger path template.
-     * @param string $method
-     * @param int $httpCode
-     *
-     * @return stdClass
      */
-    public function getResponse($path, $method, $httpCode)
+    public function getResponse(string $path, string $method, string $httpCode): stdClass
     {
         $method = strtolower($method);
         $pathSegments = function ($path, $method, $httpCode) {
@@ -251,11 +226,10 @@ class SchemaManager
      * If request does not have specific media types then inherit from global API media types.
      *
      * @param string $path Swagger path template.
-     * @param string $method
      *
      * @return string[]
      */
-    public function getRequestMediaTypes($path, $method)
+    public function getRequestMediaTypes(string $path, string $method): array
     {
         $method = strtolower($method);
         $mediaTypesPath = [
@@ -276,11 +250,10 @@ class SchemaManager
 
     /**
      * @param string $path Swagger path template.
-     * @param string $method
      *
      * @return stdClass[]
      */
-    public function getRequestHeadersParameters($path, $method)
+    public function getRequestHeadersParameters(string $path, string $method): array
     {
         $parameters = $this->getRequestParameters($path, $method);
         $parameters = $this->filterParametersObjectByLocation($parameters, 'header');
@@ -293,11 +266,10 @@ class SchemaManager
 
     /**
      * @param string $path Swagger path template.
-     * @param string $method
      *
      * @return stdClass[]
      */
-    public function getRequestQueryParameters($path, $method)
+    public function getRequestQueryParameters(string $path, string $method): array
     {
         $parameters = $this->getRequestParameters($path, $method);
         $parameters = $this->filterParametersObjectByLocation($parameters, 'query');
@@ -310,11 +282,8 @@ class SchemaManager
 
     /**
      * @param string $path Swagger path template.
-     * @param string $method
-     *
-     * @return stdClass
      */
-    public function getRequestSchema($path, $method)
+    public function getRequestSchema(string $path, string $method): stdClass
     {
         $parameters = $this->getRequestParameters($path, $method);
         $parameters = $this->filterParametersObjectByLocation($parameters, 'body');
@@ -341,11 +310,10 @@ class SchemaManager
 
     /**
      * @param string $path Swagger path template.
-     * @param string $method
      *
      * @return stdClass[]
      */
-    public function getRequestParameters($path, $method)
+    public function getRequestParameters(string $path, string $method): array
     {
         $method = $this->getMethod($path, $method);
         if (!isset($method->parameters)) {
@@ -357,11 +325,10 @@ class SchemaManager
 
     /**
      * @param stdClass[] $parameters
-     * @param string $location
      *
      * @return \stdClass[]
      */
-    private function filterParametersObjectByLocation(array $parameters, $location)
+    private function filterParametersObjectByLocation(array $parameters, string $location): array
     {
         return array_values(array_filter(
             $parameters,

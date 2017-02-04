@@ -25,12 +25,7 @@ class JsonSchemaConstraint extends Constraint
      */
     private $validator;
 
-    /**
-     * @param object $expectedSchema
-     * @param string $context
-     * @param Validator $validator
-     */
-    public function __construct($expectedSchema, $context, Validator $validator)
+    public function __construct($expectedSchema, string $context, Validator $validator)
     {
         parent::__construct();
 
@@ -39,9 +34,6 @@ class JsonSchemaConstraint extends Constraint
         $this->validator = $validator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function matches($other)
     {
         $this->validator->reset();
@@ -51,17 +43,11 @@ class JsonSchemaConstraint extends Constraint
         return $this->validator->isValid();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function failureDescription($other)
     {
         return json_encode($other) . ' ' . $this->toString();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function additionalFailureDescription($other)
     {
         $description = '';
@@ -73,9 +59,6 @@ class JsonSchemaConstraint extends Constraint
         return $description;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toString()
     {
         return 'is a valid ' . $this->context;

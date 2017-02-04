@@ -17,18 +17,14 @@ trait SymfonyAssertsTrait
     /**
      * Asserts response match with the response schema.
      *
-     * @param Response $response
-     * @param SchemaManager $schemaManager
      * @param string $path percent-encoded path used on the request.
-     * @param string $httpMethod
-     * @param string $message
      */
     public function assertResponseMatch(
         Response $response,
         SchemaManager $schemaManager,
-        $path,
-        $httpMethod,
-        $message = ''
+        string $path,
+        string $httpMethod,
+        string $message = ''
     ) {
         $this->assertResponseMediaTypeMatch(
             $response->headers->get('Content-Type'),
@@ -62,15 +58,11 @@ trait SymfonyAssertsTrait
 
     /**
      * Asserts request match with the request schema.
-     *
-     * @param Request $request
-     * @param SchemaManager $schemaManager
-     * @param string $message
      */
     public function assertRequestMatch(
         Request $request,
         SchemaManager $schemaManager,
-        $message = ''
+        string $message = ''
     ) {
         $path = $request->getPathInfo();
         $httpMethod = $request->getMethod();
@@ -115,17 +107,12 @@ trait SymfonyAssertsTrait
 
     /**
      * Asserts response match with the response schema.
-     *
-     * @param Response $response
-     * @param Request $request
-     * @param SchemaManager $schemaManager
-     * @param string $message
      */
     public function assertResponseAndRequestMatch(
         Response $response,
         Request $request,
         SchemaManager $schemaManager,
-        $message = ''
+        string $message = ''
     ) {
         try {
             $this->assertRequestMatch($request, $schemaManager, $message);
@@ -143,9 +130,9 @@ trait SymfonyAssertsTrait
     /**
      * @param string[] $headers
      *
-     * @return string
+     * @return string[]
      */
-    protected function inlineHeaders(array $headers)
+    protected function inlineHeaders(array $headers): array
     {
         return array_map(
             function (array $headers) {

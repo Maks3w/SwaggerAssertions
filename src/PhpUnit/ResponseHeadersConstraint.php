@@ -9,10 +9,6 @@ use JsonSchema\Validator;
  */
 class ResponseHeadersConstraint extends JsonSchemaConstraint
 {
-    /**
-     * @param object $headersSchema
-     * @param Validator $validator
-     */
     public function __construct($headersSchema, Validator $validator)
     {
         $normalizedSchema = new \stdClass();
@@ -22,9 +18,6 @@ class ResponseHeadersConstraint extends JsonSchemaConstraint
         parent::__construct($normalizedSchema, 'response header', $validator);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function matches($headers)
     {
         $headers = (object) array_change_key_case((array) $headers, CASE_LOWER);
