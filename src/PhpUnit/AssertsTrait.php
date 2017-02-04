@@ -4,7 +4,7 @@ namespace FR3D\SwaggerAssertions\PhpUnit;
 
 use FR3D\SwaggerAssertions\SchemaManager;
 use JsonSchema\Validator;
-use PHPUnit_Framework_Assert as Assert;
+use PHPUnit\Framework\Assert;
 use stdClass;
 use Zend\Http\Header\ContentType;
 

@@ -5,6 +5,7 @@ namespace FR3D\SwaggerAssertions\PhpUnit;
 use FR3D\SwaggerAssertions\SchemaManager;
 use GuzzleHttp\Message\RequestInterface;
 use GuzzleHttp\Message\ResponseInterface;
+use PHPUnit\Framework\ExpectationFailedException;
 
 /**
  * Facade functions for interact with Guzzle constraints.
@@ -128,7 +129,7 @@ trait GuzzleAssertsTrait
     ) {
         try {
             $this->assertRequestMatch($request, $schemaManager, $message);
-        } catch (\PHPUnit_Framework_ExpectationFailedException $e) {
+        } catch (ExpectationFailedException $e) {
             // If response represent a Client error then ignore.
             $statusCode = $response->getStatusCode();
             if ($statusCode < 400 || $statusCode > 499) {

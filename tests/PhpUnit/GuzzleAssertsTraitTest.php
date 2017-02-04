@@ -7,9 +7,9 @@ use GuzzleHttp\Message\RequestInterface;
 use GuzzleHttp\Message\ResponseInterface;
 use GuzzleHttp\Query;
 use GuzzleHttp\Stream\StreamInterface;
-use PHPUnit_Framework_ExpectationFailedException as ExpectationFailedException;
+use PHPUnit\Framework\ExpectationFailedException;
+use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use PHPUnit_Framework_TestCase as TestCase;
 
 /**
  * @covers FR3D\SwaggerAssertions\PhpUnit\GuzzleAssertsTrait
@@ -59,7 +59,7 @@ class GuzzleAssertsTraitTest extends TestCase
 
         try {
             self::assertResponseAndRequestMatch($response, $request, $this->schemaManager);
-        } catch (\PHPUnit_Framework_ExpectationFailedException $e) {
+        } catch (ExpectationFailedException $e) {
             self::assertContains('request', $e->getMessage());
         }
     }

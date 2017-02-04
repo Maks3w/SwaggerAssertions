@@ -2,7 +2,7 @@
 
 namespace FR3D\SwaggerAssertions;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers FR3D\SwaggerAssertions\SchemaManager

@@ -4,11 +4,12 @@ use FR3D\SwaggerAssertions\PhpUnit\AssertsTrait;
 use FR3D\SwaggerAssertions\SchemaManager;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * PHPUnit integration example.
  */
-class LocalFileTest extends \PHPUnit_Framework_TestCase
+class LocalFileTest extends TestCase
 {
     use AssertsTrait;
 

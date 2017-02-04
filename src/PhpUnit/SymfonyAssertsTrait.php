@@ -3,6 +3,7 @@
 namespace FR3D\SwaggerAssertions\PhpUnit;
 
 use FR3D\SwaggerAssertions\SchemaManager;
+use PHPUnit\Framework\ExpectationFailedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -128,7 +129,7 @@ trait SymfonyAssertsTrait
     ) {
         try {
             $this->assertRequestMatch($request, $schemaManager, $message);
-        } catch (\PHPUnit_Framework_ExpectationFailedException $e) {
+        } catch (ExpectationFailedException $e) {
             // If response represent a Client error then ignore.
             $statusCode = $response->getStatusCode();
             if ($statusCode < 400 || $statusCode > 499) {

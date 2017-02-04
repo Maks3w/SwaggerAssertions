@@ -3,9 +3,10 @@
 namespace FR3D\SwaggerAssertions\PhpUnit;
 
 use JsonSchema\Validator;
-use PHPUnit_Framework_ExpectationFailedException as ExpectationFailedException;
-use PHPUnit_Framework_TestCase as TestCase;
-use PHPUnit_Framework_TestFailure as TestFailure;
+use PHPUnit\Framework\Constraint\Constraint;
+use PHPUnit\Framework\ExpectationFailedException;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\TestFailure;
 
 /**
  * @covers FR3D\SwaggerAssertions\PhpUnit\RequestQueryConstraint
@@ -13,7 +14,7 @@ use PHPUnit_Framework_TestFailure as TestFailure;
 class RequestQueryConstraintTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_Constraint
+     * @var Constraint
      */
     protected $constraint;
 

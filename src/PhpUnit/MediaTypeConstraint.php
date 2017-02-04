@@ -2,7 +2,7 @@
 
 namespace FR3D\SwaggerAssertions\PhpUnit;
 
-use PHPUnit_Framework_Constraint as Constraint;
+use PHPUnit\Framework\Constraint\Constraint;
 
 /**
  * Validate given media type is present in the allowed media type collection.

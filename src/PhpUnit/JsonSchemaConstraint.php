@@ -3,7 +3,7 @@
 namespace FR3D\SwaggerAssertions\PhpUnit;
 
 use JsonSchema\Validator;
-use PHPUnit_Framework_Constraint as Constraint;
+use PHPUnit\Framework\Constraint\Constraint;
 
 /**
  * Validate given value match the expected JSON Schema.

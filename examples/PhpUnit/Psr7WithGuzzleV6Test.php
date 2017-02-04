@@ -5,11 +5,12 @@ use FR3D\SwaggerAssertions\SchemaManager;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Psr7\Request;
+use PHPUnit\Framework\TestCase;
 
 /**
  * PHPUnit-Guzzle integration example.
  */
-class Psr7WithGuzzleV6Test extends \PHPUnit_Framework_TestCase
+class Psr7WithGuzzleV6Test extends TestCase
 {
     use Psr7AssertsTrait;
 
