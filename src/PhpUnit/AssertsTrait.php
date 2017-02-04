@@ -164,7 +164,7 @@ trait AssertsTrait
     }
 
     /**
-     * Asserts request body match with the request schema.
+     * Asserts request query match with the request schema.
      *
      * @param mixed[] $query
      * @param string $path percent-encoded path used on the request.
