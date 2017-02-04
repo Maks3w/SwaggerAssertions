@@ -1,8 +1,7 @@
 <?php
 
-namespace FR3D\SwaggerAssertionsTest\PhpUnit;
+namespace FR3D\SwaggerAssertions\PhpUnit;
 
-use FR3D\SwaggerAssertions\PhpUnit\SymfonyAssertsTrait;
 use FR3D\SwaggerAssertions\SchemaManager;
 use PHPUnit_Framework_ExpectationFailedException as ExpectationFailedException;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;

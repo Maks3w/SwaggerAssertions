@@ -35,7 +35,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "FR3D\\SwaggerAssertionsTest\\": "tests/"
+            "FR3D\\SwaggerAssertions\\": "tests/"
         }
     }
 }

@@ -1,8 +1,7 @@
 <?php
 
-namespace FR3D\SwaggerAssertionsTest;
+namespace FR3D\SwaggerAssertions;
 
-use FR3D\SwaggerAssertions\SchemaManager;
 use PHPUnit_Framework_TestCase as TestCase;
 
 /**
