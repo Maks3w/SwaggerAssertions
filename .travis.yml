@@ -16,7 +16,7 @@ matrix:
     - php: 5.6
       env:
         - EXECUTE_TEST_COVERALLS=true
-    - php: 7.0
+    - php: 7.1
       env:
         - EXECUTE_CS_CHECK=true
     - php: hhvm
