@@ -24,7 +24,6 @@
         "symfony/http-foundation": "^2.7"
     },
     "suggest": {
-        "guzzlehttp/guzzle": "For Guzzle constraints",
         "symfony/http-foundation": "For Symfony constraints"
     },
     "autoload": {
