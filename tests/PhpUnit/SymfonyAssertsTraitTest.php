@@ -50,7 +50,7 @@ class SymfonyAssertsTraitTest extends TestCase
         self::assertResponseAndRequestMatch($response, $request, $this->schemaManager);
     }
 
-    public function testAssertRerquestIsInvalidIfResponseIsNotAClientError()
+    public function testAssertRequestIsInvalidIfResponseIsNotAClientError()
     {
         $response = $this->createMockResponse(200, $this->getValidHeaders(), $this->getValidResponseBody());
         $request = $this->createMockRequest('POST', '/api/pets', ['Content-Type' => ['application/pdf']]);
