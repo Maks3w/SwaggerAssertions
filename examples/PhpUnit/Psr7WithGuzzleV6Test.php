@@ -31,16 +31,13 @@ class Psr7WithGuzzleV6Test extends TestCase
 
     protected function setUp()
     {
-        if (version_compare(ClientInterface::VERSION, '6.0', '<')) {
-            self::markTestSkipped('This example requires Guzzle V6 installed');
-        }
         $this->guzzleHttpClient = new Client(['headers' => ['User-Agent' => 'https://github.com/Maks3w/SwaggerAssertions']]);
     }
 
     public function testFetchPetMatchDefinition()
     {
-        $request = new Request('GET', 'http://petstore.swagger.io/v2/pet/findByStatus');
-        $request->withHeader('Accept', 'application/json');
+        $request = new Request('GET', 'http://petstore.swagger.io/v2/store/inventory');
+        $request = $request->withHeader('Accept', 'application/json');
 
         $response = $this->guzzleHttpClient->send($request);
 
@@ -50,7 +47,7 @@ class Psr7WithGuzzleV6Test extends TestCase
     public function testOnlyResponse()
     {
         $request = new Request('GET', 'http://petstore.swagger.io/v2/pet/findByStatus');
-        $request->withHeader('Accept', 'application/json');
+        $request = $request->withHeader('Accept', 'application/json');
 
         $response = $this->guzzleHttpClient->send($request);
 
