@@ -1,8 +1,5 @@
 # Swagger Assertions
 
-[![Build Status](https://travis-ci.org/Maks3w/SwaggerAssertions.svg?branch=master)](https://travis-ci.org/Maks3w/SwaggerAssertions)
-[![Coverage Status](https://coveralls.io/repos/Maks3w/SwaggerAssertions/badge.svg?branch=master)](https://coveralls.io/r/Maks3w/SwaggerAssertions?branch=master)
-
 Test any API requests and responses match with the models described in the documentation.
 
 This project is compatible with [Swagger 2](http://swagger.io/) spec definitions.
