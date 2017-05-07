@@ -315,12 +315,34 @@ class SchemaManager
      */
     public function getRequestParameters(string $path, string $method): array
     {
-        $method = $this->getMethod($path, $method);
-        if (!isset($method->parameters)) {
-            return [];
+        $result = [];
+        $pathItemParameters = [
+            'paths',
+            $path,
+            'parameters',
+        ];
+
+        // See if there any parameters shared by all methods
+        if ($this->hasPath($pathItemParameters)) {
+            foreach ($this->getPath($pathItemParameters) as $parameter) {
+                // Index by unique ID for later merging.
+                // "A unique parameter is defined by a combination of a name and location."
+                // - http://swagger.io/specification/#pathItemParameters
+                $uniqueId = $parameter->name . ',' . $parameter->in;
+                $result[$uniqueId] = $parameter;
+            }
         }
 
-        return $method->parameters;
+        $method = $this->getMethod($path, $method);
+        if (isset($method->parameters)) {
+            foreach ($method->parameters as $parameter) {
+                // Operation parameters override shared parameters
+                $uniqueId = $parameter->name . ',' . $parameter->in;
+                $result[$uniqueId] = $parameter;
+            }
+        }
+
+        return array_values($result);
     }
 
     /**
