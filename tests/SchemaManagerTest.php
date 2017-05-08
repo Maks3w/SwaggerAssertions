@@ -138,6 +138,33 @@ class SchemaManagerTest extends TestCase
     }
 
     /**
+     * @dataProvider requestParameters
+     */
+    public function testGetRequestParameters($path, $method, $expectedParameters)
+    {
+        $parameters = $this->schemaManager->getRequestParameters($path, $method);
+
+        self::assertEquals($expectedParameters, json_encode($parameters));
+    }
+
+    public function requestParameters()
+    {
+        $pets_id_shared_parameters = '[{"name":"id","in":"path","description":"ID of pet to fetch","required":true,"type":"integer","format":"int64"}';
+        $pets_id_patch_parameters = $pets_id_shared_parameters . ',{"name":"X-Required-Header","in":"header","description":"Required header","required":true,"type":"string"},{"name":"X-Optional-Header","in":"header","description":"Optional header","type":"string"},{"name":"pet","in":"body","description":"Pet to update","required":true,"schema":{"type":"object","allOf":[{"type":"object","required":["id","name"],"externalDocs":{"description":"find more info here","url":"https:\/\/swagger.io\/about"},"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"tag":{"type":"string"}}},{"required":["id"],"properties":{"id":{"type":"integer","format":"int64"}}}]}}]';
+        $pets_id_delete_parameter = '[{"name":"id","in":"path","description":"Override the shared ID parameter","required":true,"type":"integer","format":"int64"}]';
+
+        $dataSet = [
+            // Description => [path, method, expectedParameters]
+            'without parameters' => ['/food', 'get', '[]'],
+            'with a shared parameter and operation parameters' => ['/pets/{id}', 'patch', $pets_id_patch_parameters],
+            'with a operation parameter that overrides a shared parameter' => ['/pets/{id}', 'delete', $pets_id_delete_parameter],
+            'with only a shared parameter' => ['/pets/{id}', 'get', $pets_id_shared_parameters . ']'],
+        ];
+
+        return $dataSet;
+    }
+
+    /**
      * @dataProvider requestHeadersParameters
      */
     public function testGetRequestHeadersParameters($path, $method, $expectedParameters)
