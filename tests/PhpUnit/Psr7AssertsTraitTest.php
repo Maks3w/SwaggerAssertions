@@ -181,6 +181,21 @@ EOF
         }
     }
 
+    public function testAssertRequestQueryTypeCheck()
+    {
+        $headers = [
+            'Content-Type' => ['application/json'],
+            'X-Optional-Header' => ['any'],
+        ];
+        $query = [
+            'page' => 1,
+            'limit' => 1000,
+        ];
+        $request = $this->createMockRequest('GET', '/api/pets', $headers, $this->getValidRequestBody(), $query);
+
+        self::assertRequestMatch($request, $this->schemaManager);
+    }
+
     public function testAssertRequestHeaderDoesNotMatch()
     {
         $headers = [
