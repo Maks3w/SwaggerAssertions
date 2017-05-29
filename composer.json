@@ -15,7 +15,7 @@
         "php": ">= 7.0",
         "justinrainbow/json-schema": "^2.0.1",
         "phpunit/phpunit": "^6.0",
-        "rize/uri-template": "^0.3.0",
+        "rize/uri-template": "^0.3.1",
         "zendframework/zend-http": "2.5 - 3"
     },
     "require-dev": {
