@@ -25,13 +25,14 @@ trait AssertsTrait
         string $path,
         string $httpMethod,
         int $httpCode,
+        string $mediaType,
         string $message = ''
     ) {
         if (!$schemaManager->findPathInTemplates($path, $template, $params)) {
             throw new \RuntimeException('Request URI does not match with any swagger path definition');
         }
 
-        $bodySchema = $schemaManager->getResponseSchema($template, $httpMethod, $httpCode);
+        $bodySchema = $schemaManager->getResponseSchema($template, $httpMethod, $httpCode, $mediaType);
         $constraint = new JsonSchemaConstraint($bodySchema, 'response body', $this->getValidator());
 
         Assert::assertThat($responseBody, $constraint, $message);
@@ -48,13 +49,14 @@ trait AssertsTrait
         SchemaManager $schemaManager,
         string $path,
         string $httpMethod,
+        string $mediaType,
         string $message = ''
     ) {
         if (!$schemaManager->findPathInTemplates($path, $template, $params)) {
             throw new \RuntimeException('Request URI does not match with any swagger path definition');
         }
 
-        $bodySchema = $schemaManager->getRequestSchema($template, $httpMethod);
+        $bodySchema = $schemaManager->getRequestSchema($template, $httpMethod, $mediaType);
         $constraint = new JsonSchemaConstraint($bodySchema, 'request body', $this->getValidator());
 
         Assert::assertThat($requestBody, $constraint, $message);
@@ -70,6 +72,7 @@ trait AssertsTrait
         SchemaManager $schemaManager,
         string $path,
         string $httpMethod,
+        int $httpStatusCode,
         string $message = ''
     ) {
         if (!$schemaManager->findPathInTemplates($path, $template, $params)) {
@@ -82,7 +85,7 @@ trait AssertsTrait
         $ctHeader = ContentType::fromString('Content-Type: ' . $responseMediaType);
         $responseMediaType = $ctHeader->getMediaType();
 
-        $constraint = new MediaTypeConstraint($schemaManager->getResponseMediaTypes($template, $httpMethod));
+        $constraint = new MediaTypeConstraint($schemaManager->getResponseMediaTypes($template, $httpMethod, $httpStatusCode));
 
         Assert::assertThat($responseMediaType, $constraint, $message);
     }

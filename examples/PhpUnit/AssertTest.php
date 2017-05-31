@@ -43,6 +43,6 @@ class AssertTest extends TestCase
 
         $responseBody = json_decode((string) $response->getBody());
 
-        $this->assertResponseBodyMatch($responseBody, self::$schemaManager, '/v2/pet/findByStatus', 'get', 200);
+        $this->assertResponseBodyMatch($responseBody, self::$schemaManager, '/v2/pet/findByStatus', 'get', 200, 'application/json');
     }
 }

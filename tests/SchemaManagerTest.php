@@ -32,7 +32,7 @@ class SchemaManagerTest extends TestCase
     public function validPathsProvider()
     {
         $dataCases = [
-            'integer' => ['/api/pets/1234', '/pets/{id}', ['id' => 1234]],
+            'integer' => ['/pets/1234', '/pets/{id}', ['id' => 1234]],
         ];
 
         $rfc3986AllowedPathCharacters = [
@@ -45,7 +45,7 @@ class SchemaManagerTest extends TestCase
 
             $parameter = 'a' . $char . 'b';
 
-            $data = ['/api/pets/' . $parameter, '/pets/{id}', ['id' => $parameter]];
+            $data = ['/pets/' . $parameter, '/pets/{id}', ['id' => $parameter]];
 
             $dataCases[$title] = $data;
         }
@@ -56,9 +56,9 @@ class SchemaManagerTest extends TestCase
     /**
      * @dataProvider responseMediaTypesProvider
      */
-    public function testGetResponseMediaType($path, $method, array $expectedMediaTypes)
+    public function testGetResponseMediaType($path, $method, int $httpStatusCode, array $expectedMediaTypes)
     {
-        $mediaTypes = $this->schemaManager->getResponseMediaTypes($path, $method);
+        $mediaTypes = $this->schemaManager->getResponseMediaTypes($path, $method, $httpStatusCode);
 
         self::assertEquals($expectedMediaTypes, $mediaTypes);
     }
@@ -66,32 +66,33 @@ class SchemaManagerTest extends TestCase
     public function responseMediaTypesProvider()
     {
         return [
-            // Description => [path, method, expectedMediaTypes]
-            'in response object' => ['/pets', 'get', ['application/json', 'application/xml', 'text/xml', 'text/html']],
-            'fallback to global' => ['/pets', 'delete', ['application/json']],
+            // Description => [path, method, status code, expectedMediaTypes]
+            'in response object' => ['/pets/{id}', 'patch', '200', ['application/json']],
+            'response without content' => ['/pets/{id}', 'patch', '204', []],
+            'fallback to default' => ['/pets/{id}', 'patch', '400', ['application/json', 'text/html']],
         ];
     }
 
     /**
      * @dataProvider responseSchemaProvider
      */
-    public function testGetResponseSchema($path, $method, $httpCode, $expectedSchema)
+    public function testGetResponseSchema($path, $method, $httpCode, $mediaType, $expectedSchema)
     {
-        $schema = $this->schemaManager->getResponseSchema($path, $method, $httpCode);
+        $schema = $this->schemaManager->getResponseSchema($path, $method, $httpCode, $mediaType);
 
         self::assertEquals($expectedSchema, json_encode($schema));
     }
 
     public function responseSchemaProvider()
     {
-        $schema200 = '{"type":"array","items":{"type":"object","required":["id","name"],"externalDocs":{"description":"find more info here","url":"https:\/\/swagger.io\/about"},"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"tag":{"type":"string"}}}}';
-        $schemaDefault = '{"type":"object","required":["code","message"],"properties":{"code":{"type":"integer","format":"int32"},"message":{"type":"string"}}}';
+        $schema200 = '{"type":"array","items":{"required":["id","name"],"externalDocs":{"description":"find more info here","url":"https:\/\/swagger.io\/about"},"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"tag":{"type":"string"}}}}';
+        $schemaDefault = '{"required":["code","message"],"properties":{"code":{"type":"integer","format":"int32"},"message":{"type":"string"}}}';
 
         $dataSet = [
-            // Description => [path, method, httpCode, expectedSchema]
-            'by http code' => ['/pets', 'get', 200, $schema200],
-            'fallback to default' => ['/pets', 'get', 222, $schemaDefault],
-            'schema not defined (empty)' => ['/pets/{id}', 'patch', 204, '{}'],
+            // Description => [path, method, httpCode, media type, expectedSchema]
+            'by http code' => ['/pets', 'get', 200, 'application/json', $schema200],
+            'fallback to default' => ['/pets', 'get', 222, 'application/json', $schemaDefault],
+            'schema not defined (empty)' => ['/pets/{id}', 'patch', 204, '', '{}'],
         ];
 
         return $dataSet;
@@ -111,7 +112,7 @@ class SchemaManagerTest extends TestCase
     {
         $dataSet = [
             // Description => [path, method, httpCode, expectedHeaders]
-            'by http code' => ['/pets', 'get', 200, '{"ETag":{"type":"string","minimum":1}}'],
+            'by http code' => ['/pets', 'get', 200, '{"ETag":{"schema":{"type":"string","minimum":1}}}'],
             'fallback to default' => ['/pets', 'get', 222, '[]'],
         ];
 
@@ -132,8 +133,7 @@ class SchemaManagerTest extends TestCase
     {
         return [
             // Description => [path, method, expectedMediaTypes]
-            'in request method' => ['/pets/{id}', 'patch', ['application/json', 'application/xml']],
-            'fallback to global' => ['/pets', 'post', ['application/json']],
+            'in request method' => ['/pets/{id}', 'patch', ['application/json']],
         ];
     }
 
@@ -149,9 +149,9 @@ class SchemaManagerTest extends TestCase
 
     public function requestParameters()
     {
-        $pets_id_shared_parameters = '[{"name":"id","in":"path","description":"ID of pet to fetch","required":true,"type":"integer","format":"int64"}';
-        $pets_id_patch_parameters = $pets_id_shared_parameters . ',{"name":"X-Required-Header","in":"header","description":"Required header","required":true,"type":"string"},{"name":"X-Optional-Header","in":"header","description":"Optional header","type":"string"},{"name":"pet","in":"body","description":"Pet to update","required":true,"schema":{"type":"object","allOf":[{"type":"object","required":["id","name"],"externalDocs":{"description":"find more info here","url":"https:\/\/swagger.io\/about"},"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"tag":{"type":"string"}}},{"required":["id"],"properties":{"id":{"type":"integer","format":"int64"}}}]}}]';
-        $pets_id_delete_parameter = '[{"name":"id","in":"path","description":"Override the shared ID parameter","required":true,"type":"integer","format":"int64"}]';
+        $pets_id_shared_parameters = '[{"name":"id","in":"path","description":"ID of pet to fetch","required":true,"schema":{"type":"integer","format":"int64"}}';
+        $pets_id_patch_parameters = $pets_id_shared_parameters . ',{"name":"X-Required-Header","in":"header","description":"Required header","required":true,"schema":{"type":"string"}},{"name":"X-Optional-Header","in":"header","description":"Optional header","schema":{"type":"string"}}]';
+        $pets_id_delete_parameter = '[{"name":"id","in":"path","description":"Override the shared ID parameter","required":true,"schema":{"type":"integer","format":"int64"}}]';
 
         $dataSet = [
             // Description => [path, method, expectedParameters]
@@ -176,7 +176,7 @@ class SchemaManagerTest extends TestCase
 
     public function requestHeadersParameters()
     {
-        $parameters = '[{"name":"X-Required-Header","in":"header","description":"Required header","required":true,"type":"string"},{"name":"X-Optional-Header","in":"header","description":"Optional header","type":"string"}]';
+        $parameters = '[{"name":"X-Required-Header","in":"header","description":"Required header","required":true,"schema":{"type":"string"}},{"name":"X-Optional-Header","in":"header","description":"Optional header","schema":{"type":"string"}}]';
 
         $dataSet = [
             // Description => [path, method, expectedHeaders]
@@ -190,21 +190,20 @@ class SchemaManagerTest extends TestCase
     /**
      * @dataProvider requestBodyParameters
      */
-    public function testGetRequestBodyParameters($path, $method, $expectedParameters)
+    public function testGetRequestBodyParameters($path, $method, $mediaType, $expectedParameters)
     {
-        $parameters = $this->schemaManager->getRequestSchema($path, $method);
+        $parameters = $this->schemaManager->getRequestSchema($path, $method, $mediaType);
 
         self::assertEquals($expectedParameters, json_encode($parameters));
     }
 
     public function requestBodyParameters()
     {
-        $parameters = '{"type":"object","allOf":[{"type":"object","required":["id","name"],"externalDocs":{"description":"find more info here","url":"https:\/\/swagger.io\/about"},"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"tag":{"type":"string"}}},{"required":["id"],"properties":{"id":{"type":"integer","format":"int64"}}}]}';
+        $parameters = '{"allOf":[{"required":["id","name"],"externalDocs":{"description":"find more info here","url":"https:\/\/swagger.io\/about"},"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"tag":{"type":"string"}}},{"required":["id"],"properties":{"id":{"type":"integer","format":"int64"}}}]}';
 
         $dataSet = [
-            // Description => [path, method, expectedBody]
-            'in request method' => ['/pets/{id}', 'patch', $parameters],
-            'without parameters' => ['/food', 'get', '{}'],
+            // Description => [path, method, media type, expectedBody]
+            'in request method' => ['/pets/{id}', 'patch', 'application/json', $parameters],
         ];
 
         return $dataSet;
@@ -222,7 +221,7 @@ class SchemaManagerTest extends TestCase
 
     public function requestQueryParameters()
     {
-        $parameters = '[{"name":"tags","in":"query","description":"tags to filter by","required":false,"type":"array","items":{"type":"string"},"collectionFormat":"csv"},{"name":"limit","in":"query","description":"maximum number of results to return","required":true,"type":"integer","format":"int32"}]';
+        $parameters = '[{"name":"tags","in":"query","description":"tags to filter by","required":false,"style":"simple","schema":{"type":"array","items":{"type":"string"}}},{"name":"limit","in":"query","description":"maximum number of results to return","required":true,"schema":{"type":"integer","format":"int32"}}]';
 
         $dataSet = [
             // Description => [path, method, expectedHeaders]
