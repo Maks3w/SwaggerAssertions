@@ -17,11 +17,11 @@ class RequestHeadersConstraintTest extends TestCase
      * @var Constraint
      */
     protected $constraint;
+    const TEST_SCHEMA = '[{"name":"X-Required-Header","in":"header","description":"Required header","required":true,"type":"string"},{"name":"X-Optional-Header","in":"header","description":"Optional header","type":"string"}]';
 
     protected function setUp()
     {
-        $schema = '[{"name":"X-Required-Header","in":"header","description":"Required header","required":true,"type":"string"},{"name":"X-Optional-Header","in":"header","description":"Optional header","type":"string"}]';
-        $schema = json_decode($schema);
+        $schema = json_decode(self::TEST_SCHEMA);
 
         $this->constraint = new RequestHeadersConstraint($schema, new Validator());
     }
@@ -72,5 +72,14 @@ EOF
                 TestFailure::exceptionToString($e)
             );
         }
+    }
+
+    public function testSchemaUnchanged()
+    {
+        $schema = json_decode(self::TEST_SCHEMA);
+        new RequestHeadersConstraint($schema, new Validator());
+
+        // Make sure there were no side effects ($schema should be unchanged)
+        self::assertEquals($schema, json_decode(self::TEST_SCHEMA));
     }
 }

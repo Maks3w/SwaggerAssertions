@@ -24,6 +24,8 @@ class RequestHeadersConstraint extends JsonSchemaConstraint
                 // @codeCoverageIgnoreEnd
             }
 
+            $headerParameter = clone $headerParameter;
+
             $normalizedName = strtolower($headerParameter->name);
             unset($headerParameter->name);
 
