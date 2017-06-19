@@ -371,42 +371,36 @@ class SchemaManager
     }
 
     /**
-     * adds support for x-nullable extension
+     * adds support for x-nullable extension.
      *
      * turns type into ["original_type","null"] if x-nullable : true exists
      *
      * @param $schema
      */
-    private function turnXnullableToNullType(&$schema){
-
-        foreach ($schema as $key=>$item){
-
-            if('properties' === $key){
-
-                foreach ($item as $property=>$definition)
-                {
-                    if(isset($definition->type)){
+    private function turnXnullableToNullType(&$schema)
+    {
+        foreach ($schema as $key => $item) {
+            if ('properties' === $key) {
+                foreach ($item as $property => $definition) {
+                    if (isset($definition->type)) {
                         $arr = get_object_vars($definition);
 
-                        if(array_key_exists('x-nullable', $arr)){
-                            if ($arr['x-nullable'] == true){
-                                $definition->type = [$definition->type, "null"];
+                        if (array_key_exists('x-nullable', $arr)) {
+                            if ($arr['x-nullable'] == true) {
+                                $definition->type = [$definition->type, 'null'];
 
-                                if(isset($definition->enum)){
-                                    $definition->enum[]= null;
+                                if (isset($definition->enum)) {
+                                    $definition->enum[] = null;
                                 }
 
                                 unset($definition->{'x-nullable'});
                             }
                         }
-                    }
-                    else{
+                    } else {
                         $this->turnXnullableToNullType($definition);
                     }
                 }
-            }
-            elseif('items' === $key or 'allOf' === $key){
-
+            } elseif ('items' === $key or 'allOf' === $key) {
                 $this->turnXnullableToNullType($item);
             }
         }
