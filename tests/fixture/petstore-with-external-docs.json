@@ -283,7 +283,8 @@
           "format": "int64"
         },
         "name": {
-          "type": "string"
+          "type": "string",
+          "x-nullable":true
         },
         "tag": {
           "type": "string"
