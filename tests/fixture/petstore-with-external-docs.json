@@ -283,11 +283,14 @@
           "format": "int64"
         },
         "name": {
-          "type": "string",
-          "x-nullable":true
+          "type": "string"
         },
         "tag": {
-          "type": "string"
+          "type": "string",
+          "x-nullable":true,
+          "enum":[
+            "pet"
+          ]
         }
       }
     },

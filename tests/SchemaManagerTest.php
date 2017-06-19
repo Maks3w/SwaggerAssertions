@@ -84,7 +84,7 @@ class SchemaManagerTest extends TestCase
 
     public function responseSchemaProvider()
     {
-        $schema200 = '{"type":"array","items":{"type":"object","required":["id","name"],"externalDocs":{"description":"find more info here","url":"https:\/\/swagger.io\/about"},"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":["string","null"]},"tag":{"type":"string"}}}}';
+        $schema200 = '{"type":"array","items":{"type":"object","required":["id","name"],"externalDocs":{"description":"find more info here","url":"https:\/\/swagger.io\/about"},"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"tag":{"type":["string","null"],"enum":["pet",null]}}}}';
         $schemaDefault = '{"type":"object","required":["code","message"],"properties":{"code":{"type":"integer","format":"int32"},"message":{"type":"string"}}}';
 
         $dataSet = [
@@ -150,7 +150,7 @@ class SchemaManagerTest extends TestCase
     public function requestParameters()
     {
         $pets_id_shared_parameters = '[{"name":"id","in":"path","description":"ID of pet to fetch","required":true,"type":"integer","format":"int64"}';
-        $pets_id_patch_parameters = $pets_id_shared_parameters . ',{"name":"X-Required-Header","in":"header","description":"Required header","required":true,"type":"string"},{"name":"X-Optional-Header","in":"header","description":"Optional header","type":"string"},{"name":"pet","in":"body","description":"Pet to update","required":true,"schema":{"type":"object","allOf":[{"type":"object","required":["id","name"],"externalDocs":{"description":"find more info here","url":"https:\/\/swagger.io\/about"},"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string","x-nullable":true},"tag":{"type":"string"}}},{"required":["id"],"properties":{"id":{"type":"integer","format":"int64"}}}]}}]';
+        $pets_id_patch_parameters = $pets_id_shared_parameters . ',{"name":"X-Required-Header","in":"header","description":"Required header","required":true,"type":"string"},{"name":"X-Optional-Header","in":"header","description":"Optional header","type":"string"},{"name":"pet","in":"body","description":"Pet to update","required":true,"schema":{"type":"object","allOf":[{"type":"object","required":["id","name"],"externalDocs":{"description":"find more info here","url":"https:\/\/swagger.io\/about"},"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"tag":{"type":"string","x-nullable":true,"enum":["pet"]}}},{"required":["id"],"properties":{"id":{"type":"integer","format":"int64"}}}]}}]';
         $pets_id_delete_parameter = '[{"name":"id","in":"path","description":"Override the shared ID parameter","required":true,"type":"integer","format":"int64"}]';
 
         $dataSet = [
@@ -199,7 +199,7 @@ class SchemaManagerTest extends TestCase
 
     public function requestBodyParameters()
     {
-        $parameters = '{"type":"object","allOf":[{"type":"object","required":["id","name"],"externalDocs":{"description":"find more info here","url":"https:\/\/swagger.io\/about"},"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string","x-nullable":true},"tag":{"type":"string"}}},{"required":["id"],"properties":{"id":{"type":"integer","format":"int64"}}}]}';
+        $parameters = '{"type":"object","allOf":[{"type":"object","required":["id","name"],"externalDocs":{"description":"find more info here","url":"https:\/\/swagger.io\/about"},"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"tag":{"type":"string","x-nullable":true,"enum":["pet"]}}},{"required":["id"],"properties":{"id":{"type":"integer","format":"int64"}}}]}';
 
         $dataSet = [
             // Description => [path, method, expectedBody]
