@@ -42,7 +42,7 @@ class RequestQueryConstraint extends JsonSchemaConstraint
 
     protected function matches($headers)
     {
-        $headers = (object) array_change_key_case((array) $headers, CASE_LOWER);
+        $headers = (object) $headers;
 
         return parent::matches($headers);
     }
