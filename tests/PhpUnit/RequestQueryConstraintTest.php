@@ -101,4 +101,18 @@ EOF
 
         self::assertEquals($expected, $schema);
     }
+
+    public function testUpperCaseCharactersAreAllowedInQueryParameterName()
+    {
+        $parameters = [
+            'tags' => ['foo', 'bar'],
+            'LIMIT' => 1,
+        ];
+
+        $schema = '[{"name":"tags","in":"query","description":"tags to filter by","required":false,"type":"array","items":{"type":"string"},"collectionFormat":"csv"},{"name":"LIMIT","in":"query","description":"maximum number of results to return","required":true,"type":"integer","format":"int32"}]';
+        $schema = json_decode($schema);
+        $constraint = new RequestQueryConstraint($schema, new Validator());
+
+        self::assertTrue($constraint->evaluate($parameters, '', true));
+    }
 }
