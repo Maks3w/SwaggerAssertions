@@ -36,7 +36,7 @@ class SymfonyAssertsTraitTest extends TestCase
     public function testAssertResponseMatchOnDelete()
     {
         /** No content is sent on a 204 response for a DELETE request */
-        $response = $this->createMockResponse(204, array(), $this->getValidResponseBody());
+        $response = $this->createMockResponse(204, [], $this->getValidResponseBody());
 
         self::assertResponseMatch($response, $this->schemaManager, '/api/pets/123', Request::METHOD_DELETE);
     }
