@@ -233,6 +233,13 @@
       "delete": {
         "description": "deletes a single pet based on the ID supplied",
         "operationId": "deletePet",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "produces": [
+          ""
+        ],
         "parameters": [
           {
             "name": "id",
