@@ -313,7 +313,11 @@
           "type": "string"
         },
         "tag": {
-          "type": "string"
+          "type": "string",
+          "x-nullable":true,
+          "enum":[
+            "pet"
+          ]
         }
       }
     },
