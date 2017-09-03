@@ -26,13 +26,15 @@ trait Psr7AssertsTrait
         string $httpMethod,
         string $message = ''
     ) {
-        $this->assertResponseMediaTypeMatch(
-            $response->getHeaderLine('Content-Type'),
-            $schemaManager,
-            $path,
-            $httpMethod,
-            $message
-        );
+        if (!empty((string) $response->getBody())) {
+            $this->assertResponseMediaTypeMatch(
+                $response->getHeaderLine('Content-Type'),
+                $schemaManager,
+                $path,
+                $httpMethod,
+                $message
+            );
+        }
 
         $httpCode = $response->getStatusCode();
         $headers = $this->inlineHeaders($response->getHeaders());

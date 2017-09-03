@@ -230,6 +230,13 @@ EOF
         }
     }
 
+    public function testEmptyResponse()
+    {
+        $response = $this->createMockResponse(204, ['Content-Type' => ['']], '');
+
+        self::assertResponseMatch($response, $this->schemaManager, '/api/pets/1', 'delete');
+    }
+
     /**
      * @return string
      */
