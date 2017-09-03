@@ -40,10 +40,10 @@ class RequestQueryConstraint extends JsonSchemaConstraint
         parent::__construct($normalizedSchema, 'request query', $validator);
     }
 
-    protected function matches($headers)
+    protected function matches($parameters)
     {
-        $headers = (object) array_change_key_case((array) $headers, CASE_LOWER);
+        $parameters = (object) array_change_key_case((array) $parameters, CASE_LOWER);
 
-        return parent::matches($headers);
+        return parent::matches($parameters);
     }
 }
