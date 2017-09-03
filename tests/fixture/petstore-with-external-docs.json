@@ -1,5 +1,5 @@
 {
-  "swagger": "2.0",
+  "openapi": "3.0.0",
   "info": {
     "version": "1.0.0",
     "title": "Swagger Petstore",
@@ -19,16 +19,10 @@
     "description": "find more info here",
     "url": "https://swagger.io/about"
   },
-  "host": "petstore.swagger.io",
-  "basePath": "/api",
-  "schemes": [
-    "http"
-  ],
-  "consumes": [
-    "application/json"
-  ],
-  "produces": [
-    "application/json"
+  "servers": [
+    {
+      "url": "http://petstore.swagger.io/api"
+    }
   ],
   "paths": {
     "/food": {
@@ -39,17 +33,18 @@
           "description": "This is an example of request without parameters",
           "url": "https://swagger.io/about"
         },
-        "produces": [
-          "application/json"
-        ],
         "responses": {
           "304": {
             "description": "cached response"
           },
           "default": {
             "description": "unexpected error",
-            "schema": {
-              "$ref": "#/definitions/ErrorModel"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
             }
           }
         }
@@ -63,53 +58,61 @@
           "description": "find more info here",
           "url": "https://swagger.io/about"
         },
-        "produces": [
-          "application/json",
-          "application/xml",
-          "text/xml",
-          "text/html"
-        ],
         "parameters": [
           {
             "name": "tags",
             "in": "query",
             "description": "tags to filter by",
             "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "csv"
+            "style": "simple",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
           },
           {
             "name": "limit",
             "in": "query",
             "description": "maximum number of results to return",
             "required": true,
-            "type": "integer",
-            "format": "int32"
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "pet response",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Pet"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Pet"
+                  }
+                }
               }
             },
             "headers": {
               "ETag": {
-                "type": "string",
-                "minimum": 1
+                "schema": {
+                  "type": "string",
+                  "minimum":1
+                }
               }
             }
           },
           "default": {
             "description": "unexpected error",
-            "schema": {
-              "$ref": "#/definitions/ErrorModel"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
             }
           }
         }
@@ -117,31 +120,36 @@
       "post": {
         "description": "Creates a new pet in the store.  Duplicates are allowed",
         "operationId": "addPet",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "pet",
-            "in": "body",
-            "description": "Pet to add to the store",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/NewPet"
+        "requestBody": {
+          "description": "Pet to add to the store",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewPet"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "pet response",
-            "schema": {
-              "$ref": "#/definitions/Pet"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet"
+                }
+              }
             }
           },
           "default": {
             "description": "unexpected error",
-            "schema": {
-              "$ref": "#/definitions/ErrorModel"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
             }
           }
         }
@@ -154,45 +162,48 @@
           "in": "path",
           "description": "ID of pet to fetch",
           "required": true,
-          "type": "integer",
-          "format": "int64"
+          "schema": {
+            "type": "integer",
+            "format": "int64"
+          }
         }
       ],
       "patch": {
         "description": "Creates a new pet in the store.  Duplicates are allowed",
         "operationId": "updatePet",
-        "consumes": [
-          "application/json",
-          "application/xml"
-        ],
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
-            "$ref": "#/parameters/required_header"
+            "$ref": "#/components/parameters/required_header"
           },
           {
             "name": "X-Optional-Header",
             "in": "header",
             "description": "Optional header",
-            "type": "string"
-          },
-          {
-            "name": "pet",
-            "in": "body",
-            "description": "Pet to update",
-            "required": true,
             "schema": {
-              "$ref": "#/definitions/NewPet"
+              "type": "string"
             }
           }
         ],
+        "requestBody": {
+          "description": "Pet to update",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewPet"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "pet response",
-            "schema": {
-              "$ref": "#/definitions/Pet"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet"
+                }
+              }
             }
           },
           "204": {
@@ -200,8 +211,17 @@
           },
           "default": {
             "description": "unexpected error",
-            "schema": {
-              "$ref": "#/definitions/ErrorModel"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              },
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
             }
           }
         }
@@ -209,23 +229,37 @@
       "get": {
         "description": "Returns a user based on a single ID, if the user does not have access to the pet",
         "operationId": "findPetById",
-        "produces": [
-          "application/json",
-          "application/xml",
-          "text/xml",
-          "text/html"
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of pet to fetch",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
         ],
         "responses": {
           "200": {
             "description": "pet response",
-            "schema": {
-              "$ref": "#/definitions/Pet"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet"
+                }
+              }
             }
           },
           "default": {
             "description": "unexpected error",
-            "schema": {
-              "$ref": "#/definitions/ErrorModel"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
             }
           }
         }
@@ -239,8 +273,10 @@
             "in": "path",
             "description": "Override the shared ID parameter",
             "required": true,
-            "type": "integer",
-            "format": "int64"
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
           }
         ],
         "responses": {
@@ -249,8 +285,12 @@
           },
           "default": {
             "description": "unexpected error",
-            "schema": {
-              "$ref": "#/definitions/ErrorModel"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
             }
           }
         }
@@ -284,71 +324,72 @@
       }
     }
   },
-  "parameters": {
-    "required_header": {
-      "name": "X-Required-Header",
-      "in": "header",
-      "description": "Required header",
-      "required": true,
-      "type": "string"
-    }
-  },
-  "definitions": {
-    "Pet": {
-      "type": "object",
-      "required": [
-        "id",
-        "name"
-      ],
-      "externalDocs": {
-        "description": "find more info here",
-        "url": "https://swagger.io/about"
-      },
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "name": {
-          "type": "string"
-        },
-        "tag": {
+  "components": {
+    "parameters": {
+      "required_header": {
+        "name": "X-Required-Header",
+        "in": "header",
+        "description": "Required header",
+        "required": true,
+        "schema": {
           "type": "string"
         }
       }
     },
-    "NewPet": {
-      "type": "object",
-      "allOf": [
-        {
-          "$ref": "#/definitions/Pet"
+    "schemas": {
+      "Pet": {
+        "required": [
+          "id",
+          "name"
+        ],
+        "externalDocs": {
+          "description": "find more info here",
+          "url": "https://swagger.io/about"
         },
-        {
-          "required": [
-            "id"
-          ],
-          "properties": {
-            "id": {
-              "type": "integer",
-              "format": "int64"
-            }
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "tag": {
+            "type": "string"
           }
         }
-      ]
-    },
-    "ErrorModel": {
-      "type": "object",
-      "required": [
-        "code",
-        "message"
-      ],
-      "properties": {
-        "code": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "message": {
-          "type": "string"
+      },
+      "NewPet": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Pet"
+          },
+          {
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          }
+        ]
+      },
+      "ErrorModel": {
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          }
         }
       }
     }

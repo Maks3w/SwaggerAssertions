@@ -67,14 +67,14 @@ class SchemaManager
         return array_keys((array) $this->definition->paths);
     }
 
-    public function getResponseSchema(string $path, string $method, string $httpCode): stdClass
+    public function getResponseSchema(string $path, string $method, string $httpCode, string $mediaType): stdClass
     {
         $response = $this->getResponse($path, $method, $httpCode);
-        if (!isset($response->schema)) {
+        if (!isset($response->content)) {
             return new stdClass();
         }
 
-        return $response->schema;
+        return $response->content->$mediaType->schema;
     }
 
     /**
@@ -103,23 +103,15 @@ class SchemaManager
      *
      * @return string[]
      */
-    public function getResponseMediaTypes(string $path, string $method): array
+    public function getResponseMediaTypes(string $path, string $method, int $httpStatusCode): array
     {
-        $method = strtolower($method);
-        $responseMediaTypes = [
-            'paths',
-            $path,
-            $method,
-            'produces',
-        ];
+        $response = $this->getResponse($path, $method, $httpStatusCode);
 
-        if ($this->hasPath($responseMediaTypes)) {
-            $mediaTypes = $this->getPath($responseMediaTypes);
-        } else {
-            $mediaTypes = $this->getPath(['produces']);
+        if (isset($response->content)) {
+            return array_keys((array) $response->content);
         }
 
-        return $mediaTypes;
+        return [];
     }
 
     /**
@@ -148,11 +140,8 @@ class SchemaManager
     {
         $uriTemplateManager = new UriTemplate();
         foreach ($this->getPathTemplates() as $template) {
-            if (isset($this->definition->basePath)) {
-                $fullTemplate = $this->definition->basePath . $template;
-            } else {
-                $fullTemplate = $template;
-            }
+            // FIXME base path
+            $fullTemplate = $template;
 
             $params = $uriTemplateManager->extract($fullTemplate, $requestPath, true);
             if ($params !== null) {
@@ -236,16 +225,13 @@ class SchemaManager
             'paths',
             $path,
             $method,
-            'consumes',
+            'requestBody',
+            'content',
         ];
 
-        if ($this->hasPath($mediaTypesPath)) {
-            $mediaTypes = $this->getPath($mediaTypesPath);
-        } else {
-            $mediaTypes = $this->getPath(['consumes']);
-        }
+        $mediaTypes = $this->getPath($mediaTypesPath);
 
-        return $mediaTypes;
+        return array_keys((array) $mediaTypes);
     }
 
     /**
@@ -283,29 +269,16 @@ class SchemaManager
     /**
      * @param string $path Swagger path template.
      */
-    public function getRequestSchema(string $path, string $method): stdClass
+    public function getRequestSchema(string $path, string $method, string $mediaType): stdClass
     {
-        $parameters = $this->getRequestParameters($path, $method);
-        $parameters = $this->filterParametersObjectByLocation($parameters, 'body');
-        switch (count($parameters)) {
-            case 0:
-                return new stdClass();
-            case 1:
-                break;
-            default:
-                // @codeCoverageIgnoreStart
-                throw new \DomainException('Too many body parameters. Only one is allowed');
-                // @codeCoverageIgnoreEnd
-        }
+        $requestBody = $this->getPath([
+            'paths',
+            $path,
+            $method,
+            'requestBody',
+        ]);
 
-        $parameter = $parameters[0];
-        if (!isset($parameter->schema)) {
-            // @codeCoverageIgnoreStart
-            throw new \DomainException('schema property is required for body parameter');
-            // @codeCoverageIgnoreEnd
-        }
-
-        return $parameter->schema;
+        return $requestBody->content->$mediaType->schema;
     }
 
     /**

@@ -24,13 +24,17 @@ trait SymfonyAssertsTrait
         SchemaManager $schemaManager,
         string $path,
         string $httpMethod,
+        int $httpStatusCode,
         string $message = ''
     ) {
+        $responseMediaType = $response->headers->get('Content-Type');
+
         $this->assertResponseMediaTypeMatch(
-            $response->headers->get('Content-Type'),
+            $responseMediaType,
             $schemaManager,
             $path,
             $httpMethod,
+            $httpStatusCode,
             $message
         );
 
@@ -52,6 +56,7 @@ trait SymfonyAssertsTrait
             $path,
             $httpMethod,
             $httpCode,
+            $responseMediaType,
             $message
         );
     }
@@ -65,7 +70,7 @@ trait SymfonyAssertsTrait
         string $message = ''
     ) {
         $path = $request->getPathInfo();
-        $httpMethod = $request->getMethod();
+        $httpMethod = strtolower($request->getMethod());
         $query = $request->query->all();
 
         $headers = $this->inlineHeaders($request->headers->all());
@@ -78,9 +83,11 @@ trait SymfonyAssertsTrait
             $message
         );
 
+        $requestMediaType = $request->headers->get('Content-Type');
+
         if (!empty((string) $request->getContent())) {
             $this->assertRequestMediaTypeMatch(
-                $request->headers->get('Content-Type'),
+                $requestMediaType,
                 $schemaManager,
                 $path,
                 $httpMethod,
@@ -101,6 +108,7 @@ trait SymfonyAssertsTrait
             $schemaManager,
             $path,
             $httpMethod,
+            $requestMediaType,
             $message
         );
     }
@@ -114,17 +122,18 @@ trait SymfonyAssertsTrait
         SchemaManager $schemaManager,
         string $message = ''
     ) {
+        $statusCode = $response->getStatusCode();
+
         try {
             $this->assertRequestMatch($request, $schemaManager, $message);
         } catch (ExpectationFailedException $e) {
             // If response represent a Client error then ignore.
-            $statusCode = $response->getStatusCode();
             if ($statusCode < 400 || $statusCode > 499) {
                 throw $e;
             }
         }
 
-        $this->assertResponseMatch($response, $schemaManager, $request->getRequestUri(), $request->getMethod(), $message);
+        $this->assertResponseMatch($response, $schemaManager, $request->getRequestUri(), strtolower($request->getMethod()), $statusCode, $message);
     }
 
     /**
