@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FR3D\SwaggerAssertions\PhpUnit;
 
 use FR3D\SwaggerAssertions\SchemaManager;
@@ -7,7 +9,7 @@ use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers FR3D\SwaggerAssertions\PhpUnit\AssertsTrait
+ * @covers \FR3D\SwaggerAssertions\PhpUnit\AssertsTrait
  */
 class AssertsTraitTest extends TestCase
 {
@@ -25,7 +27,7 @@ class AssertsTraitTest extends TestCase
 
     public function testAssertResponseBodyMatch()
     {
-        $response = <<<JSON
+        $response = <<<'JSON'
 {
   "id": 123456789,
   "name": "foo"
@@ -38,14 +40,14 @@ JSON;
 
     public function testAssertResponseBodyMatchWithFile()
     {
-        $valid_gif_file = base64_decode('R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=');
+        $valid_gif_file = base64_decode('R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=', true);
 
         self::assertResponseBodyMatch($valid_gif_file, $this->schemaManager, '/api/pets/123456789/photo', 'get', 200);
     }
 
     public function testAssertResponseBodyMatchFail()
     {
-        $response = <<<JSON
+        $response = <<<'JSON'
 [
   {
     "id": 123456789
@@ -100,7 +102,7 @@ JSON;
 
     public function testAssertRequestBodyMatch()
     {
-        $request = <<<JSON
+        $request = <<<'JSON'
 {
   "id": 123456789,
   "name": "foo"
@@ -113,7 +115,7 @@ JSON;
 
     public function testAssertRequestBodyMatchFail()
     {
-        $request = <<<JSON
+        $request = <<<'JSON'
 {
   "id": 123456789
 }

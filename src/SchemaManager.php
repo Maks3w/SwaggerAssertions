@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FR3D\SwaggerAssertions;
 
 use FR3D\SwaggerAssertions\JsonSchema\Uri\Retrievers\FileGetContentsRetriever;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FR3D\SwaggerAssertions\PhpUnit;
 
 use PHPUnit\Framework\Constraint\Constraint;
@@ -8,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\TestFailure;
 
 /**
- * @covers FR3D\SwaggerAssertions\PhpUnit\MediaTypeConstraint
+ * @covers \FR3D\SwaggerAssertions\PhpUnit\MediaTypeConstraint
  */
 class MediaTypeConstraintTest extends TestCase
 {
@@ -43,7 +45,7 @@ class MediaTypeConstraintTest extends TestCase
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
             self::assertEquals(
-                <<<EOF
+                <<<'EOF'
 Failed asserting that 'application/pdf' is an allowed media type (application/json, text/xml).
 
 EOF

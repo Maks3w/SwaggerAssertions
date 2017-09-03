@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FR3D\SwaggerAssertions\PhpUnit;
 
 use JsonSchema\Validator;
@@ -9,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\TestFailure;
 
 /**
- * @covers FR3D\SwaggerAssertions\PhpUnit\RequestQueryConstraint
+ * @covers \FR3D\SwaggerAssertions\PhpUnit\RequestQueryConstraint
  */
 class RequestQueryConstraintTest extends TestCase
 {
@@ -56,7 +58,7 @@ class RequestQueryConstraintTest extends TestCase
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
             self::assertEquals(
-                <<<EOF
+                <<<'EOF'
 Failed asserting that {"tags":["foo",1],"limit":1} is a valid request query.
 [tags[1]] Integer value found, but a string is required
 
@@ -80,7 +82,7 @@ EOF
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
             self::assertEquals(
-                <<<EOF
+                <<<'EOF'
 Failed asserting that {"tags":["foo","bar"]} is a valid request query.
 [limit] The property limit is required
 

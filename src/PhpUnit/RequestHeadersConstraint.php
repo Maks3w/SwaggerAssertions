@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FR3D\SwaggerAssertions\PhpUnit;
 
 use JsonSchema\Validator;
