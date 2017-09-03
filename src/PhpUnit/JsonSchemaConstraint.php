@@ -36,6 +36,10 @@ class JsonSchemaConstraint extends Constraint
 
     protected function matches($other)
     {
+        if (isset($this->expectedSchema->type) && $this->expectedSchema->type === 'file') {
+            return true;
+        }
+
         $this->validator->reset();
 
         $this->validator->check($other, $this->expectedSchema);

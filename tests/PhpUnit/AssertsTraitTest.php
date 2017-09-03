@@ -36,6 +36,13 @@ JSON;
         self::assertResponseBodyMatch($response, $this->schemaManager, '/api/pets/123456789', 'get', 200);
     }
 
+    public function testAssertResponseBodyMatchWithFile()
+    {
+        $valid_gif_file = base64_decode('R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=');
+
+        self::assertResponseBodyMatch($valid_gif_file, $this->schemaManager, '/api/pets/123456789/photo', 'get', 200);
+    }
+
     public function testAssertResponseBodyMatchFail()
     {
         $response = <<<JSON
