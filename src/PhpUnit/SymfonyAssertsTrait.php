@@ -27,7 +27,7 @@ trait SymfonyAssertsTrait
         string $message = ''
     ) {
         $this->assertResponseMediaTypeMatch(
-            $response->headers->get('Content-Type'),
+            $response->headers->get('Content-Type', ''),
             $schemaManager,
             $path,
             $httpMethod,

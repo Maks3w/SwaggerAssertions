@@ -30,14 +30,22 @@ class SymfonyAssertsTraitTest extends TestCase
     {
         $response = $this->createMockResponse(200, $this->getValidHeaders(), $this->getValidResponseBody());
 
-        self::assertResponseMatch($response, $this->schemaManager, '/api/pets', 'get');
+        self::assertResponseMatch($response, $this->schemaManager, '/api/pets', Request::METHOD_GET);
+    }
+
+    public function testAssertResponseMatchOnDelete()
+    {
+        /** No content is sent on a 204 response for a DELETE request */
+        $response = $this->createMockResponse(204, [], $this->getValidResponseBody());
+
+        self::assertResponseMatch($response, $this->schemaManager, '/api/pets/123', Request::METHOD_DELETE);
     }
 
     public function testAssertResponseAndRequestMatch()
     {
         $body = $this->getValidRequestBody();
         $response = $this->createMockResponse(200, $this->getValidHeaders(), $body);
-        $request = $this->createMockRequest('POST', '/api/pets', ['Content-Type' => ['application/json']], $body);
+        $request = $this->createMockRequest(Request::METHOD_POST, '/api/pets', ['Content-Type' => ['application/json']], $body);
 
         self::assertResponseAndRequestMatch($response, $request, $this->schemaManager);
     }
@@ -45,7 +53,7 @@ class SymfonyAssertsTraitTest extends TestCase
     public function testAssertResponseIsValidIfClientErrorAndRequestIsInvalid()
     {
         $response = $this->createMockResponse(404, $this->getValidHeaders(), '{"code":400,"message":"Invalid"}');
-        $request = $this->createMockRequest('POST', '/api/pets', ['Content-Type' => ['application/pdf']]);
+        $request = $this->createMockRequest(Request::METHOD_POST, '/api/pets', ['Content-Type' => ['application/pdf']]);
 
         self::assertResponseAndRequestMatch($response, $request, $this->schemaManager);
     }
@@ -53,7 +61,7 @@ class SymfonyAssertsTraitTest extends TestCase
     public function testAssertRequestIsInvalidIfResponseIsNotAClientError()
     {
         $response = $this->createMockResponse(200, $this->getValidHeaders(), $this->getValidResponseBody());
-        $request = $this->createMockRequest('POST', '/api/pets', ['Content-Type' => ['application/pdf']]);
+        $request = $this->createMockRequest(Request::METHOD_POST, '/api/pets', ['Content-Type' => ['application/pdf']]);
 
         try {
             self::assertResponseAndRequestMatch($response, $request, $this->schemaManager);
@@ -74,7 +82,7 @@ JSON;
         $response = $this->createMockResponse(200, $this->getValidHeaders(), $response);
 
         try {
-            self::assertResponseMatch($response, $this->schemaManager, '/api/pets', 'get');
+            self::assertResponseMatch($response, $this->schemaManager, '/api/pets', Request::METHOD_GET);
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
             self::assertEquals(
@@ -98,7 +106,7 @@ EOF
         );
 
         try {
-            self::assertResponseMatch($response, $this->schemaManager, '/api/pets', 'get');
+            self::assertResponseMatch($response, $this->schemaManager, '/api/pets', Request::METHOD_GET);
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
             self::assertEquals(
@@ -118,7 +126,7 @@ EOF
         $response = $this->createMockResponse(200, $headers, $this->getValidResponseBody());
 
         try {
-            self::assertResponseMatch($response, $this->schemaManager, '/api/pets', 'get');
+            self::assertResponseMatch($response, $this->schemaManager, '/api/pets', Request::METHOD_GET);
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
             self::assertStringMatchesFormat(
@@ -140,7 +148,7 @@ EOF
   "id": 123456789
 }
 JSON;
-        $request = $this->createMockRequest('POST', '/api/pets', $this->getValidHeaders(), $request);
+        $request = $this->createMockRequest(Request::METHOD_POST, '/api/pets', $this->getValidHeaders(), $request);
 
         try {
             self::assertRequestMatch($request, $this->schemaManager);
@@ -162,7 +170,7 @@ EOF
     public function testAssertRequestMediaTypeDoesNotMatch()
     {
         $request = $this->createMockRequest(
-            'POST',
+            Request::METHOD_POST,
             '/api/pets',
             ['Content-Type' => ['application/pdf; charset=utf-8']],
             $this->getValidRequestBody()
@@ -186,7 +194,7 @@ EOF
             'X-Optional-Header' => ['any'],
         ];
 
-        $request = $this->createMockRequest('PATCH', '/api/pets/123', $headers, $this->getValidRequestBody());
+        $request = $this->createMockRequest(Request::METHOD_PATCH, '/api/pets/123', $headers, $this->getValidRequestBody());
 
         try {
             self::assertRequestMatch($request, $this->schemaManager);
@@ -210,7 +218,7 @@ EOF
             'tags' => ['foo', '1'],
         ];
 
-        $request = $this->createMockRequest('GET', '/api/pets', $this->getValidHeaders(), $this->getValidRequestBody(), $query);
+        $request = $this->createMockRequest(Request::METHOD_GET, '/api/pets', $this->getValidHeaders(), $this->getValidRequestBody(), $query);
 
         try {
             self::assertRequestMatch($request, $this->schemaManager);
