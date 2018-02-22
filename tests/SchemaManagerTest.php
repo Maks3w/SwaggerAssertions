@@ -26,15 +26,15 @@ class SchemaManagerTest extends TestCase
      */
     public function testFindPathInTemplatesValid($requestPath, $expectedTemplate, array $expectedParameters)
     {
-        self::assertTrue($this->schemaManager->findPathInTemplates($requestPath, $path, $parameters));
-        self::assertEquals($expectedTemplate, $path);
-        self::assertEquals($expectedParameters, $parameters);
+        $this->assertTrue($this->schemaManager->findPathInTemplates($requestPath, $path, $parameters));
+        $this->assertSame($expectedTemplate, $path);
+        $this->assertSame($expectedParameters, $parameters);
     }
 
     public function validPathsProvider()
     {
         $dataCases = [
-            'integer' => ['/pets/1234', '/pets/{id}', ['id' => 1234]],
+            'integer' => ['/pets/1234', '/pets/{id}', ['id' => '1234']],
         ];
 
         $rfc3986AllowedPathCharacters = [
@@ -62,7 +62,7 @@ class SchemaManagerTest extends TestCase
     {
         $mediaTypes = $this->schemaManager->getResponseMediaTypes($path, $method, $httpStatusCode);
 
-        self::assertEquals($expectedMediaTypes, $mediaTypes);
+        $this->assertSame($expectedMediaTypes, $mediaTypes);
     }
 
     public function responseMediaTypesProvider()
@@ -80,9 +80,9 @@ class SchemaManagerTest extends TestCase
      */
     public function testGetResponseSchema($path, $method, $httpCode, $mediaType, $expectedSchema)
     {
-        $schema = $this->schemaManager->getResponseSchema($path, $method, (string) $httpCode, $mediaType);
+        $schema = $this->schemaManager->getResponseSchema($path, $method, $httpCode, $mediaType);
 
-        self::assertEquals($expectedSchema, json_encode($schema));
+        $this->assertSame($expectedSchema, json_encode($schema));
     }
 
     public function responseSchemaProvider()
@@ -105,9 +105,9 @@ class SchemaManagerTest extends TestCase
      */
     public function testGetResponseHeaders($path, $method, $httpCode, $expectedHeaders)
     {
-        $headers = $this->schemaManager->getResponseHeaders($path, $method, (string) $httpCode);
+        $headers = $this->schemaManager->getResponseHeaders($path, $method, $httpCode);
 
-        self::assertEquals($expectedHeaders, json_encode($headers));
+        $this->assertSame($expectedHeaders, json_encode($headers));
     }
 
     public function responseHeadersProvider()
@@ -128,7 +128,7 @@ class SchemaManagerTest extends TestCase
     {
         $mediaTypes = $this->schemaManager->getRequestMediaTypes($path, $method);
 
-        self::assertEquals($expectedMediaTypes, $mediaTypes);
+        $this->assertSame($expectedMediaTypes, $mediaTypes);
     }
 
     public function requestMediaTypesProvider()
@@ -146,7 +146,7 @@ class SchemaManagerTest extends TestCase
     {
         $parameters = $this->schemaManager->getRequestParameters($path, $method);
 
-        self::assertEquals($expectedParameters, json_encode($parameters));
+        $this->assertSame($expectedParameters, json_encode($parameters));
     }
 
     public function requestParameters()
@@ -173,7 +173,7 @@ class SchemaManagerTest extends TestCase
     {
         $parameters = $this->schemaManager->getRequestHeadersParameters($path, $method);
 
-        self::assertEquals($expectedParameters, json_encode($parameters));
+        $this->assertSame($expectedParameters, json_encode($parameters));
     }
 
     public function requestHeadersParameters()
@@ -196,7 +196,7 @@ class SchemaManagerTest extends TestCase
     {
         $parameters = $this->schemaManager->getRequestSchema($path, $method, $mediaType);
 
-        self::assertEquals($expectedParameters, json_encode($parameters));
+        $this->assertSame($expectedParameters, json_encode($parameters));
     }
 
     public function requestBodyParameters()
@@ -218,7 +218,7 @@ class SchemaManagerTest extends TestCase
     {
         $parameters = $this->schemaManager->getRequestQueryParameters($path, $method);
 
-        self::assertEquals($expectedParameters, json_encode($parameters));
+        $this->assertSame($expectedParameters, json_encode($parameters));
     }
 
     public function requestQueryParameters()

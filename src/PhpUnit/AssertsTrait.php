@@ -34,7 +34,7 @@ trait AssertsTrait
             throw new \RuntimeException('Request URI does not match with any swagger path definition');
         }
 
-        $bodySchema = $schemaManager->getResponseSchema($template, $httpMethod, (string) $httpCode, $mediaType);
+        $bodySchema = $schemaManager->getResponseSchema($template, $httpMethod, $httpCode, $mediaType);
         $constraint = new JsonSchemaConstraint($bodySchema, 'response body', $this->getValidator());
 
         Assert::assertThat($responseBody, $constraint, $message);
@@ -140,7 +140,7 @@ trait AssertsTrait
         }
 
         $constraint = new ResponseHeadersConstraint(
-            $schemaManager->getResponseHeaders($template, $httpMethod, (string) $httpCode),
+            $schemaManager->getResponseHeaders($template, $httpMethod, $httpCode),
             $this->getValidator()
         );
 

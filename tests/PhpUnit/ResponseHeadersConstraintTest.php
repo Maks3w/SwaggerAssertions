@@ -30,8 +30,8 @@ class ResponseHeadersConstraintTest extends TestCase
 
     public function testConstraintDefinition()
     {
-        self::assertEquals(1, count($this->constraint));
-        self::assertEquals('is a valid response header', $this->constraint->toString());
+        $this->assertSame(1, count($this->constraint));
+        $this->assertSame('is a valid response header', $this->constraint->toString());
     }
 
     public function testValidHeaders()
@@ -41,7 +41,7 @@ class ResponseHeadersConstraintTest extends TestCase
             'ETag' => '123',
         ];
 
-        self::assertTrue($this->constraint->evaluate($headers, '', true), $this->constraint->evaluate($headers));
+        $this->assertTrue($this->constraint->evaluate($headers, '', true), $this->constraint->evaluate($headers));
     }
 
     public function testCaseInsensitiveValidHeaders()
@@ -51,7 +51,7 @@ class ResponseHeadersConstraintTest extends TestCase
             'etag' => '123',
         ];
 
-        self::assertTrue($this->constraint->evaluate($headers, '', true), $this->constraint->evaluate($headers));
+        $this->assertTrue($this->constraint->evaluate($headers, '', true), $this->constraint->evaluate($headers));
     }
 
     public function testInvalidHeaderType()
@@ -61,13 +61,13 @@ class ResponseHeadersConstraintTest extends TestCase
             // 'ETag' => '123', // Removed intentional
         ];
 
-        self::assertFalse($this->constraint->evaluate($headers, '', true));
+        $this->assertFalse($this->constraint->evaluate($headers, '', true));
 
         try {
             $this->constraint->evaluate($headers);
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
-            self::assertEquals(
+            $this->assertSame(
                 <<<EOF
 Failed asserting that {"Content-Type":"application\/json"} is a valid response header.
 [etag] The property etag is required

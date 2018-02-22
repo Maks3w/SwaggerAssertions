@@ -40,8 +40,8 @@ JSON;
 
     public function testConstraintDefinition()
     {
-        self::assertEquals(1, count($this->constraint));
-        self::assertEquals('is a valid context', $this->constraint->toString());
+        $this->assertSame(1, count($this->constraint));
+        $this->assertSame('is a valid context', $this->constraint->toString());
     }
 
     public function testValidSchema()
@@ -56,7 +56,7 @@ JSON;
 JSON;
         $response = json_decode($response);
 
-        self::assertTrue($this->constraint->evaluate($response, '', true), $this->constraint->evaluate($response));
+        $this->assertTrue($this->constraint->evaluate($response, '', true), $this->constraint->evaluate($response));
     }
 
     public function testInvalidSchema()
@@ -70,13 +70,13 @@ JSON;
 JSON;
         $response = json_decode($response);
 
-        self::assertFalse($this->constraint->evaluate($response, '', true));
+        $this->assertFalse($this->constraint->evaluate($response, '', true));
 
         try {
             $this->constraint->evaluate($response);
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
-            self::assertEquals(
+            $this->assertSame(
                 <<<'EOF'
 Failed asserting that [{"id":123456789}] is a valid context.
 [name] The property name is required

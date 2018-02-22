@@ -30,8 +30,8 @@ class RequestHeadersConstraintTest extends TestCase
 
     public function testConstraintDefinition()
     {
-        self::assertEquals(1, count($this->constraint));
-        self::assertEquals('is a valid request header', $this->constraint->toString());
+        $this->assertSame(1, count($this->constraint));
+        $this->assertSame('is a valid request header', $this->constraint->toString());
     }
 
     public function testValidHeaders()
@@ -40,7 +40,7 @@ class RequestHeadersConstraintTest extends TestCase
             'X-Required-Header' => 'any',
         ];
 
-        self::assertTrue($this->constraint->evaluate($headers, '', true), $this->constraint->evaluate($headers));
+        $this->assertTrue($this->constraint->evaluate($headers, '', true), $this->constraint->evaluate($headers));
     }
 
     public function testCaseInsensitiveValidHeaders()
@@ -49,7 +49,7 @@ class RequestHeadersConstraintTest extends TestCase
             'X-required-HEADER' => 'application/json',
         ];
 
-        self::assertTrue($this->constraint->evaluate($headers, '', true), $this->constraint->evaluate($headers));
+        $this->assertTrue($this->constraint->evaluate($headers, '', true), $this->constraint->evaluate($headers));
     }
 
     public function testInvalidHeaderType()
@@ -58,13 +58,13 @@ class RequestHeadersConstraintTest extends TestCase
             'X-Optional-Header' => 'any',
         ];
 
-        self::assertFalse($this->constraint->evaluate($headers, '', true));
+        $this->assertFalse($this->constraint->evaluate($headers, '', true));
 
         try {
             $this->constraint->evaluate($headers);
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
-            self::assertEquals(
+            $this->assertSame(
                 <<<'EOF'
 Failed asserting that {"X-Optional-Header":"any"} is a valid request header.
 [x-required-header] The property x-required-header is required
@@ -82,6 +82,6 @@ EOF
         new RequestHeadersConstraint($schema, new Validator());
 
         // Make sure there were no side effects ($schema should be unchanged)
-        self::assertEquals($schema, json_decode(self::TEST_SCHEMA));
+        $this->assertEquals($schema, json_decode(self::TEST_SCHEMA));
     }
 }

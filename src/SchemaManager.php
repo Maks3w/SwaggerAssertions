@@ -69,7 +69,7 @@ class SchemaManager
         return array_keys((array) $this->definition->paths);
     }
 
-    public function getResponseSchema(string $path, string $method, string $httpCode, string $mediaType): stdClass
+    public function getResponseSchema(string $path, string $method, int $httpCode, string $mediaType): stdClass
     {
         $response = $this->getResponse($path, $method, $httpCode);
         if (!isset($response->content)) {
@@ -84,7 +84,7 @@ class SchemaManager
      *
      * @return stdClass[]
      */
-    public function getResponseHeaders(string $path, string $method, string $httpCode)
+    public function getResponseHeaders(string $path, string $method, int $httpCode)
     {
         $response = $this->getResponse($path, $method, $httpCode);
         if (!isset($response->headers)) {
@@ -189,7 +189,7 @@ class SchemaManager
     /**
      * @param string $path Swagger path template.
      */
-    public function getResponse(string $path, string $method, string $httpCode): stdClass
+    public function getResponse(string $path, string $method, int $httpCode): stdClass
     {
         $method = strtolower($method);
         $pathSegments = function ($path, $method, $httpCode) {

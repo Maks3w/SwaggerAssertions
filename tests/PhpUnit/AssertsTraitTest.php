@@ -35,14 +35,14 @@ class AssertsTraitTest extends TestCase
 JSON;
         $response = json_decode($response);
 
-        self::assertResponseBodyMatch($response, $this->schemaManager, '/pets/123456789', 'get', 200, 'application/json');
+        $this->assertResponseBodyMatch($response, $this->schemaManager, '/pets/123456789', 'get', 200, 'application/json');
     }
 
     public function testAssertResponseBodyMatchWithFile()
     {
         $valid_gif_file = base64_decode('R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=', true);
 
-        self::assertResponseBodyMatch($valid_gif_file, $this->schemaManager, '/api/pets/123456789/photo', 'get', 200);
+        $this->assertResponseBodyMatch($valid_gif_file, $this->schemaManager, '/pets/123456789/photo', 'get', 200, 'application/json');
     }
 
     public function testAssertResponseBodyMatchFail()
@@ -57,25 +57,25 @@ JSON;
         $response = json_decode($response);
 
         try {
-            self::assertResponseBodyMatch($response, $this->schemaManager, '/pets', 'get', 200, 'application/json');
+            $this->assertResponseBodyMatch($response, $this->schemaManager, '/pets', 'get', 200, 'application/json');
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
-            self::assertTrue(true);
+            $this->assertTrue(true);
         }
     }
 
     public function testValidResponseMediaType()
     {
-        self::assertResponseMediaTypeMatch('application/json', $this->schemaManager, '/pets', 'get', 200);
+        $this->assertResponseMediaTypeMatch('application/json', $this->schemaManager, '/pets', 'get', 200);
     }
 
     public function testInvalidResponseMediaType()
     {
         try {
-            self::assertResponseMediaTypeMatch('application/pdf', $this->schemaManager, '/pets', 'get', 200);
+            $this->assertResponseMediaTypeMatch('application/pdf', $this->schemaManager, '/pets', 'get', 200);
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
-            self::assertTrue(true);
+            $this->assertTrue(true);
         }
     }
 
@@ -85,7 +85,7 @@ JSON;
             'ETag' => '123',
         ];
 
-        self::assertResponseHeadersMatch($headers, $this->schemaManager, '/pets', 'get', 200);
+        $this->assertResponseHeadersMatch($headers, $this->schemaManager, '/pets', 'get', 200);
     }
 
     public function testInvalidResponseHeaders()
@@ -93,10 +93,10 @@ JSON;
         $headers = [];
 
         try {
-            self::assertResponseHeadersMatch($headers, $this->schemaManager, '/pets', 'get', 200);
+            $this->assertResponseHeadersMatch($headers, $this->schemaManager, '/pets', 'get', 200);
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
-            self::assertTrue(true);
+            $this->assertTrue(true);
         }
     }
 
@@ -110,7 +110,7 @@ JSON;
 JSON;
         $request = json_decode($request);
 
-        self::assertRequestBodyMatch($request, $this->schemaManager, '/pets', 'post', 'application/json');
+        $this->assertRequestBodyMatch($request, $this->schemaManager, '/pets', 'post', 'application/json');
     }
 
     public function testAssertRequestBodyMatchFail()
@@ -123,25 +123,25 @@ JSON;
         $request = json_decode($request);
 
         try {
-            self::assertRequestBodyMatch($request, $this->schemaManager, '/pets', 'post', 'application/json');
+            $this->assertRequestBodyMatch($request, $this->schemaManager, '/pets', 'post', 'application/json');
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
-            self::assertTrue(true);
+            $this->assertTrue(true);
         }
     }
 
     public function testValidRequestMediaType()
     {
-        self::assertRequestMediaTypeMatch('application/json', $this->schemaManager, '/pets', 'post');
+        $this->assertRequestMediaTypeMatch('application/json', $this->schemaManager, '/pets', 'post');
     }
 
     public function testInvalidRequestMediaType()
     {
         try {
-            self::assertRequestMediaTypeMatch('application/pdf', $this->schemaManager, '/pets', 'post');
+            $this->assertRequestMediaTypeMatch('application/pdf', $this->schemaManager, '/pets', 'post');
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
-            self::assertTrue(true);
+            $this->assertTrue(true);
         }
     }
 
@@ -151,7 +151,7 @@ JSON;
             'X-Required-Header' => 'any',
         ];
 
-        self::assertRequestHeadersMatch($headers, $this->schemaManager, '/pets/1234', 'patch');
+        $this->assertRequestHeadersMatch($headers, $this->schemaManager, '/pets/1234', 'patch');
     }
 
     public function testInvalidRequestHeaders()
@@ -159,10 +159,10 @@ JSON;
         $headers = [];
 
         try {
-            self::assertRequestHeadersMatch($headers, $this->schemaManager, '/pets/1234', 'patch');
+            $this->assertRequestHeadersMatch($headers, $this->schemaManager, '/pets/1234', 'patch');
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
-            self::assertTrue(true);
+            $this->assertTrue(true);
         }
     }
 
@@ -170,7 +170,7 @@ JSON;
     {
         $query = ['tags' => ['foo', 'bar'], 'limit' => 1];
 
-        self::assertRequestQueryMatch($query, $this->schemaManager, '/pets', 'get');
+        $this->assertRequestQueryMatch($query, $this->schemaManager, '/pets', 'get');
     }
 
     public function testInvalidRequestQuery()
@@ -178,10 +178,10 @@ JSON;
         $query = ['tags' => ['foo', 'bar']];
 
         try {
-            self::assertRequestQueryMatch($query, $this->schemaManager, '/pets', 'get');
+            $this->assertRequestQueryMatch($query, $this->schemaManager, '/pets', 'get');
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
-            self::assertTrue(true);
+            $this->assertTrue(true);
         }
     }
 }

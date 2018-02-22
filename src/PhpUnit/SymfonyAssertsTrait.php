@@ -29,14 +29,18 @@ trait SymfonyAssertsTrait
         int $httpStatusCode,
         string $message = ''
     ) {
-        if (!empty((string) $response->getContent())) {$responseMediaType =
-            $response->headers->get('Content-Type');
-$this->assertResponseMediaTypeMatch(
-            $responseMediaType,            $schemaManager,
-            $path,
-            $httpMethod,$httpStatusCode,
-            $message
-        );}
+        $responseMediaType = $response->headers->get('Content-Type');
+
+        if (!empty((string) $response->getContent())) {
+            $this->assertResponseMediaTypeMatch(
+                $responseMediaType,
+                $schemaManager,
+                $path,
+                $httpMethod,
+                $httpStatusCode,
+                $message
+            );
+        }
 
         $httpCode = $response->getStatusCode();
         $headers = $this->inlineHeaders($response->headers->all());

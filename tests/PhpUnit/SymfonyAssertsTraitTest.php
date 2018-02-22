@@ -32,7 +32,7 @@ class SymfonyAssertsTraitTest extends TestCase
     {
         $response = $this->createMockResponse(200, $this->getValidHeaders(), $this->getValidResponseBody());
 
-        self::assertResponseMatch($response, $this->schemaManager, '/pets', 'get', 200);
+        $this->assertResponseMatch($response, $this->schemaManager, '/pets', 'get', 200);
     }
 
     public function testAssertResponseAndRequestMatch()
@@ -41,7 +41,7 @@ class SymfonyAssertsTraitTest extends TestCase
         $response = $this->createMockResponse(200, $this->getValidHeaders(), $body);
         $request = $this->createMockRequest('POST', '/pets', ['Content-Type' => ['application/json']], $body);
 
-        self::assertResponseAndRequestMatch($response, $request, $this->schemaManager);
+        $this->assertResponseAndRequestMatch($response, $request, $this->schemaManager);
     }
 
     public function testAssertResponseIsValidIfClientErrorAndRequestIsInvalid()
@@ -49,7 +49,7 @@ class SymfonyAssertsTraitTest extends TestCase
         $response = $this->createMockResponse(404, $this->getValidHeaders(), '{"code":400,"message":"Invalid"}');
         $request = $this->createMockRequest('POST', '/pets', ['Content-Type' => ['application/json']]);
 
-        self::assertResponseAndRequestMatch($response, $request, $this->schemaManager);
+        $this->assertResponseAndRequestMatch($response, $request, $this->schemaManager);
     }
 
     public function testAssertRequestIsInvalidIfResponseIsNotAClientError()
@@ -58,9 +58,9 @@ class SymfonyAssertsTraitTest extends TestCase
         $request = $this->createMockRequest('POST', '/pets', ['Content-Type' => ['application/json']]);
 
         try {
-            self::assertResponseAndRequestMatch($response, $request, $this->schemaManager);
+            $this->assertResponseAndRequestMatch($response, $request, $this->schemaManager);
         } catch (ExpectationFailedException $e) {
-            self::assertContains('request', $e->getMessage());
+            $this->assertContains('request', $e->getMessage());
         }
     }
 
@@ -76,10 +76,10 @@ JSON;
         $response = $this->createMockResponse(200, $this->getValidHeaders(), $response);
 
         try {
-            self::assertResponseMatch($response, $this->schemaManager, '/pets', 'get', 200);
+            $this->assertResponseMatch($response, $this->schemaManager, '/pets', 'get', 200);
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
-            self::assertEquals(
+            $this->assertSame(
                 <<<'EOF'
 Failed asserting that [{"id":123456789}] is a valid response body.
 [name] The property name is required
@@ -100,10 +100,10 @@ EOF
         );
 
         try {
-            self::assertResponseMatch($response, $this->schemaManager, '/pets', 'get', 200);
+            $this->assertResponseMatch($response, $this->schemaManager, '/pets', 'get', 200);
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
-            self::assertEquals(
+            $this->assertSame(
                 "Failed asserting that 'application/pdf' is an allowed media type (application/json).",
                 $e->getMessage()
             );
@@ -120,10 +120,10 @@ EOF
         $response = $this->createMockResponse(200, $headers, $this->getValidResponseBody());
 
         try {
-            self::assertResponseMatch($response, $this->schemaManager, '/pets', 'get', 200);
+            $this->assertResponseMatch($response, $this->schemaManager, '/pets', 'get', 200);
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
-            self::assertStringMatchesFormat(
+            $this->assertStringMatchesFormat(
                 <<<EOF
 Failed asserting that {"content-type":"application\/json"%s} is a valid response header.
 [etag] The property etag is required
@@ -145,10 +145,10 @@ JSON;
         $request = $this->createMockRequest('POST', '/pets', $this->getValidHeaders(), $request);
 
         try {
-            self::assertRequestMatch($request, $this->schemaManager);
+            $this->assertRequestMatch($request, $this->schemaManager);
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
-            self::assertEquals(
+            $this->assertSame(
                 <<<'EOF'
 Failed asserting that {"id":123456789} is a valid request body.
 [name] The property name is required
@@ -171,10 +171,10 @@ EOF
         );
 
         try {
-            self::assertRequestMatch($request, $this->schemaManager);
+            $this->assertRequestMatch($request, $this->schemaManager);
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
-            self::assertEquals(
+            $this->assertSame(
                 "Failed asserting that 'application/pdf' is an allowed media type (application/json).",
                 $e->getMessage()
             );
@@ -191,10 +191,10 @@ EOF
         $request = $this->createMockRequest('PATCH', '/pets/123', $headers, $this->getValidRequestBody());
 
         try {
-            self::assertRequestMatch($request, $this->schemaManager);
+            $this->assertRequestMatch($request, $this->schemaManager);
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
-            self::assertEquals(
+            $this->assertSame(
                 <<<EOF
 Failed asserting that {"content-type":"application\/json","x-optional-header":"any"} is a valid request header.
 [x-required-header] The property x-required-header is required
@@ -215,10 +215,10 @@ EOF
         $request = $this->createMockRequest('GET', '/pets', $this->getValidHeaders(), '', $query);
 
         try {
-            self::assertRequestMatch($request, $this->schemaManager);
+            $this->assertRequestMatch($request, $this->schemaManager);
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
-            self::assertEquals(
+            $this->assertSame(
                 <<<'EOF'
 Failed asserting that {"tags":["foo","1"]} is a valid request query.
 [limit] The property limit is required
@@ -234,7 +234,7 @@ EOF
     {
         $response = $this->createMockResponse(204, ['Content-Type' => ['']], '');
 
-        self::assertResponseMatch($response, $this->schemaManager, '/api/pets/1', 'delete');
+        $this->assertResponseMatch($response, $this->schemaManager, '/pets/1', 'delete', 204);
     }
 
     /**

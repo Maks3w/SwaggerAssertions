@@ -30,8 +30,8 @@ class RequestQueryConstraintTest extends TestCase
 
     public function testConstraintDefinition()
     {
-        self::assertEquals(1, count($this->constraint));
-        self::assertEquals('is a valid request query', $this->constraint->toString());
+        $this->assertSame(1, count($this->constraint));
+        $this->assertSame('is a valid request query', $this->constraint->toString());
     }
 
     public function testValidQuery()
@@ -41,7 +41,7 @@ class RequestQueryConstraintTest extends TestCase
             'limit' => 1,
         ];
 
-        self::assertTrue($this->constraint->evaluate($parameters, '', true), $this->constraint->evaluate($parameters));
+        $this->assertTrue($this->constraint->evaluate($parameters, '', true), $this->constraint->evaluate($parameters));
     }
 
     public function testInvalidParameterType()
@@ -51,13 +51,13 @@ class RequestQueryConstraintTest extends TestCase
             'limit' => 1,
         ];
 
-        self::assertFalse($this->constraint->evaluate($parameters, '', true));
+        $this->assertFalse($this->constraint->evaluate($parameters, '', true));
 
         try {
             $this->constraint->evaluate($parameters);
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
-            self::assertEquals(
+            $this->assertSame(
                 <<<'EOF'
 Failed asserting that {"tags":["foo",1],"limit":1} is a valid request query.
 [tags[1]] Integer value found, but a string is required
@@ -75,13 +75,13 @@ EOF
             'tags' => ['foo', 'bar'],
         ];
 
-        self::assertFalse($this->constraint->evaluate($parameters, '', true));
+        $this->assertFalse($this->constraint->evaluate($parameters, '', true));
 
         try {
             $this->constraint->evaluate($parameters);
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
-            self::assertEquals(
+            $this->assertSame(
                 <<<'EOF'
 Failed asserting that {"tags":["foo","bar"]} is a valid request query.
 [limit] The property limit is required
@@ -101,6 +101,6 @@ EOF
 
         new RequestQueryConstraint($schema, new Validator());
 
-        self::assertEquals($expected, $schema);
+        $this->assertEquals($expected, $schema);
     }
 }
