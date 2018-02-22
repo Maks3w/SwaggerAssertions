@@ -19,6 +19,7 @@ class RequestQueryConstraint extends JsonSchemaConstraint
     {
         $normalizedSchema = new \stdClass();
         $normalizedSchema->required = [];
+        $normalizedSchema->properties = new \stdClass();
         foreach ($queryParameters as $queryParameter) {
             $queryParameter = clone $queryParameter;
 
@@ -36,7 +37,7 @@ class RequestQueryConstraint extends JsonSchemaConstraint
                 unset($queryParameter->required);
             }
 
-            $normalizedSchema->{$normalizedName} = $queryParameter;
+            $normalizedSchema->properties->{$normalizedName} = $queryParameter;
         }
 
         parent::__construct($normalizedSchema, 'request query', $validator);
