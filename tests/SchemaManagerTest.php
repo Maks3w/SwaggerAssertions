@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FR3D\SwaggerAssertions;
 
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers FR3D\SwaggerAssertions\SchemaManager
+ * @covers \FR3D\SwaggerAssertions\SchemaManager
  */
 class SchemaManagerTest extends TestCase
 {
@@ -78,7 +80,7 @@ class SchemaManagerTest extends TestCase
      */
     public function testGetResponseSchema($path, $method, $httpCode, $mediaType, $expectedSchema)
     {
-        $schema = $this->schemaManager->getResponseSchema($path, $method, $httpCode, $mediaType);
+        $schema = $this->schemaManager->getResponseSchema($path, $method, (string) $httpCode, $mediaType);
 
         self::assertEquals($expectedSchema, json_encode($schema));
     }
@@ -103,7 +105,7 @@ class SchemaManagerTest extends TestCase
      */
     public function testGetResponseHeaders($path, $method, $httpCode, $expectedHeaders)
     {
-        $headers = $this->schemaManager->getResponseHeaders($path, $method, $httpCode);
+        $headers = $this->schemaManager->getResponseHeaders($path, $method, (string) $httpCode);
 
         self::assertEquals($expectedHeaders, json_encode($headers));
     }

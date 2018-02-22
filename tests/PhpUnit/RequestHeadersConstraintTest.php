@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FR3D\SwaggerAssertions\PhpUnit;
 
 use JsonSchema\Validator;
@@ -9,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\TestFailure;
 
 /**
- * @covers FR3D\SwaggerAssertions\PhpUnit\RequestHeadersConstraint
+ * @covers \FR3D\SwaggerAssertions\PhpUnit\RequestHeadersConstraint
  */
 class RequestHeadersConstraintTest extends TestCase
 {
@@ -17,11 +19,11 @@ class RequestHeadersConstraintTest extends TestCase
      * @var Constraint
      */
     protected $constraint;
+    const TEST_SCHEMA = '[{"name":"X-Required-Header","in":"header","description":"Required header","required":true,"type":"string"},{"name":"X-Optional-Header","in":"header","description":"Optional header","type":"string"}]';
 
     protected function setUp()
     {
-        $schema = '[{"name":"X-Required-Header","in":"header","description":"Required header","required":true,"type":"string"},{"name":"X-Optional-Header","in":"header","description":"Optional header","type":"string"}]';
-        $schema = json_decode($schema);
+        $schema = json_decode(self::TEST_SCHEMA);
 
         $this->constraint = new RequestHeadersConstraint($schema, new Validator());
     }
@@ -63,7 +65,7 @@ class RequestHeadersConstraintTest extends TestCase
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
             self::assertEquals(
-                <<<EOF
+                <<<'EOF'
 Failed asserting that {"X-Optional-Header":"any"} is a valid request header.
 [x-required-header] The property x-required-header is required
 
@@ -72,5 +74,14 @@ EOF
                 TestFailure::exceptionToString($e)
             );
         }
+    }
+
+    public function testSchemaUnchanged()
+    {
+        $schema = json_decode(self::TEST_SCHEMA);
+        new RequestHeadersConstraint($schema, new Validator());
+
+        // Make sure there were no side effects ($schema should be unchanged)
+        self::assertEquals($schema, json_decode(self::TEST_SCHEMA));
     }
 }

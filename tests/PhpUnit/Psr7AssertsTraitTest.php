@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FR3D\SwaggerAssertions\PhpUnit;
 
 use FR3D\SwaggerAssertions\SchemaManager;
@@ -12,7 +14,7 @@ use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
 
 /**
- * @covers FR3D\SwaggerAssertions\PhpUnit\Psr7AssertsTrait
+ * @covers \FR3D\SwaggerAssertions\PhpUnit\Psr7AssertsTrait
  */
 class Psr7AssertsTraitTest extends TestCase
 {
@@ -66,7 +68,7 @@ class Psr7AssertsTraitTest extends TestCase
 
     public function testAssertResponseBodyDoesNotMatch()
     {
-        $response = <<<JSON
+        $response = <<<'JSON'
 [
   {
     "id": 123456789
@@ -80,7 +82,7 @@ JSON;
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
             self::assertEquals(
-                <<<EOF
+                <<<'EOF'
 Failed asserting that [{"id":123456789}] is a valid response body.
 [name] The property name is required
 
@@ -137,7 +139,7 @@ EOF
 
     public function testAssertRequestBodyDoesNotMatch()
     {
-        $request = <<<JSON
+        $request = <<<'JSON'
 {
   "id": 123456789
 }
@@ -149,7 +151,7 @@ JSON;
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
             self::assertEquals(
-                <<<EOF
+                <<<'EOF'
 Failed asserting that {"id":123456789} is a valid request body.
 [name] The property name is required
 [] Failed to match all schemas
@@ -219,7 +221,7 @@ EOF
             self::fail('Expected ExpectationFailedException to be thrown');
         } catch (ExpectationFailedException $e) {
             self::assertEquals(
-                <<<EOF
+                <<<'EOF'
 Failed asserting that {"tags":["foo","1"]} is a valid request query.
 [limit] The property limit is required
 
@@ -230,12 +232,19 @@ EOF
         }
     }
 
+    public function testEmptyResponse()
+    {
+        $response = $this->createMockResponse(204, ['Content-Type' => ['']], '');
+
+        self::assertResponseMatch($response, $this->schemaManager, '/api/pets/1', 'delete');
+    }
+
     /**
      * @return string
      */
     protected function getValidRequestBody()
     {
-        return <<<JSON
+        return <<<'JSON'
 {
 "id": 123456789,
 "name": "foo"
@@ -248,7 +257,7 @@ JSON;
      */
     protected function getValidResponseBody()
     {
-        return <<<JSON
+        return <<<'JSON'
 [
   {
     "id": 123456789,

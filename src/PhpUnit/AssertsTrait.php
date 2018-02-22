@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FR3D\SwaggerAssertions\PhpUnit;
 
 use FR3D\SwaggerAssertions\SchemaManager;
@@ -32,7 +34,7 @@ trait AssertsTrait
             throw new \RuntimeException('Request URI does not match with any swagger path definition');
         }
 
-        $bodySchema = $schemaManager->getResponseSchema($template, $httpMethod, $httpCode, $mediaType);
+        $bodySchema = $schemaManager->getResponseSchema($template, $httpMethod, (string) $httpCode, $mediaType);
         $constraint = new JsonSchemaConstraint($bodySchema, 'response body', $this->getValidator());
 
         Assert::assertThat($responseBody, $constraint, $message);
@@ -137,7 +139,10 @@ trait AssertsTrait
             // @codeCoverageIgnoreEnd
         }
 
-        $constraint = new ResponseHeadersConstraint($schemaManager->getResponseHeaders($template, $httpMethod, $httpCode), $this->getValidator());
+        $constraint = new ResponseHeadersConstraint(
+            $schemaManager->getResponseHeaders($template, $httpMethod, (string) $httpCode),
+            $this->getValidator()
+        );
 
         Assert::assertThat($headers, $constraint, $message);
     }

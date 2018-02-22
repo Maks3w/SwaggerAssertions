@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FR3D\SwaggerAssertions\PhpUnit;
 
 use JsonSchema\Validator;
@@ -23,6 +25,8 @@ class RequestHeadersConstraint extends JsonSchemaConstraint
                 throw new \DomainException('Expected missing name field');
                 // @codeCoverageIgnoreEnd
             }
+
+            $headerParameter = clone $headerParameter;
 
             $normalizedName = strtolower($headerParameter->name);
             unset($headerParameter->name);
