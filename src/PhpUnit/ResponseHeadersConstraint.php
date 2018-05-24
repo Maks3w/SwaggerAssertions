@@ -20,7 +20,7 @@ class ResponseHeadersConstraint extends JsonSchemaConstraint
         parent::__construct($normalizedSchema, 'response header', $validator);
     }
 
-    protected function matches($headers)
+    protected function matches($headers): bool
     {
         $headers = (object) array_change_key_case((array) $headers, CASE_LOWER);
 

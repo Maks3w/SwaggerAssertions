@@ -56,7 +56,7 @@ JSON;
 JSON;
         $response = json_decode($response);
 
-        self::assertTrue($this->constraint->evaluate($response, '', true), $this->constraint->evaluate($response));
+        self::assertTrue($this->constraint->evaluate($response, '', true));
     }
 
     public function testInvalidSchema()

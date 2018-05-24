@@ -40,7 +40,7 @@ class RequestHeadersConstraintTest extends TestCase
             'X-Required-Header' => 'any',
         ];
 
-        self::assertTrue($this->constraint->evaluate($headers, '', true), $this->constraint->evaluate($headers));
+        self::assertTrue($this->constraint->evaluate($headers, '', true));
     }
 
     public function testCaseInsensitiveValidHeaders()
@@ -49,7 +49,7 @@ class RequestHeadersConstraintTest extends TestCase
             'X-required-HEADER' => 'application/json',
         ];
 
-        self::assertTrue($this->constraint->evaluate($headers, '', true), $this->constraint->evaluate($headers));
+        self::assertTrue($this->constraint->evaluate($headers, '', true));
     }
 
     public function testInvalidHeaderType()

@@ -36,7 +36,7 @@ class JsonSchemaConstraint extends Constraint
         $this->validator = $validator;
     }
 
-    protected function matches($other)
+    protected function matches($other): bool
     {
         if (isset($this->expectedSchema->type) && $this->expectedSchema->type === 'file') {
             return true;
@@ -49,12 +49,12 @@ class JsonSchemaConstraint extends Constraint
         return $this->validator->isValid();
     }
 
-    protected function failureDescription($other)
+    protected function failureDescription($other): string
     {
         return json_encode($other) . ' ' . $this->toString();
     }
 
-    protected function additionalFailureDescription($other)
+    protected function additionalFailureDescription($other): string
     {
         $description = '';
 
@@ -65,7 +65,7 @@ class JsonSchemaConstraint extends Constraint
         return $description;
     }
 
-    public function toString()
+    public function toString(): string
     {
         return 'is a valid ' . $this->context;
     }

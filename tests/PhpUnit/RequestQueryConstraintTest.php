@@ -41,7 +41,7 @@ class RequestQueryConstraintTest extends TestCase
             'limit' => 1,
         ];
 
-        self::assertTrue($this->constraint->evaluate($parameters, '', true), $this->constraint->evaluate($parameters));
+        self::assertTrue($this->constraint->evaluate($parameters, '', true));
     }
 
     public function testInvalidParameterType()

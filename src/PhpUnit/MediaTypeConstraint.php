@@ -26,12 +26,12 @@ class MediaTypeConstraint extends Constraint
         $this->allowedMediaTypes = $allowedMediaTypes;
     }
 
-    protected function matches($other)
+    protected function matches($other): bool
     {
         return in_array($other, $this->allowedMediaTypes, true);
     }
 
-    public function toString()
+    public function toString(): string
     {
         return 'is an allowed media type (' . implode(', ', $this->allowedMediaTypes) . ')';
     }
