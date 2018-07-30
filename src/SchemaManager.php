@@ -151,7 +151,7 @@ class SchemaManager
         $uriTemplateManager = new UriTemplate();
         foreach ($this->getPathTemplates() as $template) {
             if (isset($this->definition->basePath)) {
-                $fullTemplate = $this->definition->basePath . $template;
+                $fullTemplate = rtrim($this->definition->basePath, '/') . $template;
             } else {
                 $fullTemplate = $template;
             }

@@ -20,7 +20,7 @@
     "url": "https://swagger.io/about"
   },
   "host": "petstore.swagger.io",
-  "basePath": "/api",
+  "basePath": "/api/",
   "schemes": [
     "http"
   ],
