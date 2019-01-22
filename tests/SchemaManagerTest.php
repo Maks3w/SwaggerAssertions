@@ -35,6 +35,9 @@ class SchemaManagerTest extends TestCase
     {
         $dataCases = [
             'integer' => ['/api/pets/1234', '/pets/{id}', ['id' => 1234]],
+            'integer_with_query_parameter' => ['/api/pets/1234?foo=bar', '/pets/{id}', ['id' => 1234]],
+            'integer_with_query_parameters' => ['/api/pets/1234?foo=bar&abc=xyz', '/pets/{id}', ['id' => 1234]],
+            'none_with_query_parameter' => ['/api/pets?hello=world', '/pets', []],
         ];
 
         $rfc3986AllowedPathCharacters = [

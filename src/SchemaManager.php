@@ -148,6 +148,8 @@ class SchemaManager
      */
     public function findPathInTemplates(string $requestPath, &$path, &$params = []): bool
     {
+        $requestPath = parse_url($requestPath, PHP_URL_PATH);
+
         $uriTemplateManager = new UriTemplate();
         foreach ($this->getPathTemplates() as $template) {
             if (isset($this->definition->basePath)) {
