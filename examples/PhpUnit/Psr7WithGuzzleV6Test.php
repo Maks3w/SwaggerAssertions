@@ -26,33 +26,33 @@ class Psr7WithGuzzleV6Test extends TestCase
      */
     protected $guzzleHttpClient;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$schemaManager = SchemaManager::fromUri('http://petstore.swagger.io/v2/swagger.json');
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->guzzleHttpClient = new Client(['headers' => ['User-Agent' => 'https://github.com/Maks3w/SwaggerAssertions']]);
     }
 
-    public function testFetchPetMatchDefinition()
+    public function testFetchPetMatchDefinition(): void
     {
         $request = new Request('GET', 'http://petstore.swagger.io/v2/store/inventory');
         $request = $request->withHeader('Accept', 'application/json');
 
         $response = $this->guzzleHttpClient->send($request);
 
-        $this->assertResponseAndRequestMatch($response, $request, self::$schemaManager);
+        self::assertResponseAndRequestMatch($response, $request, self::$schemaManager);
     }
 
-    public function testOnlyResponse()
+    public function testOnlyResponse(): void
     {
         $request = new Request('GET', 'http://petstore.swagger.io/v2/pet/findByStatus');
         $request = $request->withHeader('Accept', 'application/json');
 
         $response = $this->guzzleHttpClient->send($request);
 
-        $this->assertResponseMatch($response, self::$schemaManager, '/v2/pet/findByStatus', 'get');
+        self::assertResponseMatch($response, self::$schemaManager, '/v2/pet/findByStatus', 'get');
     }
 }

@@ -16,7 +16,7 @@ class SchemaManagerTest extends TestCase
      */
     protected $schemaManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->schemaManager = SchemaManager::fromUri('file://' . __DIR__ . '/fixture/petstore-with-external-docs.json');
     }
@@ -24,14 +24,14 @@ class SchemaManagerTest extends TestCase
     /**
      * @dataProvider validPathsProvider
      */
-    public function testFindPathInTemplatesValid($requestPath, $expectedTemplate, array $expectedParameters)
+    public function testFindPathInTemplatesValid($requestPath, $expectedTemplate, array $expectedParameters): void
     {
         self::assertTrue($this->schemaManager->findPathInTemplates($requestPath, $path, $parameters));
         self::assertEquals($expectedTemplate, $path);
         self::assertEquals($expectedParameters, $parameters);
     }
 
-    public function validPathsProvider()
+    public function validPathsProvider(): array
     {
         $dataCases = [
             'integer' => ['/api/pets/1234', '/pets/{id}', ['id' => 1234]],
@@ -58,14 +58,14 @@ class SchemaManagerTest extends TestCase
     /**
      * @dataProvider responseMediaTypesProvider
      */
-    public function testGetResponseMediaType($path, $method, array $expectedMediaTypes)
+    public function testGetResponseMediaType($path, $method, array $expectedMediaTypes): void
     {
         $mediaTypes = $this->schemaManager->getResponseMediaTypes($path, $method);
 
         self::assertEquals($expectedMediaTypes, $mediaTypes);
     }
 
-    public function responseMediaTypesProvider()
+    public function responseMediaTypesProvider(): array
     {
         return [
             // Description => [path, method, expectedMediaTypes]
@@ -77,14 +77,14 @@ class SchemaManagerTest extends TestCase
     /**
      * @dataProvider responseSchemaProvider
      */
-    public function testGetResponseSchema($path, $method, $httpCode, $expectedSchema)
+    public function testGetResponseSchema($path, $method, $httpCode, $expectedSchema): void
     {
         $schema = $this->schemaManager->getResponseSchema($path, $method, (string) $httpCode);
 
         self::assertEquals($expectedSchema, json_encode($schema));
     }
 
-    public function responseSchemaProvider()
+    public function responseSchemaProvider(): array
     {
         $schema200 = '{"type":"array","items":{"type":"object","required":["id","name"],"externalDocs":{"description":"find more info here","url":"https:\/\/swagger.io\/about"},"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"tag":{"type":"string"}}}}';
         $schemaDefault = '{"type":"object","required":["code","message"],"properties":{"code":{"type":"integer","format":"int32"},"message":{"type":"string"}}}';
@@ -102,14 +102,14 @@ class SchemaManagerTest extends TestCase
     /**
      * @dataProvider responseHeadersProvider
      */
-    public function testGetResponseHeaders($path, $method, $httpCode, $expectedHeaders)
+    public function testGetResponseHeaders($path, $method, $httpCode, $expectedHeaders): void
     {
         $headers = $this->schemaManager->getResponseHeaders($path, $method, (string) $httpCode);
 
         self::assertEquals($expectedHeaders, json_encode($headers));
     }
 
-    public function responseHeadersProvider()
+    public function responseHeadersProvider(): array
     {
         $dataSet = [
             // Description => [path, method, httpCode, expectedHeaders]
@@ -123,14 +123,14 @@ class SchemaManagerTest extends TestCase
     /**
      * @dataProvider requestMediaTypesProvider
      */
-    public function testGetRequestMediaType($path, $method, array $expectedMediaTypes)
+    public function testGetRequestMediaType($path, $method, array $expectedMediaTypes): void
     {
         $mediaTypes = $this->schemaManager->getRequestMediaTypes($path, $method);
 
         self::assertEquals($expectedMediaTypes, $mediaTypes);
     }
 
-    public function requestMediaTypesProvider()
+    public function requestMediaTypesProvider(): array
     {
         return [
             // Description => [path, method, expectedMediaTypes]
@@ -142,14 +142,14 @@ class SchemaManagerTest extends TestCase
     /**
      * @dataProvider requestParameters
      */
-    public function testGetRequestParameters($path, $method, $expectedParameters)
+    public function testGetRequestParameters($path, $method, $expectedParameters): void
     {
         $parameters = $this->schemaManager->getRequestParameters($path, $method);
 
         self::assertEquals($expectedParameters, json_encode($parameters));
     }
 
-    public function requestParameters()
+    public function requestParameters(): array
     {
         $pets_id_shared_parameters = '[{"name":"id","in":"path","description":"ID of pet to fetch","required":true,"type":"integer","format":"int64"}';
         $pets_id_patch_parameters = $pets_id_shared_parameters . ',{"name":"X-Required-Header","in":"header","description":"Required header","required":true,"type":"string"},{"name":"X-Optional-Header","in":"header","description":"Optional header","type":"string"},{"name":"pet","in":"body","description":"Pet to update","required":true,"schema":{"type":"object","allOf":[{"type":"object","required":["id","name"],"externalDocs":{"description":"find more info here","url":"https:\/\/swagger.io\/about"},"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"tag":{"type":"string"}}},{"required":["id"],"properties":{"id":{"type":"integer","format":"int64"}}}]}}]';
@@ -169,14 +169,14 @@ class SchemaManagerTest extends TestCase
     /**
      * @dataProvider requestHeadersParameters
      */
-    public function testGetRequestHeadersParameters($path, $method, $expectedParameters)
+    public function testGetRequestHeadersParameters($path, $method, $expectedParameters): void
     {
         $parameters = $this->schemaManager->getRequestHeadersParameters($path, $method);
 
         self::assertEquals($expectedParameters, json_encode($parameters));
     }
 
-    public function requestHeadersParameters()
+    public function requestHeadersParameters(): array
     {
         $parameters = '[{"name":"X-Required-Header","in":"header","description":"Required header","required":true,"type":"string"},{"name":"X-Optional-Header","in":"header","description":"Optional header","type":"string"}]';
 
@@ -192,14 +192,14 @@ class SchemaManagerTest extends TestCase
     /**
      * @dataProvider requestBodyParameters
      */
-    public function testGetRequestBodyParameters($path, $method, $expectedParameters)
+    public function testGetRequestBodyParameters($path, $method, $expectedParameters): void
     {
         $parameters = $this->schemaManager->getRequestSchema($path, $method);
 
         self::assertEquals($expectedParameters, json_encode($parameters));
     }
 
-    public function requestBodyParameters()
+    public function requestBodyParameters(): array
     {
         $parameters = '{"type":"object","allOf":[{"type":"object","required":["id","name"],"externalDocs":{"description":"find more info here","url":"https:\/\/swagger.io\/about"},"properties":{"id":{"type":"integer","format":"int64"},"name":{"type":"string"},"tag":{"type":"string"}}},{"required":["id"],"properties":{"id":{"type":"integer","format":"int64"}}}]}';
 
@@ -215,14 +215,14 @@ class SchemaManagerTest extends TestCase
     /**
      * @dataProvider requestQueryParameters
      */
-    public function testGetRequestQueryParameters($path, $method, $expectedParameters)
+    public function testGetRequestQueryParameters($path, $method, $expectedParameters): void
     {
         $parameters = $this->schemaManager->getRequestQueryParameters($path, $method);
 
         self::assertEquals($expectedParameters, json_encode($parameters));
     }
 
-    public function requestQueryParameters()
+    public function requestQueryParameters(): array
     {
         $parameters = '[{"name":"tags","in":"query","description":"tags to filter by","required":false,"type":"array","items":{"type":"string"},"collectionFormat":"csv"},{"name":"limit","in":"query","description":"maximum number of results to return","required":true,"type":"integer","format":"int32"}]';
 

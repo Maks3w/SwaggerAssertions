@@ -21,15 +21,15 @@ trait Psr7AssertsTrait
      *
      * @param string $path percent-encoded path used on the request.
      */
-    public function assertResponseMatch(
+    public static function assertResponseMatch(
         ResponseInterface $response,
         SchemaManager $schemaManager,
         string $path,
         string $httpMethod,
         string $message = ''
-    ) {
+    ): void {
         if (!empty((string) $response->getBody())) {
-            $this->assertResponseMediaTypeMatch(
+            self::assertResponseMediaTypeMatch(
                 $response->getHeaderLine('Content-Type'),
                 $schemaManager,
                 $path,
@@ -39,9 +39,9 @@ trait Psr7AssertsTrait
         }
 
         $httpCode = $response->getStatusCode();
-        $headers = $this->inlineHeaders($response->getHeaders());
+        $headers = self::inlineHeaders($response->getHeaders());
 
-        $this->assertResponseHeadersMatch(
+        self::assertResponseHeadersMatch(
             $headers,
             $schemaManager,
             $path,
@@ -50,7 +50,7 @@ trait Psr7AssertsTrait
             $message
         );
 
-        $this->assertResponseBodyMatch(
+        self::assertResponseBodyMatch(
             json_decode((string) $response->getBody()),
             $schemaManager,
             $path,
@@ -63,20 +63,20 @@ trait Psr7AssertsTrait
     /**
      * Asserts request match with the request schema.
      */
-    public function assertRequestMatch(
+    public static function assertRequestMatch(
         RequestInterface $request,
         SchemaManager $schemaManager,
         string $message = ''
-    ) {
+    ): void {
         $path = $request->getUri()->getPath();
         $httpMethod = $request->getMethod();
 
-        $headers = $this->inlineHeaders($request->getHeaders());
+        $headers = self::inlineHeaders($request->getHeaders());
 
         $queryString = $request->getUri()->getQuery();
         parse_str(html_entity_decode($queryString), $query);
 
-        $this->assertRequestHeadersMatch(
+        self::assertRequestHeadersMatch(
             $headers,
             $schemaManager,
             $path,
@@ -85,7 +85,7 @@ trait Psr7AssertsTrait
         );
 
         if (!empty((string) $request->getBody())) {
-            $this->assertRequestMediaTypeMatch(
+            self::assertRequestMediaTypeMatch(
                 $request->getHeaderLine('Content-Type'),
                 $schemaManager,
                 $path,
@@ -94,7 +94,7 @@ trait Psr7AssertsTrait
             );
         }
 
-        $this->assertRequestQueryMatch(
+        self::assertRequestQueryMatch(
             $query,
             $schemaManager,
             $path,
@@ -102,7 +102,7 @@ trait Psr7AssertsTrait
             $message
         );
 
-        $this->assertRequestBodyMatch(
+        self::assertRequestBodyMatch(
             json_decode((string) $request->getBody()),
             $schemaManager,
             $path,
@@ -114,14 +114,14 @@ trait Psr7AssertsTrait
     /**
      * Asserts response match with the response schema.
      */
-    public function assertResponseAndRequestMatch(
+    public static function assertResponseAndRequestMatch(
         ResponseInterface $response,
         RequestInterface $request,
         SchemaManager $schemaManager,
         string $message = ''
-    ) {
+    ): void {
         try {
-            $this->assertRequestMatch($request, $schemaManager, $message);
+            self::assertRequestMatch($request, $schemaManager, $message);
         } catch (ExpectationFailedException $e) {
             // If response represent a Client error then ignore.
             $statusCode = $response->getStatusCode();
@@ -130,7 +130,7 @@ trait Psr7AssertsTrait
             }
         }
 
-        $this->assertResponseMatch($response, $schemaManager, $request->getUri()->getPath(), $request->getMethod(), $message);
+        self::assertResponseMatch($response, $schemaManager, $request->getUri()->getPath(), $request->getMethod(), $message);
     }
 
     /**
@@ -138,7 +138,7 @@ trait Psr7AssertsTrait
      *
      * @return string[]
      */
-    protected function inlineHeaders(array $headers): array
+    protected static function inlineHeaders(array $headers): array
     {
         return array_map(
             function (array $headers) {

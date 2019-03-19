@@ -26,17 +26,17 @@ class AssertTest extends TestCase
      */
     protected $guzzleHttpClient;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$schemaManager = SchemaManager::fromUri('http://petstore.swagger.io/v2/swagger.json');
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->guzzleHttpClient = new Client(['headers' => ['User-Agent' => 'https://github.com/Maks3w/SwaggerAssertions']]);
     }
 
-    public function testFetchPetBodyMatchDefinition()
+    public function testFetchPetBodyMatchDefinition(): void
     {
         $request = new Request('GET', 'http://petstore.swagger.io/v2/pet/findByStatus');
         $request = $request->withHeader('Accept', 'application/json');
@@ -45,6 +45,6 @@ class AssertTest extends TestCase
 
         $responseBody = json_decode((string) $response->getBody());
 
-        $this->assertResponseBodyMatch($responseBody, self::$schemaManager, '/v2/pet/findByStatus', 'get', 200);
+        self::assertResponseBodyMatch($responseBody, self::$schemaManager, '/v2/pet/findByStatus', 'get', 200);
     }
 }

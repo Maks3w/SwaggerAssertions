@@ -26,7 +26,7 @@ class LocalFileTest extends TestCase
      */
     protected $guzzleHttpClient;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $filePath = __DIR__ . '/../fixtures/pet_store.json';
 
@@ -34,12 +34,12 @@ class LocalFileTest extends TestCase
         self::$schemaManager = new SchemaManager(json_decode(file_get_contents($filePath)));
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->guzzleHttpClient = new Client(['headers' => ['User-Agent' => 'https://github.com/Maks3w/SwaggerAssertions']]);
     }
 
-    public function testFetchPetBodyMatchDefinition()
+    public function testFetchPetBodyMatchDefinition(): void
     {
         $request = new Request('GET', 'http://petstore.swagger.io/v2/pet/findByStatus');
         $request = $request->withHeader('Accept', 'application/json');
@@ -48,6 +48,6 @@ class LocalFileTest extends TestCase
 
         $responseBody = json_decode((string) $response->getBody());
 
-        $this->assertResponseBodyMatch($responseBody, self::$schemaManager, '/v2/pet/findByStatus', 'get', 200);
+        self::assertResponseBodyMatch($responseBody, self::$schemaManager, '/v2/pet/findByStatus', 'get', 200);
     }
 }

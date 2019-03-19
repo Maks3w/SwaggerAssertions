@@ -19,23 +19,23 @@ class MediaTypeConstraintTest extends TestCase
      */
     protected $constraint;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->constraint = new MediaTypeConstraint(['application/json', 'text/xml']);
     }
 
-    public function testConstraintDefinition()
+    public function testConstraintDefinition(): void
     {
         self::assertCount(1, $this->constraint);
         self::assertEquals('is an allowed media type (application/json, text/xml)', $this->constraint->toString());
     }
 
-    public function testValidMediaType()
+    public function testValidMediaType(): void
     {
         self::assertTrue($this->constraint->evaluate('text/xml', '', true));
     }
 
-    public function testInvalidMediaType()
+    public function testInvalidMediaType(): void
     {
         $mediaType = 'application/pdf';
         self::assertFalse($this->constraint->evaluate($mediaType, '', true));
