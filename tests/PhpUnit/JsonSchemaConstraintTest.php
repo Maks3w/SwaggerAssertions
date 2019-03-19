@@ -40,7 +40,7 @@ JSON;
 
     public function testConstraintDefinition()
     {
-        self::assertEquals(1, count($this->constraint));
+        self::assertCount(1, $this->constraint);
         self::assertEquals('is a valid context', $this->constraint->toString());
     }
 
