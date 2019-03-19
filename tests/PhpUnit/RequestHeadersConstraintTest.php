@@ -19,22 +19,22 @@ class RequestHeadersConstraintTest extends TestCase
      * @var Constraint
      */
     protected $constraint;
-    const TEST_SCHEMA = '[{"name":"X-Required-Header","in":"header","description":"Required header","required":true,"type":"string"},{"name":"X-Optional-Header","in":"header","description":"Optional header","type":"string"}]';
+    private const TEST_SCHEMA = '[{"name":"X-Required-Header","in":"header","description":"Required header","required":true,"type":"string"},{"name":"X-Optional-Header","in":"header","description":"Optional header","type":"string"}]';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $schema = json_decode(self::TEST_SCHEMA);
 
         $this->constraint = new RequestHeadersConstraint($schema, new Validator());
     }
 
-    public function testConstraintDefinition()
+    public function testConstraintDefinition(): void
     {
         self::assertCount(1, $this->constraint);
         self::assertEquals('is a valid request header', $this->constraint->toString());
     }
 
-    public function testValidHeaders()
+    public function testValidHeaders(): void
     {
         $headers = [
             'X-Required-Header' => 'any',
@@ -43,7 +43,7 @@ class RequestHeadersConstraintTest extends TestCase
         self::assertTrue($this->constraint->evaluate($headers, '', true));
     }
 
-    public function testCaseInsensitiveValidHeaders()
+    public function testCaseInsensitiveValidHeaders(): void
     {
         $headers = [
             'X-required-HEADER' => 'application/json',
@@ -52,7 +52,7 @@ class RequestHeadersConstraintTest extends TestCase
         self::assertTrue($this->constraint->evaluate($headers, '', true));
     }
 
-    public function testInvalidHeaderType()
+    public function testInvalidHeaderType(): void
     {
         $headers = [
             'X-Optional-Header' => 'any',
@@ -76,7 +76,7 @@ EOF
         }
     }
 
-    public function testSchemaUnchanged()
+    public function testSchemaUnchanged(): void
     {
         $schema = json_decode(self::TEST_SCHEMA);
         new RequestHeadersConstraint($schema, new Validator());

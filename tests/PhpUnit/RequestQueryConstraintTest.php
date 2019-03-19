@@ -20,7 +20,7 @@ class RequestQueryConstraintTest extends TestCase
      */
     protected $constraint;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $schema = '[{"name":"tags","in":"query","description":"tags to filter by","required":false,"type":"array","items":{"type":"string"},"collectionFormat":"csv"},{"name":"limit","in":"query","description":"maximum number of results to return","required":true,"type":"integer","format":"int32"}]';
         $schema = json_decode($schema);
@@ -28,13 +28,13 @@ class RequestQueryConstraintTest extends TestCase
         $this->constraint = new RequestQueryConstraint($schema, new Validator());
     }
 
-    public function testConstraintDefinition()
+    public function testConstraintDefinition(): void
     {
         self::assertCount(1, $this->constraint);
         self::assertEquals('is a valid request query', $this->constraint->toString());
     }
 
-    public function testValidQuery()
+    public function testValidQuery(): void
     {
         $parameters = [
             'tags' => ['foo', 'bar'],
@@ -44,7 +44,7 @@ class RequestQueryConstraintTest extends TestCase
         self::assertTrue($this->constraint->evaluate($parameters, '', true));
     }
 
-    public function testInvalidParameterType()
+    public function testInvalidParameterType(): void
     {
         self::markTestSkipped('Is not possible to check types');
 
@@ -71,7 +71,7 @@ EOF
         }
     }
 
-    public function testMissingParameter()
+    public function testMissingParameter(): void
     {
         $parameters = [
             'tags' => ['foo', 'bar'],
@@ -95,7 +95,7 @@ EOF
         }
     }
 
-    public function testConstructorDoesNotAlterParameters()
+    public function testConstructorDoesNotAlterParameters(): void
     {
         $source = '[{"name":"tags","in":"query","description":"tags to filter by","required":false,"type":"array","items":{"type":"string"},"collectionFormat":"csv"},{"name":"limit","in":"query","description":"maximum number of results to return","required":true,"type":"integer","format":"int32"}]';
         $schema = json_decode($source);

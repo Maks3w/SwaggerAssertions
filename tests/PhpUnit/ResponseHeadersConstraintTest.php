@@ -20,7 +20,7 @@ class ResponseHeadersConstraintTest extends TestCase
      */
     protected $constraint;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $schema = '{"ETag":{"minimum":1}}';
         $schema = json_decode($schema);
@@ -28,13 +28,13 @@ class ResponseHeadersConstraintTest extends TestCase
         $this->constraint = new ResponseHeadersConstraint($schema, new Validator());
     }
 
-    public function testConstraintDefinition()
+    public function testConstraintDefinition(): void
     {
         self::assertCount(1, $this->constraint);
         self::assertEquals('is a valid response header', $this->constraint->toString());
     }
 
-    public function testValidHeaders()
+    public function testValidHeaders(): void
     {
         $headers = [
             'Content-Type' => 'application/json',
@@ -44,7 +44,7 @@ class ResponseHeadersConstraintTest extends TestCase
         self::assertTrue($this->constraint->evaluate($headers, '', true));
     }
 
-    public function testCaseInsensitiveValidHeaders()
+    public function testCaseInsensitiveValidHeaders(): void
     {
         $headers = [
             'Content-Type' => 'application/json',
@@ -54,7 +54,7 @@ class ResponseHeadersConstraintTest extends TestCase
         self::assertTrue($this->constraint->evaluate($headers, '', true));
     }
 
-    public function testInvalidHeaderType()
+    public function testInvalidHeaderType(): void
     {
         $headers = [
             'Content-Type' => 'application/json',

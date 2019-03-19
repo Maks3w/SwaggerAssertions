@@ -29,7 +29,9 @@ class JsonSchemaConstraint extends Constraint
 
     public function __construct($expectedSchema, string $context, Validator $validator)
     {
-        parent::__construct();
+        if (is_callable([Constraint::class, '__construct'])) {
+            parent::__construct();
+        }
 
         $this->expectedSchema = $expectedSchema;
         $this->context = $context;

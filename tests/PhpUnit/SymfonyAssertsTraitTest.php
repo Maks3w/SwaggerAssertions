@@ -23,19 +23,19 @@ class SymfonyAssertsTraitTest extends TestCase
      */
     protected $schemaManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->schemaManager = SchemaManager::fromUri('file://' . __DIR__ . '/../fixture/petstore-with-external-docs.json');
     }
 
-    public function testAssertResponseMatch()
+    public function testAssertResponseMatch(): void
     {
         $response = $this->createMockResponse(200, $this->getValidHeaders(), $this->getValidResponseBody());
 
         self::assertResponseMatch($response, $this->schemaManager, '/api/pets', 'get');
     }
 
-    public function testAssertResponseAndRequestMatch()
+    public function testAssertResponseAndRequestMatch(): void
     {
         $body = $this->getValidRequestBody();
         $response = $this->createMockResponse(200, $this->getValidHeaders(), $body);
@@ -44,7 +44,7 @@ class SymfonyAssertsTraitTest extends TestCase
         self::assertResponseAndRequestMatch($response, $request, $this->schemaManager);
     }
 
-    public function testAssertResponseIsValidIfClientErrorAndRequestIsInvalid()
+    public function testAssertResponseIsValidIfClientErrorAndRequestIsInvalid(): void
     {
         $response = $this->createMockResponse(404, $this->getValidHeaders(), '{"code":400,"message":"Invalid"}');
         $request = $this->createMockRequest('POST', '/api/pets', ['Content-Type' => ['application/pdf']]);
@@ -52,7 +52,7 @@ class SymfonyAssertsTraitTest extends TestCase
         self::assertResponseAndRequestMatch($response, $request, $this->schemaManager);
     }
 
-    public function testAssertRequestIsInvalidIfResponseIsNotAClientError()
+    public function testAssertRequestIsInvalidIfResponseIsNotAClientError(): void
     {
         $response = $this->createMockResponse(200, $this->getValidHeaders(), $this->getValidResponseBody());
         $request = $this->createMockRequest('POST', '/api/pets', ['Content-Type' => ['application/pdf']]);
@@ -60,11 +60,11 @@ class SymfonyAssertsTraitTest extends TestCase
         try {
             self::assertResponseAndRequestMatch($response, $request, $this->schemaManager);
         } catch (ExpectationFailedException $e) {
-            self::assertContains('request', $e->getMessage());
+            self::assertStringContainsString('request', $e->getMessage());
         }
     }
 
-    public function testAssertResponseBodyDoesNotMatch()
+    public function testAssertResponseBodyDoesNotMatch(): void
     {
         $response = <<<'JSON'
 [
@@ -91,7 +91,7 @@ EOF
         }
     }
 
-    public function testAssertResponseMediaTypeDoesNotMatch()
+    public function testAssertResponseMediaTypeDoesNotMatch(): void
     {
         $response = $this->createMockResponse(
             200,
@@ -110,7 +110,7 @@ EOF
         }
     }
 
-    public function testAssertResponseHeaderDoesNotMatch()
+    public function testAssertResponseHeaderDoesNotMatch(): void
     {
         $headers = [
             'Content-Type' => ['application/json'],
@@ -135,7 +135,7 @@ EOF
         }
     }
 
-    public function testAssertRequestBodyDoesNotMatch()
+    public function testAssertRequestBodyDoesNotMatch(): void
     {
         $request = <<<'JSON'
 {
@@ -161,7 +161,7 @@ EOF
         }
     }
 
-    public function testAssertRequestMediaTypeDoesNotMatch()
+    public function testAssertRequestMediaTypeDoesNotMatch(): void
     {
         $request = $this->createMockRequest(
             'POST',
@@ -181,7 +181,7 @@ EOF
         }
     }
 
-    public function testAssertRequestHeaderDoesNotMatch()
+    public function testAssertRequestHeaderDoesNotMatch(): void
     {
         $headers = [
             'Content-Type' => ['application/json'],
@@ -206,7 +206,7 @@ EOF
         }
     }
 
-    public function testAssertRequestQueryDoesNotMatch()
+    public function testAssertRequestQueryDoesNotMatch(): void
     {
         $query = [
             'tags' => ['foo', '1'],
@@ -230,17 +230,14 @@ EOF
         }
     }
 
-    public function testEmptyResponse()
+    public function testEmptyResponse(): void
     {
         $response = $this->createMockResponse(204, ['Content-Type' => ['']], '');
 
         self::assertResponseMatch($response, $this->schemaManager, '/api/pets/1', 'delete');
     }
 
-    /**
-     * @return string
-     */
-    protected function getValidRequestBody()
+    protected function getValidRequestBody(): string
     {
         return <<<'JSON'
 {
@@ -250,10 +247,7 @@ EOF
 JSON;
     }
 
-    /**
-     * @return string
-     */
-    protected function getValidResponseBody()
+    protected function getValidResponseBody(): string
     {
         return <<<'JSON'
 [
@@ -268,7 +262,7 @@ JSON;
     /**
      * @return string[]
      */
-    protected function getValidHeaders()
+    protected function getValidHeaders(): array
     {
         return [
             'Content-Type' => 'application/json',
@@ -277,15 +271,10 @@ JSON;
     }
 
     /**
-     * @param string $method
-     * @param string $path
      * @param string[] $headers
-     * @param string $body
      * @param mixed[] $query
-     *
-     * @return Request
      */
-    protected function createMockRequest($method, $path, array $headers, $body = '', $query = [])
+    protected function createMockRequest(string $method, string $path, array $headers, string $body = '', $query = []): Request
     {
         $request = Request::create($path, $method, $query, [], [], [], $body);
         $request->headers = new HeaderBag($headers);
@@ -294,13 +283,9 @@ JSON;
     }
 
     /**
-     * @param int $statusCode
      * @param string[] $headers
-     * @param string $body
-     *
-     * @return Response
      */
-    protected function createMockResponse($statusCode, array $headers, $body)
+    protected function createMockResponse(int $statusCode, array $headers, string $body): Response
     {
         return new Response($body, $statusCode, $headers);
     }

@@ -7,7 +7,6 @@ namespace FR3D\SwaggerAssertions\PhpUnit;
 use FR3D\SwaggerAssertions\SchemaManager;
 use JsonSchema\Validator;
 use PHPUnit\Framework\Assert;
-use stdClass;
 use Zend\Http\Header\ContentType;
 
 /**
@@ -18,23 +17,23 @@ trait AssertsTrait
     /**
      * Asserts response body match with the response schema.
      *
-     * @param stdClass|stdClass[] $responseBody
+     * @param mixed $responseBody
      * @param string $path percent-encoded path used on the request.
      */
-    public function assertResponseBodyMatch(
+    public static function assertResponseBodyMatch(
         $responseBody,
         SchemaManager $schemaManager,
         string $path,
         string $httpMethod,
         int $httpCode,
         string $message = ''
-    ) {
+    ): void {
         if (!$schemaManager->findPathInTemplates($path, $template, $params)) {
             throw new \RuntimeException('Request URI does not match with any swagger path definition');
         }
 
         $bodySchema = $schemaManager->getResponseSchema($template, $httpMethod, (string) $httpCode);
-        $constraint = new JsonSchemaConstraint($bodySchema, 'response body', $this->getValidator());
+        $constraint = new JsonSchemaConstraint($bodySchema, 'response body', self::getValidator());
 
         Assert::assertThat($responseBody, $constraint, $message);
     }
@@ -42,22 +41,22 @@ trait AssertsTrait
     /**
      * Asserts request body match with the request schema.
      *
-     * @param stdClass|stdClass[] $requestBody
+     * @param mixed $requestBody
      * @param string $path percent-encoded path used on the request.
      */
-    public function assertRequestBodyMatch(
+    public static function assertRequestBodyMatch(
         $requestBody,
         SchemaManager $schemaManager,
         string $path,
         string $httpMethod,
         string $message = ''
-    ) {
+    ): void {
         if (!$schemaManager->findPathInTemplates($path, $template, $params)) {
             throw new \RuntimeException('Request URI does not match with any swagger path definition');
         }
 
         $bodySchema = $schemaManager->getRequestSchema($template, $httpMethod);
-        $constraint = new JsonSchemaConstraint($bodySchema, 'request body', $this->getValidator());
+        $constraint = new JsonSchemaConstraint($bodySchema, 'request body', self::getValidator());
 
         Assert::assertThat($requestBody, $constraint, $message);
     }
@@ -67,13 +66,13 @@ trait AssertsTrait
      *
      * @param string $path percent-encoded path used on the request.
      */
-    public function assertResponseMediaTypeMatch(
+    public static function assertResponseMediaTypeMatch(
         string $responseMediaType,
         SchemaManager $schemaManager,
         string $path,
         string $httpMethod,
         string $message = ''
-    ) {
+    ): void {
         if (!$schemaManager->findPathInTemplates($path, $template, $params)) {
             // @codeCoverageIgnoreStart
             throw new \RuntimeException('Request URI does not match with any swagger path definition');
@@ -94,13 +93,13 @@ trait AssertsTrait
      *
      * @param string $path percent-encoded path used on the request.
      */
-    public function assertRequestMediaTypeMatch(
+    public static function assertRequestMediaTypeMatch(
         string $requestMediaType,
         SchemaManager $schemaManager,
         string $path,
         string $httpMethod,
         string $message = ''
-    ) {
+    ): void {
         if (!$schemaManager->findPathInTemplates($path, $template, $params)) {
             // @codeCoverageIgnoreStart
             throw new \RuntimeException('Request URI does not match with any swagger path definition');
@@ -122,14 +121,14 @@ trait AssertsTrait
      * @param string[] $headers
      * @param string $path percent-encoded path used on the request.
      */
-    public function assertResponseHeadersMatch(
+    public static function assertResponseHeadersMatch(
         array $headers,
         SchemaManager $schemaManager,
         string $path,
         string $httpMethod,
         int $httpCode,
         string $message = ''
-    ) {
+    ): void {
         if (!$schemaManager->findPathInTemplates($path, $template, $params)) {
             // @codeCoverageIgnoreStart
             throw new \RuntimeException('Request URI does not match with any swagger path definition');
@@ -138,7 +137,7 @@ trait AssertsTrait
 
         $constraint = new ResponseHeadersConstraint(
             $schemaManager->getResponseHeaders($template, $httpMethod, (string) $httpCode),
-            $this->getValidator()
+            self::getValidator()
         );
 
         Assert::assertThat($headers, $constraint, $message);
@@ -150,20 +149,20 @@ trait AssertsTrait
      * @param string[] $headers
      * @param string $path percent-encoded path used on the request.
      */
-    public function assertRequestHeadersMatch(
+    public static function assertRequestHeadersMatch(
         array $headers,
         SchemaManager $schemaManager,
         string $path,
         string $httpMethod,
         string $message = ''
-    ) {
+    ): void {
         if (!$schemaManager->findPathInTemplates($path, $template, $params)) {
             // @codeCoverageIgnoreStart
             throw new \RuntimeException('Request URI does not match with any swagger path definition');
             // @codeCoverageIgnoreEnd
         }
 
-        $constraint = new RequestHeadersConstraint($schemaManager->getRequestHeadersParameters($template, $httpMethod), $this->getValidator());
+        $constraint = new RequestHeadersConstraint($schemaManager->getRequestHeadersParameters($template, $httpMethod), self::getValidator());
 
         Assert::assertThat($headers, $constraint, $message);
     }
@@ -174,25 +173,25 @@ trait AssertsTrait
      * @param mixed[] $query
      * @param string $path percent-encoded path used on the request.
      */
-    public function assertRequestQueryMatch(
+    public static function assertRequestQueryMatch(
         $query,
         SchemaManager $schemaManager,
         string $path,
         string $httpMethod,
         string $message = ''
-    ) {
+    ): void {
         if (!$schemaManager->findPathInTemplates($path, $template, $params)) {
             // @codeCoverageIgnoreStart
             throw new \RuntimeException('Request URI does not match with any swagger path definition');
             // @codeCoverageIgnoreEnd
         }
 
-        $constraint = new RequestQueryConstraint($schemaManager->getRequestQueryParameters($template, $httpMethod), $this->getValidator());
+        $constraint = new RequestQueryConstraint($schemaManager->getRequestQueryParameters($template, $httpMethod), self::getValidator());
 
         Assert::assertThat($query, $constraint, $message);
     }
 
-    protected function getValidator(): Validator
+    protected static function getValidator(): Validator
     {
         return new Validator();
     }

@@ -20,7 +20,7 @@ class JsonSchemaConstraintTest extends TestCase
      */
     protected $constraint;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $schema = <<<JSON
 {
@@ -38,13 +38,13 @@ JSON;
         $this->constraint = new JsonSchemaConstraint($schema, 'context', new Validator());
     }
 
-    public function testConstraintDefinition()
+    public function testConstraintDefinition(): void
     {
         self::assertCount(1, $this->constraint);
         self::assertEquals('is a valid context', $this->constraint->toString());
     }
 
-    public function testValidSchema()
+    public function testValidSchema(): void
     {
         $response = <<<'JSON'
 [
@@ -59,7 +59,7 @@ JSON;
         self::assertTrue($this->constraint->evaluate($response, '', true));
     }
 
-    public function testInvalidSchema()
+    public function testInvalidSchema(): void
     {
         $response = <<<'JSON'
 [

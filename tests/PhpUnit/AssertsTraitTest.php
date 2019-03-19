@@ -20,12 +20,12 @@ class AssertsTraitTest extends TestCase
      */
     protected $schemaManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->schemaManager = SchemaManager::fromUri('file://' . __DIR__ . '/../fixture/petstore-with-external-docs.json');
     }
 
-    public function testAssertResponseBodyMatch()
+    public function testAssertResponseBodyMatch(): void
     {
         $response = <<<'JSON'
 {
@@ -38,14 +38,14 @@ JSON;
         self::assertResponseBodyMatch($response, $this->schemaManager, '/api/pets/123456789', 'get', 200);
     }
 
-    public function testAssertResponseBodyMatchWithFile()
+    public function testAssertResponseBodyMatchWithFile(): void
     {
         $valid_gif_file = base64_decode('R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=', true);
 
         self::assertResponseBodyMatch($valid_gif_file, $this->schemaManager, '/api/pets/123456789/photo', 'get', 200);
     }
 
-    public function testAssertResponseBodyMatchFail()
+    public function testAssertResponseBodyMatchFail(): void
     {
         $response = <<<'JSON'
 [
@@ -64,12 +64,12 @@ JSON;
         }
     }
 
-    public function testValidResponseMediaType()
+    public function testValidResponseMediaType(): void
     {
         self::assertResponseMediaTypeMatch('text/html', $this->schemaManager, '/api/pets', 'get');
     }
 
-    public function testInvalidResponseMediaType()
+    public function testInvalidResponseMediaType(): void
     {
         try {
             self::assertResponseMediaTypeMatch('application/pdf', $this->schemaManager, '/api/pets', 'get');
@@ -79,7 +79,7 @@ JSON;
         }
     }
 
-    public function testValidResponseHeaders()
+    public function testValidResponseHeaders(): void
     {
         $headers = [
             'ETag' => '123',
@@ -88,7 +88,7 @@ JSON;
         self::assertResponseHeadersMatch($headers, $this->schemaManager, '/api/pets', 'get', 200);
     }
 
-    public function testInvalidResponseHeaders()
+    public function testInvalidResponseHeaders(): void
     {
         $headers = [];
 
@@ -100,7 +100,7 @@ JSON;
         }
     }
 
-    public function testAssertRequestBodyMatch()
+    public function testAssertRequestBodyMatch(): void
     {
         $request = <<<'JSON'
 {
@@ -113,7 +113,7 @@ JSON;
         self::assertRequestBodyMatch($request, $this->schemaManager, '/api/pets', 'post');
     }
 
-    public function testAssertRequestBodyMatchFail()
+    public function testAssertRequestBodyMatchFail(): void
     {
         $request = <<<'JSON'
 {
@@ -130,12 +130,12 @@ JSON;
         }
     }
 
-    public function testValidRequestMediaType()
+    public function testValidRequestMediaType(): void
     {
         self::assertRequestMediaTypeMatch('application/json', $this->schemaManager, '/api/pets', 'post');
     }
 
-    public function testInvalidRequestMediaType()
+    public function testInvalidRequestMediaType(): void
     {
         try {
             self::assertRequestMediaTypeMatch('application/pdf', $this->schemaManager, '/api/pets', 'post');
@@ -145,7 +145,7 @@ JSON;
         }
     }
 
-    public function testValidRequestHeaders()
+    public function testValidRequestHeaders(): void
     {
         $headers = [
             'X-Required-Header' => 'any',
@@ -154,7 +154,7 @@ JSON;
         self::assertRequestHeadersMatch($headers, $this->schemaManager, '/api/pets/1234', 'patch');
     }
 
-    public function testInvalidRequestHeaders()
+    public function testInvalidRequestHeaders(): void
     {
         $headers = [];
 
@@ -166,14 +166,14 @@ JSON;
         }
     }
 
-    public function testValidRequestQuery()
+    public function testValidRequestQuery(): void
     {
         $query = ['tags' => ['foo', 'bar'], 'limit' => 1];
 
         self::assertRequestQueryMatch($query, $this->schemaManager, '/api/pets', 'get');
     }
 
-    public function testInvalidRequestQuery()
+    public function testInvalidRequestQuery(): void
     {
         $query = ['tags' => ['foo', 'bar']];
 

@@ -21,15 +21,15 @@ trait SymfonyAssertsTrait
      *
      * @param string $path percent-encoded path used on the request.
      */
-    public function assertResponseMatch(
+    public static function assertResponseMatch(
         Response $response,
         SchemaManager $schemaManager,
         string $path,
         string $httpMethod,
         string $message = ''
-    ) {
+    ): void {
         if (!empty((string) $response->getContent())) {
-            $this->assertResponseMediaTypeMatch(
+            self::assertResponseMediaTypeMatch(
                 $response->headers->get('Content-Type'),
                 $schemaManager,
                 $path,
@@ -39,9 +39,9 @@ trait SymfonyAssertsTrait
         }
 
         $httpCode = $response->getStatusCode();
-        $headers = $this->inlineHeaders($response->headers->all());
+        $headers = self::inlineHeaders($response->headers->all());
 
-        $this->assertResponseHeadersMatch(
+        self::assertResponseHeadersMatch(
             $headers,
             $schemaManager,
             $path,
@@ -50,7 +50,7 @@ trait SymfonyAssertsTrait
             $message
         );
 
-        $this->assertResponseBodyMatch(
+        self::assertResponseBodyMatch(
             json_decode($response->getContent()),
             $schemaManager,
             $path,
@@ -63,18 +63,18 @@ trait SymfonyAssertsTrait
     /**
      * Asserts request match with the request schema.
      */
-    public function assertRequestMatch(
+    public static function assertRequestMatch(
         Request $request,
         SchemaManager $schemaManager,
         string $message = ''
-    ) {
+    ): void {
         $path = $request->getPathInfo();
         $httpMethod = $request->getMethod();
         $query = $request->query->all();
 
-        $headers = $this->inlineHeaders($request->headers->all());
+        $headers = self::inlineHeaders($request->headers->all());
 
-        $this->assertRequestHeadersMatch(
+        self::assertRequestHeadersMatch(
             $headers,
             $schemaManager,
             $path,
@@ -83,7 +83,7 @@ trait SymfonyAssertsTrait
         );
 
         if (!empty((string) $request->getContent())) {
-            $this->assertRequestMediaTypeMatch(
+            self::assertRequestMediaTypeMatch(
                 $request->headers->get('Content-Type'),
                 $schemaManager,
                 $path,
@@ -92,7 +92,7 @@ trait SymfonyAssertsTrait
             );
         }
 
-        $this->assertRequestQueryMatch(
+        self::assertRequestQueryMatch(
             $query,
             $schemaManager,
             $path,
@@ -100,7 +100,7 @@ trait SymfonyAssertsTrait
             $message
         );
 
-        $this->assertRequestBodyMatch(
+        self::assertRequestBodyMatch(
             json_decode($request->getContent()),
             $schemaManager,
             $path,
@@ -112,14 +112,14 @@ trait SymfonyAssertsTrait
     /**
      * Asserts response match with the response schema.
      */
-    public function assertResponseAndRequestMatch(
+    public static function assertResponseAndRequestMatch(
         Response $response,
         Request $request,
         SchemaManager $schemaManager,
         string $message = ''
-    ) {
+    ): void {
         try {
-            $this->assertRequestMatch($request, $schemaManager, $message);
+            self::assertRequestMatch($request, $schemaManager, $message);
         } catch (ExpectationFailedException $e) {
             // If response represent a Client error then ignore.
             $statusCode = $response->getStatusCode();
@@ -128,7 +128,7 @@ trait SymfonyAssertsTrait
             }
         }
 
-        $this->assertResponseMatch($response, $schemaManager, $request->getRequestUri(), $request->getMethod(), $message);
+        self::assertResponseMatch($response, $schemaManager, $request->getRequestUri(), $request->getMethod(), $message);
     }
 
     /**
@@ -136,7 +136,7 @@ trait SymfonyAssertsTrait
      *
      * @return string[]
      */
-    protected function inlineHeaders(array $headers): array
+    protected static function inlineHeaders(array $headers): array
     {
         return array_map(
             function (array $headers) {
