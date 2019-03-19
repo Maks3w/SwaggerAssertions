@@ -62,7 +62,7 @@ class Psr7AssertsTraitTest extends TestCase
         try {
             self::assertResponseAndRequestMatch($response, $request, $this->schemaManager);
         } catch (ExpectationFailedException $e) {
-            self::assertContains('request', $e->getMessage());
+            self::assertStringContainsString('request', $e->getMessage());
         }
     }
 
