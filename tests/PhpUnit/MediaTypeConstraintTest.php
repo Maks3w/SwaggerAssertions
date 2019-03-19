@@ -26,7 +26,7 @@ class MediaTypeConstraintTest extends TestCase
 
     public function testConstraintDefinition()
     {
-        self::assertEquals(1, count($this->constraint));
+        self::assertCount(1, $this->constraint);
         self::assertEquals('is an allowed media type (application/json, text/xml)', $this->constraint->toString());
     }
 
