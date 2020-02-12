@@ -1,13 +1,14 @@
-sudo: false
-
 language: php
+
+os:
+  - linux
 
 cache:
   directories:
     - $HOME/.composer/cache
     - vendor
 
-matrix:
+jobs:
   fast_finish: true
   include:
     - php: 7.1
