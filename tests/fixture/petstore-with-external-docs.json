@@ -282,6 +282,32 @@
           }
         }
       }
+    },
+    "/pets/overloaded": {
+      "get": {
+        "description": "Similar path to /pets/{id} but with a fixed value and different purpose",
+        "operationId": "overloadedPet",
+        "produces": [
+          "application/json",
+          "application/xml",
+          "text/xml",
+          "text/html"
+        ],
+        "responses": {
+          "200": {
+            "description": "pet response",
+            "schema": {
+              "$ref": "#/definitions/Pet"
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/ErrorModel"
+            }
+          }
+        }
+      }
     }
   },
   "parameters": {

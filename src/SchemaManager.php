@@ -149,14 +149,17 @@ class SchemaManager
     public function findPathInTemplates(string $requestPath, &$path, &$params = []): bool
     {
         $uriTemplateManager = new UriTemplate();
-        foreach ($this->getPathTemplates() as $template) {
-            if (isset($this->definition->basePath)) {
-                $fullTemplate = $this->definition->basePath . $template;
-            } else {
-                $fullTemplate = $template;
-            }
-
-            $params = $uriTemplateManager->extract($fullTemplate, $requestPath, true);
+        $pathTemplates = $this->getPathTemplates();
+        if (isset($this->definition->basePath)) {
+            $requestPath = substr($requestPath, strlen($this->definition->basePath));
+        }
+        if (in_array($requestPath, $pathTemplates, true)) {
+            $path = $requestPath;
+            $params = [];
+            return true;
+        }
+        foreach ($pathTemplates as $template) {
+            $params = $uriTemplateManager->extract($template, $requestPath, true);
             if ($params !== null) {
                 $path = $template;
 

@@ -35,6 +35,7 @@ class SchemaManagerTest extends TestCase
     {
         $dataCases = [
             'integer' => ['/api/pets/1234', '/pets/{id}', ['id' => 1234]],
+            'overloaded' => ['/api/pets/overloaded', '/pets/overloaded', []],
         ];
 
         $rfc3986AllowedPathCharacters = [
