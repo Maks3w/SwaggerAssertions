@@ -12,7 +12,7 @@
     "license": "BSD-2-Clause",
     "homepage": "https://github.com/Maks3w/SwaggerAssertions",
     "require": {
-        "php": ">= 7.1",
+        "php": ">= 7.2",
         "ext-json": "*",
         "justinrainbow/json-schema": "^5",
         "laminas/laminas-http": "^2.11",
@@ -21,7 +21,7 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.0",
-        "guzzlehttp/guzzle": "^6.0",
+        "guzzlehttp/guzzle": "^6.3",
         "psr/http-message": "^1.0",
         "symfony/http-foundation": "2.7 - 3"
     },
