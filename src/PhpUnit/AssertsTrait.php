@@ -6,8 +6,8 @@ namespace FR3D\SwaggerAssertions\PhpUnit;
 
 use FR3D\SwaggerAssertions\SchemaManager;
 use JsonSchema\Validator;
+use Laminas\Http\Header\ContentType;
 use PHPUnit\Framework\Assert;
-use Zend\Http\Header\ContentType;
 
 /**
  * Facade functions for interact with raw constraints.

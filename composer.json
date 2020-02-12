@@ -15,9 +15,9 @@
         "php": ">= 7.1",
         "ext-json": "*",
         "justinrainbow/json-schema": "^5",
+        "laminas/laminas-http": "^2.11",
         "phpunit/phpunit": "^7.5||^8.0||^9.0",
-        "rize/uri-template": "^0.3.0",
-        "zendframework/zend-http": "2.5 - 3"
+        "rize/uri-template": "^0.3.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.0",
