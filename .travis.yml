@@ -3,6 +3,8 @@ language: php
 os:
   - linux
 
+dist: xenial
+
 cache:
   directories:
     - $HOME/.composer/cache
@@ -11,34 +13,29 @@ cache:
 jobs:
   fast_finish: true
   include:
-    - php: 7.2
+    - php: 7.3
       env:
         - COMPOSER_ARGUMENTS=--prefer-lowest
-    - php: 7.2
+    - php: 7.3
       env:
         - EXECUTE_TEST_COVERALLS=true
-    - php: 7.4
+    - php: 8.0
       env:
         - EXECUTE_CS_CHECK=true
-
-before_install:
-  - if [[ $EXECUTE_TEST_COVERALLS != 'true' ]]; then phpenv config-rm xdebug.ini || return 0; fi
 
 install:
   - travis_retry composer update --no-interaction $COMPOSER_ARGUMENTS
   - composer info -i
 
 script:
-  - if [[ $EXECUTE_TEST_COVERALLS == 'true' ]]; then vendor/bin/phpunit --coverage-clover clover.xml tests; fi
+  - if [[ $EXECUTE_TEST_COVERALLS == 'true' ]]; then XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-clover clover.xml tests; fi
   - if [[ $EXECUTE_TEST_COVERALLS != 'true' ]]; then vendor/bin/phpunit tests; fi
 
-  - php vendor/bin/phpunit examples
-
-  - if [[ $EXECUTE_CS_CHECK == 'true' ]]; then vendor/bin/php-cs-fixer fix -v --dry-run; fi
+  - if [[ $EXECUTE_CS_CHECK == 'true' ]]; then PHP_CS_FIXER_IGNORE_ENV=true vendor/bin/php-cs-fixer fix -v --dry-run; fi
 
 after_script:
   - if [[ $EXECUTE_TEST_COVERALLS == 'true' ]]; then
-    wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar;
-    chmod +x coveralls.phar;
-    php coveralls.phar -v;
+    travis_retry wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.4.3/php-coveralls.phar;
+    chmod +x php-coveralls.phar;
+    travis_retry php php-coveralls.phar --verbose;
     fi
