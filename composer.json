@@ -12,7 +12,7 @@
     "license": "BSD-2-Clause",
     "homepage": "https://github.com/Maks3w/SwaggerAssertions",
     "require": {
-        "php": ">= 7.2",
+        "php": ">= 7.2 || >= 8.0",
         "ext-json": "*",
         "justinrainbow/json-schema": "^5",
         "laminas/laminas-http": "^2.11",
