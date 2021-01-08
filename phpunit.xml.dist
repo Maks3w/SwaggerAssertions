@@ -13,12 +13,12 @@
         </testsuite>
     </testsuites>
 
-    <filter>
-        <whitelist>
+    <coverage>
+        <include>
             <directory suffix=".php">./src</directory>
-            <exclude>
-                <directory>./src/JsonSchema</directory>
-            </exclude>
-        </whitelist>
-    </filter>
+        </include>
+        <exclude>
+            <directory>./src/JsonSchema</directory>
+        </exclude>
+    </coverage>
 </phpunit>
