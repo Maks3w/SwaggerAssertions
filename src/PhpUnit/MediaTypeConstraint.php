@@ -21,10 +21,6 @@ class MediaTypeConstraint extends Constraint
      */
     public function __construct(array $allowedMediaTypes)
     {
-        if (is_callable([Constraint::class, '__construct'])) {
-            parent::__construct();
-        }
-
         $this->allowedMediaTypes = $allowedMediaTypes;
     }
 
