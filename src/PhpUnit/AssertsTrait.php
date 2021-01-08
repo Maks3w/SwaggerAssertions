@@ -6,7 +6,6 @@ namespace FR3D\SwaggerAssertions\PhpUnit;
 
 use FR3D\SwaggerAssertions\SchemaManager;
 use JsonSchema\Validator;
-use Laminas\Http\Header\ContentType;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -80,8 +79,7 @@ trait AssertsTrait
         }
 
         // Strip charset encoding
-        $ctHeader = ContentType::fromString('Content-Type: ' . $responseMediaType);
-        $responseMediaType = $ctHeader->getMediaType();
+        $responseMediaType = self::getMediaType($responseMediaType);
 
         $constraint = new MediaTypeConstraint($schemaManager->getResponseMediaTypes($template, $httpMethod));
 
@@ -107,8 +105,7 @@ trait AssertsTrait
         }
 
         // Strip charset encoding
-        $ctHeader = ContentType::fromString('Content-Type: ' . $requestMediaType);
-        $requestMediaType = $ctHeader->getMediaType();
+        $requestMediaType = self::getMediaType($requestMediaType);
 
         $constraint = new MediaTypeConstraint($schemaManager->getRequestMediaTypes($template, $httpMethod));
 
@@ -194,5 +191,15 @@ trait AssertsTrait
     protected static function getValidator(): Validator
     {
         return new Validator();
+    }
+
+    protected static function getMediaType(string $contentTypeHeader): string
+    {
+        if (trim($contentTypeHeader) === '') {
+            return '';
+        }
+
+        $contentTypeParts = explode(';', $contentTypeHeader);
+        return strtolower(trim($contentTypeParts[0]));
     }
 }
