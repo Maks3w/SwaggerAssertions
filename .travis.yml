@@ -31,7 +31,7 @@ script:
   - if [[ $EXECUTE_TEST_COVERALLS == 'true' ]]; then XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-clover clover.xml tests; fi
   - if [[ $EXECUTE_TEST_COVERALLS != 'true' ]]; then vendor/bin/phpunit tests; fi
 
-  - if [[ $EXECUTE_CS_CHECK == 'true' ]]; then PHP_CS_FIXER_IGNORE_ENV=true vendor/bin/php-cs-fixer fix -v --dry-run; fi
+  - if [[ $EXECUTE_CS_CHECK == 'true' ]]; then vendor/bin/php-cs-fixer fix -v --dry-run; fi
 
 after_script:
   - if [[ $EXECUTE_TEST_COVERALLS == 'true' ]]; then

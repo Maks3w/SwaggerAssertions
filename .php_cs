@@ -5,7 +5,7 @@ return PhpCsFixer\Config::create()
     ->setRules(
         [
             '@PHP71Migration' => true,
-            '@PSR2' => true,
+            '@PSR12' => true,
             'array_syntax' => [
                 'syntax' => 'short'
             ],
