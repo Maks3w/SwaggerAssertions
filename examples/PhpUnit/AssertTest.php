@@ -28,7 +28,7 @@ class AssertTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        self::$schemaManager = SchemaManager::fromUri('http://petstore.swagger.io/v2/swagger.json');
+        self::$schemaManager = SchemaManager::fromUri('https://petstore.swagger.io/v2/swagger.json');
     }
 
     protected function setUp(): void
